@@ -29,7 +29,7 @@ const Download = ({ user }: { user: User | null }) => {
     <div className="z-50 flex w-full max-w-md flex-col gap-1 space-y-1 px-4 pb-10 md:px-0">
       <div className="flex h-full w-full flex-col items-center gap-2 md:flex-row">
         <Input
-          className="h-10 w-full rounded-xl text-base opacity-100 dark:bg-zinc-950 md:h-12 md:w-96 md:text-lg"
+          className="h-10 w-full rounded-xl bg-stone-50 text-base opacity-100 dark:bg-zinc-950 md:h-12 md:w-96 md:text-lg"
           placeholder="input your twitter space link"
           onKeyDown={(e) => {
             if (e.key === 'Enter') handleDownload(e.currentTarget.value)
