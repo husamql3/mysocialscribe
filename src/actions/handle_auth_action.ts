@@ -13,7 +13,6 @@ export async function login(formData: FormData) {
   }
 
   const { error } = await supabase.auth.signInWithPassword(data)
-
   if (error) {
     return {
       success: false,
@@ -44,6 +43,7 @@ export async function signup(formData: FormData) {
 
 export async function logout() {
   const supabase = await createClient()
+
   const { error } = await supabase.auth.signOut()
   if (error) {
     console.error(error)
@@ -56,10 +56,11 @@ export async function logout() {
 
 export async function signInWithGithub() {
   const supabase = await createClient()
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'github',
     options: {
-      redirectTo: 'https://mysocialscribe.com/auth/callback',
+      redirectTo: process.env.NEXT_PUBLIC_AUTH_CALLBACK_URL,
     },
   })
   if (error) {
@@ -77,10 +78,11 @@ export async function signInWithGithub() {
 
 export async function signInWithGoogle() {
   const supabase = await createClient()
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: 'https://mysocialscribe.com/auth/callback',
+      redirectTo: process.env.NEXT_PUBLIC_AUTH_CALLBACK_URL,
     },
   })
   if (error) {
