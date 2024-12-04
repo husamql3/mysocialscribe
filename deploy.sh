@@ -3,7 +3,6 @@
 # Env Vars
 DOMAIN_NAME="${DOMAIN_NAME:-mysocialscribe.com}"
 EMAIL="${EMAIL:-mysocialscribe.info@gmail.com}"
-PASS="${PASS:-}"
 SUPABASE_URL="${SUPABASE_URL:-}"
 SUPABASE_ANON_KEY="${SUPABASE_ANON_KEY:-}"
 GA_MEASUREMENT_ID="${GA_MEASUREMENT_ID:-}"
@@ -86,7 +85,6 @@ check_command "Repository setup"
 log "Setting up environment variables..."
 cat > "$APP_DIR/.env" << EOF
 DOMAIN_NAME=$DOMAIN_NAME
-PASS=$PASS
 SUPABASE_URL=$SUPABASE_URL
 SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY
 GA_MEASUREMENT_ID=$GA_MEASUREMENT_ID
@@ -122,7 +120,6 @@ log "Deployment completed successfully!
 ----------------------------------------
 Domain: https://$DOMAIN_NAME
 Environment Variables Status:
-- PASS: ${PASS:+set}${PASS:-not set}
 - SUPABASE_URL: ${SUPABASE_URL:+set}${SUPABASE_URL:-not set}
 - SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY:+set}${SUPABASE_ANON_KEY:-not set}
 ----------------------------------------"
