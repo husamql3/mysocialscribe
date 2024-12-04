@@ -6,8 +6,6 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/db/supabase/server'
 
 export async function login(formData: FormData) {
-  'use server'
-
   const supabase = await createClient()
   const data = {
     email: formData.get('email') as string,
@@ -19,7 +17,7 @@ export async function login(formData: FormData) {
   if (error) {
     return {
       success: false,
-      error: error.message
+      error: error.message,
     }
   }
 
@@ -50,6 +48,48 @@ export async function logout() {
   if (error) {
     console.error(error)
     return
+  }
+
+  revalidatePath('/', 'layout')
+  redirect('/')
+}
+
+export async function signInWithGithub() {
+  const supabase = await createClient()
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: 'github',
+    options: {
+      redirectTo: 'http://localhost:3000/auth/callback',
+    },
+  })
+  if (error) {
+    console.error(error)
+    return
+  }
+
+  if (data.url) {
+    redirect(data.url)
+  }
+
+  revalidatePath('/', 'layout')
+  redirect('/')
+}
+
+export async function signInWithGoogle() {
+  const supabase = await createClient()
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: 'http://localhost:3000/auth/callback',
+    },
+  })
+  if (error) {
+    console.error(error)
+    return
+  }
+
+  if (data.url) {
+    redirect(data.url)
   }
 
   revalidatePath('/', 'layout')
