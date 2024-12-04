@@ -1,7 +1,7 @@
 import { FC, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Check, Eye, EyeOff, X } from 'lucide-react'
+import { Check, Eye, EyeOff, Loader2, X } from 'lucide-react'
 
 import { Input } from '@/components/ui/input'
 import { signupSchema } from '@/types/schema/auth.schema'
@@ -20,7 +20,7 @@ const SignUpForm: FC<SignupFormProps> = ({ onLoginClick }) => {
   const {
     control,
     watch,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitting },
   } = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
     mode: 'onChange',
@@ -200,10 +200,17 @@ const SignUpForm: FC<SignupFormProps> = ({ onLoginClick }) => {
           <Button
             type="submit"
             className="w-full"
-            disabled={!isValid || strengthScore < 4}
+            disabled={!isValid || strengthScore < 4 || isSubmitting}
             formAction={signup}
           >
-            Sign up
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Signing up...
+              </>
+            ) : (
+              'Sign up'
+            )}
           </Button>
         </form>
 

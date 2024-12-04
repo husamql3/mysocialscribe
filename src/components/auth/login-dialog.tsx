@@ -4,8 +4,8 @@ import React, { useState } from 'react'
 
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { HoverBorderGradient } from '@/components/ui/hover-border-gradient'
-import SignupForm from '@/components/components/signup-form'
-import LoginForm from '@/components/components/login-form'
+import SignupForm from '@/components/auth/signup-form'
+import LoginForm from '@/components/auth/login-form'
 
 const LoginDialog = () => {
   const [isLoginForm, setIsLoginForm] = useState(true)

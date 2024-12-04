@@ -1,5 +1,5 @@
 export type LoginDialogContextType = {
-  openLoginDialog: () => void
+  openLoginDialog: (form?: 'login' | 'signup') => void
   openSignupDialog: () => void
   closeDialog: () => void
 }

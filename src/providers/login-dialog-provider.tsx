@@ -1,33 +1,34 @@
 'use client'
 
-import React, { createContext, useCallback, useContext, useState } from 'react'
+import { createContext, useCallback, useContext, useState, FC, ReactNode } from 'react'
 
 import { LoginDialogContextType } from '@/types/LoginDialogContextType'
 
 import { Dialog, DialogContent } from '@/components/ui/dialog'
-import SignupForm from '@/components/components/signup-form'
-import LoginForm from '@/components/components/login-form'
+import SignupForm from '@/components/auth/signup-form'
+import LoginForm from '@/components/auth/login-form'
+
+type FormType = 'login' | 'signup'
 
 const LoginDialogContext = createContext<LoginDialogContextType | undefined>(undefined)
 
-export const LoginDialogProvider: React.FC<{
-  children: React.ReactNode
+export const LoginDialogProvider: FC<{
+  children: ReactNode
 }> = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false)
-  const [isLoginForm, setIsLoginForm] = useState(true)
+  const [currentForm, setCurrentForm] = useState<FormType>('login')
 
-  const openLoginDialog = useCallback(() => {
-    setIsLoginForm((prevState) => !prevState)
-    setIsOpen((prevState) => !prevState)
+  const openLoginDialog = useCallback((form: FormType = 'login') => {
+    setCurrentForm(form)
+    setIsOpen(true)
   }, [])
 
   const openSignupDialog = useCallback(() => {
-    setIsLoginForm((prevState) => !prevState)
-    setIsOpen((prevState) => !prevState)
-  }, [])
+    openLoginDialog('signup')
+  }, [openLoginDialog])
 
   const closeDialog = useCallback(() => {
-    setIsOpen((prevState) => !prevState)
+    setIsOpen(false)
   }, [])
 
   return (
@@ -44,10 +45,10 @@ export const LoginDialogProvider: React.FC<{
         onOpenChange={setIsOpen}
       >
         <DialogContent className="sm:max-w-[425px]">
-          {isLoginForm ? (
-            <LoginForm onSignupClick={() => setIsLoginForm(false)} />
+          {currentForm === 'login' ? (
+            <LoginForm onSignupClick={() => setCurrentForm('signup')} />
           ) : (
-            <SignupForm onLoginClick={() => setIsLoginForm(true)} />
+            <SignupForm onLoginClick={() => setCurrentForm('login')} />
           )}
         </DialogContent>
       </Dialog>

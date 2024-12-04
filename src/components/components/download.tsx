@@ -16,7 +16,7 @@ const Download = ({ user }: { user: User | null }) => {
 
   const handleDownload = (url: string) => {
     if (user === null) {
-      openLoginDialog()
+      openLoginDialog('login')
       return
     }
 

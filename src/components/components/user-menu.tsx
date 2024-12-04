@@ -1,7 +1,7 @@
 import { createClient } from '@/db/supabase/server'
 
-import LoginDialog from '@/components/components/login-dialog'
-import LogoutButton from '@/components/components/logout-button'
+import LoginDialog from '@/components/auth/login-dialog'
+import LogoutButton from '@/components/auth/logout-button'
 
 const UserMenu = async () => {
   const supabase = await createClient()
