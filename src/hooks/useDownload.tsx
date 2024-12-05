@@ -6,13 +6,13 @@ import { UseDownloadType } from '@/types/UseDownloadType'
 
 export const useDownload = (): UseDownloadType => {
   const [downloading, setDownloading] = useState(false)
-  const [progress, setProgress] = useState(0)
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   const downloadTwitterSpaces = async (url: string): Promise<void> => {
     try {
       setDownloading(true)
-      setProgress(0)
+      setDownloadUrl(null)
       setError(null)
 
       const twitterSpacesRegex = /^https?:\/\/(x|twitter)\.com\/[^/]+\/(status|spaces)\/\d+/
@@ -20,7 +20,7 @@ export const useDownload = (): UseDownloadType => {
         throw new Error('Invalid Twitter Spaces or Tweet URL')
       }
 
-      const response = await fetch('/api/download', {
+      const response = await fetch('/api/download/twitter', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,56 +33,14 @@ export const useDownload = (): UseDownloadType => {
         throw new Error(errorData.error || 'Download failed')
       }
 
-      const contentLength = parseInt(response.headers.get('Content-Length') || '0', 10)
-      const reader = response.body?.getReader()
-
-      if (!reader) {
-        throw new Error('Unable to read response stream')
-      }
-
-      let receivedLength = 0
-      const chunks: Uint8Array[] = []
-
-      while (true) {
-        const { done, value } = await reader.read()
-
-        if (done) {
-          setProgress(100)
-          break
-        }
-
-        if (value) {
-          chunks.push(value)
-          receivedLength += value.length
-
-          const progressValue =
-            contentLength > 0
-              ? Math.min(Math.round((receivedLength / contentLength) * 100), 100)
-              : Math.min(Math.round(receivedLength / (1024 * 1024)), 100)
-
-          setProgress(progressValue)
-        }
-      }
-
-      const blob = new Blob(chunks)
-      const downloadUrl = window.URL.createObjectURL(blob)
-
-      const link = document.createElement('a')
-      link.href = downloadUrl
-      link.download = 'twitter_spaces.mp3'
-      document.body.appendChild(link)
-      link.click()
-
-      document.body.removeChild(link)
-      window.URL.revokeObjectURL(downloadUrl)
+      const data = await response.json()
+      setDownloadUrl(data.downloadUrl)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unexpected error occurred')
     } finally {
       setDownloading(false)
-      setProgress(0)
-      setError(null)
     }
   }
 
-  return { downloading, progress, error, downloadTwitterSpaces }
+  return { downloading, downloadUrl, error, downloadTwitterSpaces }
 }

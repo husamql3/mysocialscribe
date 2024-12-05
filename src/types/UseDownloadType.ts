@@ -1,6 +1,6 @@
 export type UseDownloadType = {
   downloading: boolean
-  progress: number
+  downloadUrl: string | null
   error: string | null
   downloadTwitterSpaces: (url: string) => Promise<void>
 }
