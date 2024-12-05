@@ -11,7 +11,6 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 
 const Download = ({ user }: { user: User | null }) => {
-  // const { downloading, downloadTwitterSpaces, error, progress } = useDownload()
   const { downloading, downloadTwitterSpaces, error } = useDownload()
   const { openLoginDialog } = useLoginDialog()
   const [inputUrl, setInputUrl] = useState('')
@@ -58,22 +57,6 @@ const Download = ({ user }: { user: User | null }) => {
       </div>
 
       {error && <p className="text-sm text-red-500 dark:text-red-400">{error}</p>}
-
-      {/*{downloading && (*/}
-      {/*  <div className="flex w-full items-center space-x-2">*/}
-      {/*    <Progress*/}
-      {/*      value={progress}*/}
-      {/*      className="w-full"*/}
-      {/*    />*/}
-      {/*    <span className="text-sm text-gray-500">{progress}%</span>*/}
-      {/*  </div>*/}
-      {/*)}*/}
-
-      {/*{progress === 100 && !downloading && (*/}
-      {/*  <p className="text-sm text-green-500 dark:text-green-400">*/}
-      {/*    Download complete! Check your downloads folder.*/}
-      {/*  </p>*/}
-      {/*)}*/}
     </div>
   )
 }

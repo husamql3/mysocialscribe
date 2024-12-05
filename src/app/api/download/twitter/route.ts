@@ -48,12 +48,10 @@ export async function POST(req: NextRequest) {
                 contentType: 'audio/mpeg',
               })
             if (error) throw error
-            console.log('File uploaded successfully')
 
             const {
               data: { publicUrl },
             } = supabase.storage.from('twitter-spaces').getPublicUrl(filename)
-            console.log('Public URL generated:', publicUrl)
 
             // Remove local file
             await unlink(filePath)
