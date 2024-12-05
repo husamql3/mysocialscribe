@@ -10,9 +10,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const { url } = await req.json()
-    if (!url) {
-      return NextResponse.json({ error: 'URL is required' }, { status: 400 })
-    }
+    if (!url) return NextResponse.json({ error: 'URL is required' }, { status: 400 })
 
     const filename = `twitter_space_${crypto.randomUUID().slice(0, 8)}.mp3`
     const filePath = path.join(process.cwd(), 'public', 'downloads', filename)
