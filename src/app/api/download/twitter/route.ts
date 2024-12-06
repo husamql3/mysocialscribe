@@ -5,7 +5,7 @@ import path from 'path'
 
 import { createClient } from '@/db/supabase/client'
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest): Promise<NextResponse> {
   const supabase = createClient()
 
   try {
@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
 
     await writeFile(path.join(process.cwd(), 'public', 'downloads', '.gitkeep'), '')
 
-    return new Promise(async (resolve) => {
+    return new Promise<NextResponse>((resolve) => {
       const ytDlpProcess = spawn('yt-dlp', [
         '-o',
         filePath,
