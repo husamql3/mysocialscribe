@@ -39,9 +39,9 @@ export default function RootLayout({
       <body className={clx('flex min-h-svh flex-col bg-zinc-50 dark:bg-zinc-950', lato.className)}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
+          themes={['dark']}
           enableSystem
-          disableTransitionOnChange
         >
           <LoginDialogProvider>
             <Header />
