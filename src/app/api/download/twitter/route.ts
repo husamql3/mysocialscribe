@@ -38,7 +38,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       ytDlpProcess.on('close', async (code) => {
         if (code === 0) {
           try {
-            const dlUrl = `${process.env.NEXT_PUBLIC_API_URL}/downloads/` + filename
+            const dlUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/downloads/` + filename
             console.log('download url', dlUrl)
 
             // Insert the download URL into the database with the twitter space URL
