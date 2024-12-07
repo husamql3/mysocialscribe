@@ -32,5 +32,12 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
+# Set permissions for the downloads directory
+RUN mkdir -p /app/public/downloads && \
+    chmod -R 755 /app/public/downloads
+
+# Set ownership for the downloads directory
+RUN chown -R node:node /app/public/downloads
+
 EXPOSE 3000
 CMD ["node", "server.js"]
