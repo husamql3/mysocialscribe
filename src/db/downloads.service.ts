@@ -10,6 +10,7 @@ export const saveDownloadRecord = async ({ userId, url, filename }: SaveDownload
     filename,
   })
   if (updateError) throw updateError
+  console.log('Download record saved successfully', url, filename)
 }
 
 export const findOldDownloads = async (): Promise<OldDownload[]> => {

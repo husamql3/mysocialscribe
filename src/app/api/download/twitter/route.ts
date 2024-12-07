@@ -36,6 +36,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         { stdio: ['ignore', 'pipe', 'ignore'] }
       )
 
+      ytDlpProcess.stdout.on('data', (chunk) => {
+        console.log(chunk.toString())
+      })
+
       ytDlpProcess.on('close', async (code) => {
         if (code === 0) {
           try {
