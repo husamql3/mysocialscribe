@@ -12,11 +12,9 @@ const transporter = nodemailer.createTransport({
   secure: false,
   auth: {
     user: 'mysocialscribe.info@gmail.com',
-    pass: process.env.PASS,
+    pass: 'ssjc mdmh ihlv umqu',
   },
 })
-
-
 
 export const sendEmail = async ({
   to,

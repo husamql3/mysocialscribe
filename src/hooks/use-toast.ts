@@ -14,7 +14,6 @@ type ToasterToast = ToastProps & {
   action?: ToastActionElement
 }
 
-// Resolve ESLint warning by using the enum directly as the type
 enum ActionTypes {
   ADD_TOAST = 'ADD_TOAST',
   UPDATE_TOAST = 'UPDATE_TOAST',
