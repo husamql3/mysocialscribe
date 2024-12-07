@@ -7,6 +7,7 @@ import HeadMetadata from '@/components/components/head-metadata'
 import DotPattern from '@/components/ui/dot-pattern'
 import Footer from '@/components/layout/footer'
 import Header from '@/components/layout/header'
+import { Toaster } from '@/components/ui/toaster'
 
 import './globals.css'
 import { cn } from '@/lib/utils'
@@ -47,6 +48,7 @@ export default function RootLayout({
             <Header />
             {children}
             <Footer />
+            <Toaster />
           </LoginDialogProvider>
 
           <DotPattern

@@ -4,7 +4,6 @@ export type DownloadTwitterSpacesType = {
 }
 
 export type UseDownloadType = {
-  downloading: boolean
   error: string | null
   downloadTwitterSpaces: ({ url, userId }: DownloadTwitterSpacesType) => Promise<void>
 }

@@ -1,16 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { spawn } from 'child_process'
-import { readFile, unlink, writeFile } from 'fs/promises'
+import { writeFile } from 'fs/promises'
 import path from 'path'
 
-import { createClient } from '@/db/supabase/client'
+import { saveDownloadRecord } from '@/db/downloads.service'
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const supabase = createClient()
-
   try {
-    const { url } = await req.json()
+    const { url, userId } = await req.json()
+    // Check for url parameter in the request
     if (!url) return NextResponse.json({ error: 'URL is required' }, { status: 400 })
+
+    // Check for user authentication
+    if (!userId) return NextResponse.json({ error: 'User must be logged in' }, { status: 401 })
 
     const filename = `twitter_space_${crypto.randomUUID().slice(0, 8)}.mp3`
     const filePath = path.join(process.cwd(), 'public', 'downloads', filename)
@@ -18,43 +20,32 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     await writeFile(path.join(process.cwd(), 'public', 'downloads', '.gitkeep'), '')
 
     return new Promise<NextResponse>((resolve) => {
-      const ytDlpProcess = spawn('yt-dlp', [
-        '-o',
-        filePath,
-        '-f',
-        'bestaudio[ext=m4a]',
-        '--extract-audio',
-        '--audio-format',
-        'mp3',
-        url,
-      ])
-
-      ytDlpProcess.stderr.on('data', (data) => {
-        console.error(`yt-dlp error: ${data}`)
-      })
+      const ytDlpProcess = spawn(
+        'yt-dlp',
+        [
+          '-o',
+          filePath,
+          '-f',
+          'bestaudio[ext=m4a]',
+          '--extract-audio',
+          '--audio-format',
+          'mp3',
+          url,
+        ],
+        { stdio: ['ignore', 'pipe', 'ignore'] }
+      )
 
       ytDlpProcess.on('close', async (code) => {
         if (code === 0) {
           try {
-            const file = await readFile(filePath)
+            const dlUrl = `${process.env.NEXT_PUBLIC_API_URL}/downloads/` + filename
+            console.log('download url', dlUrl)
 
-            const { error } = await supabase.storage
-              .from('twitter-spaces')
-              .upload(`${filename}`, file, {
-                cacheControl: '3600',
-                upsert: true,
-                contentType: 'audio/mpeg',
-              })
-            if (error) throw error
+            // Insert the download URL into the database with the twitter space URL
+            await saveDownloadRecord({ userId, url, filename })
+            console.log('download record inserted')
 
-            const {
-              data: { publicUrl },
-            } = supabase.storage.from('twitter-spaces').getPublicUrl(filename)
-
-            // Remove local file
-            await unlink(filePath)
-
-            resolve(NextResponse.json({ downloadUrl: publicUrl }, { status: 200 }))
+            resolve(NextResponse.json({ downloadUrl: dlUrl }, { status: 200 }))
           } catch (uploadError) {
             console.error('Upload error:', uploadError)
             resolve(NextResponse.json({ error: 'Upload failed' }, { status: 500 }))

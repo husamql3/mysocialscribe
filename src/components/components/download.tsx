@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { LoaderCircle } from 'lucide-react'
 import { User } from '@supabase/auth-js'
 
 import { useDownload } from '@/hooks/useDownload'
@@ -11,7 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 
 const Download = ({ user }: { user: User | null }) => {
-  const { downloading, downloadTwitterSpaces, error } = useDownload()
+  const { downloadTwitterSpaces } = useDownload()
   const { openLoginDialog } = useLoginDialog()
   const [inputUrl, setInputUrl] = useState('')
 
@@ -41,22 +40,13 @@ const Download = ({ user }: { user: User | null }) => {
           <Button
             className="h-10 w-full min-w-12 rounded-xl text-sm md:h-12 md:w-fit"
             size="sm"
-            disabled={downloading || !inputUrl}
+            disabled={!inputUrl}
             onClick={handleDownload}
           >
-            {downloading ? (
-              <>
-                <span className="block md:hidden">Downloading...</span>
-                <LoaderCircle className="animate-spin text-white duration-700 dark:text-black" />
-              </>
-            ) : (
-              <span>Download</span>
-            )}
+            <span>Download</span>
           </Button>
         </div>
       </div>
-
-      {error && <p className="text-sm text-red-500 dark:text-red-400">{error}</p>}
     </div>
   )
 }
