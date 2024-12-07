@@ -2,62 +2,58 @@
 
 import { useState } from 'react'
 
+import { toast } from '@/hooks/use-toast'
+import { useLoginDialog } from '@/providers/login-dialog-provider'
 import { DownloadTwitterSpacesType, UseDownloadType } from '@/types/UseDownloadType'
-import { createClient } from '@/db/supabase/client'
 
 export const useDownload = (): UseDownloadType => {
-  const supabase = createClient()
-
-  const [downloading, setDownloading] = useState(false)
+  const { openLoginDialog } = useLoginDialog()
   const [error, setError] = useState<string | null>(null)
 
   const downloadTwitterSpaces = async ({
     url,
     userId,
+    email,
   }: DownloadTwitterSpacesType): Promise<void> => {
     try {
-      setDownloading(true)
-      setError(null)
-
       const twitterSpacesRegex = /^https?:\/\/(x|twitter)\.com\/[^/]+\/(status|spaces)\/\d+/
-      if (!twitterSpacesRegex.test(url)) throw new Error('Invalid Twitter Spaces or Tweet URL')
+      if (!twitterSpacesRegex.test(url)) {
+        setError('Invalid Twitter Spaces or Tweet URL')
+        throw new Error('Invalid Twitter Spaces or Tweet URL')
+      }
+
+      toast({
+        variant: 'success',
+        title: 'Download Queued',
+        description: 'Your download is being processed. Check your email for the link.',
+      })
 
       const response = await fetch('/api/download/twitter', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ url }),
+        body: JSON.stringify({ url, userId, email }),
       })
+      if (!response.ok) throw new Error('Download request failed')
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : String(err)
 
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || 'Download failed')
+      if (typeof err === 'object' && err !== null && 'message' in err) {
+        const message = (err as { message: string }).message
+        if (message === 'User must be logged in') {
+          openLoginDialog('login')
+          return
+        }
       }
 
-      const data = await response.json()
-      const publicUrl: string = data.downloadUrl
-
-      // Create a temporary anchor element to trigger download
-      const link = document.createElement('a')
-      link.href = publicUrl
-      link.target = '_blank'
-      link.download = 'twitter_space.mp3'
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-
-      const { error } = await supabase.from('downloads').insert({
-        user_id: userId,
-        public_url: publicUrl,
+      toast({
+        variant: 'destructive',
+        title: 'Download Error',
+        description: errorMessage,
       })
-      if (error) throw new Error(error.message)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unexpected error occurred')
-    } finally {
-      setDownloading(false)
     }
   }
 
-  return { downloading, error, downloadTwitterSpaces }
+  return { error, downloadTwitterSpaces }
 }

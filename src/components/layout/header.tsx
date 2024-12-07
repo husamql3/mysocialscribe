@@ -1,4 +1,3 @@
-import ModeToggle from '@/components/components/mode-toggle'
 import Logo from '@/components/components/logo'
 import UserMenu from '@/components/components/user-menu'
 
@@ -8,11 +7,7 @@ const Header = () => {
       <header className="relative py-4 pb-4">
         <div className="container mx-auto flex max-w-3xl items-center justify-between px-4 md:px-0">
           <Logo />
-
-          <div className="flex items-center gap-3">
-            <ModeToggle />
-            <UserMenu />
-          </div>
+          <UserMenu />
         </div>
       </header>
 

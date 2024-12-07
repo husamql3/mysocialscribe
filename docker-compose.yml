@@ -26,6 +26,19 @@ services:
     networks:
       - app_network
 
+  cron:
+    image: alpine/curl
+    command: >
+      sh -c '
+        apk add --no-cache curl &&
+        echo "* * * * * curl -X GET http://app:3000/api/cron" > /etc/crontabs/root && crond -f -l 2
+      '
+    depends_on:
+      - app
+    restart: unless-stopped
+    networks:
+      - app_network
+
 networks:
   app_network:
     driver: bridge

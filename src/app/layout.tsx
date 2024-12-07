@@ -7,6 +7,7 @@ import HeadMetadata from '@/components/components/head-metadata'
 import DotPattern from '@/components/ui/dot-pattern'
 import Footer from '@/components/layout/footer'
 import Header from '@/components/layout/header'
+import { Toaster } from '@/components/ui/toaster'
 
 import './globals.css'
 import { cn } from '@/lib/utils'
@@ -39,14 +40,15 @@ export default function RootLayout({
       <body className={clx('flex min-h-svh flex-col bg-zinc-50 dark:bg-zinc-950', lato.className)}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
+          themes={['dark']}
           enableSystem
-          disableTransitionOnChange
         >
           <LoginDialogProvider>
             <Header />
             {children}
             <Footer />
+            <Toaster />
           </LoginDialogProvider>
 
           <DotPattern
