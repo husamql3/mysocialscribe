@@ -13,6 +13,7 @@ export const useDownload = (): UseDownloadType => {
   const downloadTwitterSpaces = async ({
     url,
     userId,
+    email,
   }: DownloadTwitterSpacesType): Promise<void> => {
     try {
       const twitterSpacesRegex = /^https?:\/\/(x|twitter)\.com\/[^/]+\/(status|spaces)\/\d+/
@@ -32,7 +33,7 @@ export const useDownload = (): UseDownloadType => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ url, userId }),
+        body: JSON.stringify({ url, userId, email }),
       })
       if (!response.ok) throw new Error('Download request failed')
     } catch (err: unknown) {

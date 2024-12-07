@@ -20,7 +20,7 @@ const Download = ({ user }: { user: User | null }) => {
       return
     }
 
-    downloadTwitterSpaces({ url: inputUrl, userId: user.id })
+    downloadTwitterSpaces({ url: inputUrl, userId: user.id, email: user.email! })
   }
 
   return (

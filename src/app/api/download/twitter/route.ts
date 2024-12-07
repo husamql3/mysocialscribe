@@ -4,10 +4,11 @@ import { writeFile } from 'fs/promises'
 import path from 'path'
 
 import { saveDownloadRecord } from '@/db/downloads.service'
+import { sendEmail } from '@/utils/sendDownloadEmail'
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
-    const { url, userId } = await req.json()
+    const { url, userId, email } = await req.json()
     // Check for url parameter in the request
     if (!url) return NextResponse.json({ error: 'URL is required' }, { status: 400 })
 
@@ -41,9 +42,15 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
             const dlUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/downloads/` + filename
             console.log('download url', dlUrl)
 
-            // Insert the download URL into the database with the twitter space URL
-            await saveDownloadRecord({ userId, url, filename })
-            console.log('download record inserted')
+            // Save the download record to the database, and send the email to the user
+            await Promise.all([
+              saveDownloadRecord({
+                userId,
+                url,
+                filename,
+              }),
+              sendEmail({ to: email, href: dlUrl, downloadName: filename }),
+            ])
 
             resolve(NextResponse.json({ downloadUrl: dlUrl }, { status: 200 }))
           } catch (uploadError) {
