@@ -8,19 +8,32 @@ import { useLoginDialog } from '@/providers/login-dialog-provider'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import useLocalStorage from '@/hooks/useLocalStorage'
 
 const Download = ({ user }: { user: User | null }) => {
   const { downloadTwitterSpaces } = useDownload()
   const { openLoginDialog } = useLoginDialog()
-  const [inputUrl, setInputUrl] = useState('')
+  const [spaceUrl, setSpaceUrl] = useLocalStorage('spaceUrl', '')
+  const [inputUrl, setInputUrl] = useState(() => spaceUrl)
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     if (user === null) {
+      setSpaceUrl(inputUrl)
       openLoginDialog('login')
       return
     }
 
-    downloadTwitterSpaces({ url: inputUrl, userId: user.id, email: user.email! })
+    try {
+      await downloadTwitterSpaces({
+        url: inputUrl,
+        userId: user.id,
+        email: user.email!,
+      })
+    } catch (error) {
+      console.error(error)
+      setSpaceUrl('')
+      setInputUrl('')
+    }
   }
 
   return (
