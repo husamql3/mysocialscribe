@@ -24,7 +24,7 @@ export const useDownload = (): UseDownloadType => {
 
       toast({
         variant: 'success',
-        title: 'Download Queued',
+        title: 'Space is being downloaded',
         description: 'Your download is being processed. Check your email for the link.',
       })
 
