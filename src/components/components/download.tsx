@@ -50,8 +50,8 @@ const Download = ({ user }: { user: User | null }) => {
           <Button
             className="h-10 w-full min-w-12 rounded-xl text-sm md:h-12 md:w-fit"
             size="sm"
-            disabled={!inputUrl || !spaceUrl}
             onClick={handleDownload}
+            disabled={!inputUrl || (spaceUrl === '' && !inputUrl)}
           >
             <span>Download</span>
           </Button>
