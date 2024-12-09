@@ -14,7 +14,7 @@ const Download = ({ user }: { user: User | null }) => {
   const { downloadTwitterSpaces } = useDownload()
   const { openLoginDialog } = useLoginDialog()
   const [spaceUrl, setSpaceUrl] = useLocalStorage('spaceUrl', '')
-  const [inputUrl, setInputUrl] = useState(() => spaceUrl)
+  const [inputUrl, setInputUrl] = useState(spaceUrl)
 
   const handleDownload = async () => {
     if (user === null) {
@@ -51,7 +51,6 @@ const Download = ({ user }: { user: User | null }) => {
             className="h-10 w-full min-w-12 rounded-xl text-sm md:h-12 md:w-fit"
             size="sm"
             onClick={handleDownload}
-            disabled={!inputUrl && !spaceUrl}
           >
             <span>Download</span>
           </Button>
