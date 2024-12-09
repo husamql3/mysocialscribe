@@ -1,15 +1,31 @@
 import { NextResponse } from 'next/server'
+import { unlink } from 'fs/promises'
+import path from 'path'
 
-import { cleanupDownloads } from '@/utils/cleanupDownloads'
+import { OldDownload } from '@/types/DownlodsType'
+import { getRecentDownloads, updateDownloadFilename } from '@/db/downloads.service'
 
-export const dynamic = 'force-dynamic'
-
-export async function POST() {
+export async function GET() {
   try {
-    await cleanupDownloads()
-    return NextResponse.json({ message: 'Cron job executed successfully' }, { status: 200 })
+    const oldDownloads = await getRecentDownloads()
+
+    const cleanupTasks = oldDownloads.map(async (download: OldDownload) => {
+      const filePath = path.join(process.cwd(), 'public', 'downloads', download.filename)
+
+      await Promise.all([unlink(filePath).catch(() => {}), updateDownloadFilename(download.id)])
+    })
+
+    await Promise.all(cleanupTasks)
+
+    return NextResponse.json(
+      {
+        message: 'Cron job executed successfully',
+        deleted: oldDownloads,
+      },
+      { status: 200 }
+    )
   } catch (error) {
-    console.error('Error executing cron job:', error)
-    return NextResponse.json({ error: 'Error executing cron job' }, { status: 500 })
+    console.error('Cleanup process failed:', error)
+    return NextResponse.json({ error: 'Cleanup failed' }, { status: 500 })
   }
 }

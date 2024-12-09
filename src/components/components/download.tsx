@@ -23,17 +23,14 @@ const Download = ({ user }: { user: User | null }) => {
       return
     }
 
-    try {
-      await downloadTwitterSpaces({
-        url: inputUrl,
-        userId: user.id,
-        email: user.email!,
-      })
-    } catch (error) {
-      console.error(error)
-      setSpaceUrl('')
-      setInputUrl('')
-    }
+    downloadTwitterSpaces({
+      url: inputUrl,
+      userId: user.id,
+      email: user.email!,
+    })
+
+    setSpaceUrl('')
+    setInputUrl('')
   }
 
   return (
@@ -53,7 +50,7 @@ const Download = ({ user }: { user: User | null }) => {
           <Button
             className="h-10 w-full min-w-12 rounded-xl text-sm md:h-12 md:w-fit"
             size="sm"
-            disabled={!inputUrl}
+            disabled={!inputUrl || !spaceUrl}
             onClick={handleDownload}
           >
             <span>Download</span>

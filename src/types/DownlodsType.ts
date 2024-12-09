@@ -6,8 +6,8 @@ export type SaveDownloadRecord = {
 
 export type OldDownload = {
   id: string
-  user_id: string
-  space_url: string
-  filename: string
   created_at: string
+  user_id: string
+  filename: string
+  space_url: string
 }
