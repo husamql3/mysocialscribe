@@ -1,12 +1,27 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRef } from 'react'
+
+import { Confetti, ConfettiRef } from '@/components/ui/confetti'
 
 import { Card, CardContent } from '@/components/ui/card'
 
 const Page = () => {
+  const confettiRef = useRef<ConfettiRef>(null)
+
   return (
     <main className="flex h-full flex-1 flex-col items-center justify-center gap-8 p-6">
-      <Card className="z-50 flex w-full max-w-sm flex-col items-center justify-center rounded-lg px-6 pb-4 pt-8 shadow-xl dark:bg-zinc-950">
+      <Card className="relative z-50 flex w-full max-w-sm flex-col items-center justify-center overflow-auto rounded-lg px-6 pb-4 pt-8 shadow-xl dark:bg-zinc-950">
+        <Confetti
+          ref={confettiRef}
+          className="absolute z-0 size-full"
+          onMouseEnter={() => {
+            confettiRef.current?.fire({})
+          }}
+        />
+
         <Image
           src="/sent.png"
           alt="Success"
