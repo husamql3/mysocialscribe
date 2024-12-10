@@ -10,7 +10,7 @@ const Home = async () => {
   const user = data?.user
 
   return (
-    <main className="flex h-56 flex-1 flex-col items-center justify-center gap-8">
+    <main className="flex h-full flex-1 flex-col items-center justify-center gap-8">
       <Title />
       <Download user={user} />
       <CardStackComponent />

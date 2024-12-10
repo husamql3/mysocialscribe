@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 import { toast } from '@/hooks/use-toast'
 import { useLoginDialog } from '@/providers/login-dialog-provider'
@@ -9,6 +10,7 @@ import { DownloadTwitterSpacesType, UseDownloadType } from '@/types/UseDownloadT
 export const useDownload = (): UseDownloadType => {
   const { openLoginDialog } = useLoginDialog()
   const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
 
   const downloadTwitterSpaces = async ({
     url,
@@ -22,11 +24,7 @@ export const useDownload = (): UseDownloadType => {
         throw new Error('Invalid Twitter Spaces or Tweet URL')
       }
 
-      toast({
-        variant: 'success',
-        title: 'Space is being downloaded',
-        description: 'Your download is being processed. Check your email for the link.',
-      })
+      router.push('/success')
 
       const response = await fetch('/api/download/twitter', {
         method: 'POST',
