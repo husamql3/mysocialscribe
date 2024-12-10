@@ -3,7 +3,7 @@
 import { FC } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { LuLoader2 } from 'react-icons/lu'
+import { LuLoaderCircle } from 'react-icons/lu'
 
 import { loginSchema } from '@/types/schema/auth.schema'
 import { LoginFormData } from '@/types/AuthType'
@@ -115,7 +115,7 @@ const LoginForm: FC<LoginFormProps> = ({ onSignupClick }) => {
           >
             {isSubmitting ? (
               <>
-                <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />
+                <LuLoaderCircle className="mr-2 h-4 w-4 animate-spin" />
                 Logging in...
               </>
             ) : (

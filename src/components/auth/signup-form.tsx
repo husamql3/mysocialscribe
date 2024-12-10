@@ -18,6 +18,7 @@ type SignupFormProps = {
 
 const SignUpForm: FC<SignupFormProps> = ({ onLoginClick }) => {
   const {
+    handleSubmit,
     control,
     watch,
     formState: { errors, isValid, isSubmitting },
@@ -61,6 +62,14 @@ const SignUpForm: FC<SignupFormProps> = ({ onLoginClick }) => {
   const [isVisible, setIsVisible] = useState(false)
   const toggleVisibility = () => setIsVisible((prev) => !prev)
 
+  const onSubmit = async (data: SignupFormData) => {
+    try {
+      await signup(data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return (
     <>
       <DialogTitle>
@@ -71,7 +80,10 @@ const SignUpForm: FC<SignupFormProps> = ({ onLoginClick }) => {
       </DialogTitle>
 
       <CardContent>
-        <form className="grid gap-4">
+        <form
+          className="grid gap-4"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           {/* Email Input */}
           <div className="group relative">
             <label
@@ -201,7 +213,6 @@ const SignUpForm: FC<SignupFormProps> = ({ onLoginClick }) => {
             type="submit"
             className="w-full"
             disabled={!isValid || strengthScore < 4 || isSubmitting}
-            formAction={signup}
           >
             {isSubmitting ? (
               <>

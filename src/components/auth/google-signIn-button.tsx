@@ -1,5 +1,5 @@
-import { useFormStatus } from 'react-dom'
-import { LuLoader2 } from 'react-icons/lu'
+import { useForm } from 'react-hook-form'
+import { LuLoaderCircle } from 'react-icons/lu'
 import { IoLogoGoogle } from 'react-icons/io5'
 
 import { signInWithGoogle } from '@/actions/handle_auth_action'
@@ -7,19 +7,26 @@ import { signInWithGoogle } from '@/actions/handle_auth_action'
 import { Button } from '@/components/ui/button'
 
 const GoogleSignInButton = () => {
-  const { pending } = useFormStatus()
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm()
+
+  const onSubmit = async () => {
+    await signInWithGoogle()
+  }
 
   return (
-    <form action={signInWithGoogle}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Button
         type="submit"
         className="w-full"
         variant="outline"
-        disabled={pending}
+        disabled={isSubmitting}
       >
-        {pending ? (
+        {isSubmitting ? (
           <>
-            <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />
+            <LuLoaderCircle className="mr-2 h-4 w-4 animate-spin" />
             Logging in with Google...
           </>
         ) : (
