@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { User } from '@supabase/auth-js'
+import { useSearchParams } from 'next/navigation'
 
 import { useDownload } from '@/hooks/useDownload'
 import { useLoginDialog } from '@/providers/login-dialog-provider'
@@ -11,9 +12,10 @@ import { Button } from '@/components/ui/button'
 import useLocalStorage from '@/hooks/useLocalStorage'
 
 const Download = ({ user }: { user: User | null }) => {
+  const searchParams = useSearchParams()
   const { downloadTwitterSpaces } = useDownload()
   const { openLoginDialog } = useLoginDialog()
-  const [spaceUrl, setSpaceUrl] = useLocalStorage('spaceUrl', '')
+  const [spaceUrl, setSpaceUrl] = useLocalStorage('spaceUrl', searchParams.get('spaceUrl') ?? '') // todo fix
   const [inputUrl, setInputUrl] = useState(spaceUrl)
 
   const handleDownload = async () => {

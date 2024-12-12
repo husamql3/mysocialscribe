@@ -29,6 +29,7 @@ const Page = () => {
           width={80}
           height={80}
           quality={80}
+          loading="eager"
         />
 
         <CardContent className="w-full pb-5 text-center font-semibold dark:text-stone-50">

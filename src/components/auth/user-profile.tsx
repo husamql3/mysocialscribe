@@ -1,8 +1,9 @@
 'use client'
 
 import { User } from '@supabase/auth-js'
-import { ChevronDown, LogOut } from 'lucide-react'
 import { GoHistory } from 'react-icons/go'
+import { useRouter } from 'next/navigation'
+import { ChevronDown, LogOut } from 'lucide-react'
 
 import { logout } from '@/actions/handle_auth_action'
 
@@ -19,6 +20,8 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 export default function UserProfile({ user }: { user: User | undefined }) {
+  const router = useRouter()
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -27,11 +30,11 @@ export default function UserProfile({ user }: { user: User | undefined }) {
           size="sm"
           className="h-auto gap-0 !bg-transparent p-0 focus-visible:ring-0 dark:focus-visible:ring-0"
         >
-          <Avatar className="flex items-center justify-center">
+          <Avatar className="flex h-8 w-8 items-center justify-center">
             <AvatarImage
               src={user?.user_metadata?.avatar_url || '/avatar.png'}
               alt={user?.user_metadata?.full_name}
-              className="h-8 w-8 rounded-full object-cover object-center"
+              className="w-full rounded-full object-cover object-center"
             />
             <AvatarFallback>{user?.user_metadata?.full_name?.[0]}</AvatarFallback>
           </Avatar>
@@ -53,7 +56,7 @@ export default function UserProfile({ user }: { user: User | undefined }) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => router.push('/history')}>
             <GoHistory
               size={16}
               className="opacity-60"
