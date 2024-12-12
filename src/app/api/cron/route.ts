@@ -2,14 +2,14 @@ import { NextResponse } from 'next/server'
 import { unlink } from 'fs/promises'
 import path from 'path'
 
-import { OldDownload } from '@/types/DownlodsType'
 import { getRecentDownloads, updateDownloadFilename } from '@/db/downloads.service'
+import { UserDownload } from '@/types/DownlodsType'
 
 export async function GET() {
   try {
     const oldDownloads = await getRecentDownloads()
 
-    const cleanupTasks = oldDownloads.map(async (download: OldDownload) => {
+    const cleanupTasks = oldDownloads.map(async (download: UserDownload) => {
       const filePath = path.join(process.cwd(), 'public', 'downloads', download.filename)
 
       await Promise.all([unlink(filePath).catch(() => {}), updateDownloadFilename(download.id)])

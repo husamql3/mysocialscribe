@@ -1,13 +1,11 @@
-import { createClient } from '@/db/supabase/server'
+import { getUser } from '@/db/auth.service'
 
 import Logo from '@/components/components/logo'
 import UserProfile from '@/components/auth/user-profile'
 import LoginDialog from '@/components/auth/login-dialog'
 
 const Header = async () => {
-  const supabase = await createClient()
-  const { data } = await supabase.auth.getUser()
-  const user = data.user
+  const { user } = await getUser()
 
   return (
     <>

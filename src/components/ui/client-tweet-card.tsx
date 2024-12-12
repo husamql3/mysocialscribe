@@ -64,7 +64,6 @@ export const TweetSkeleton = ({
   ...props
 }: {
   className?: string
-  [key: string]: any
 }) => (
   <div
     className={cn(

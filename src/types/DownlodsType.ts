@@ -4,7 +4,7 @@ export type SaveDownloadRecord = {
   filename: string
 }
 
-export type OldDownload = {
+export type UserDownload = {
   id: string
   created_at: string
   user_id: string

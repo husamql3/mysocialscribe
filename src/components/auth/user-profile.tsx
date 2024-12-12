@@ -1,8 +1,8 @@
 'use client'
 
+import Link from 'next/link'
 import { User } from '@supabase/auth-js'
 import { GoHistory } from 'react-icons/go'
-import { useRouter } from 'next/navigation'
 import { ChevronDown, LogOut } from 'lucide-react'
 
 import { logout } from '@/actions/handle_auth_action'
@@ -20,8 +20,6 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 export default function UserProfile({ user }: { user: User | undefined }) {
-  const router = useRouter()
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -56,14 +54,19 @@ export default function UserProfile({ user }: { user: User | undefined }) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => router.push('/history')}>
-            <GoHistory
-              size={16}
-              className="opacity-60"
-              aria-hidden="true"
-            />
-            <span>History</span>
-          </DropdownMenuItem>
+          <Link
+            href="/history"
+            prefetch
+          >
+            <DropdownMenuItem>
+              <GoHistory
+                size={16}
+                className="opacity-60"
+                aria-hidden="true"
+              />
+              <span>History</span>
+            </DropdownMenuItem>
+          </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={async () => await logout()}>

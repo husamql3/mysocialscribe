@@ -1,5 +1,5 @@
 import { createClient } from '@/db/supabase/client'
-import { OldDownload, SaveDownloadRecord } from '@/types/DownlodsType'
+import { UserDownload, SaveDownloadRecord } from '@/types/DownlodsType'
 
 export const saveDownloadRecord = async ({ userId, url, filename }: SaveDownloadRecord) => {
   const supabase = createClient()
@@ -20,7 +20,7 @@ export async function getRecentDownloads() {
   const { data: oldDownloads, error } = await supabase.rpc('get_recent_downloads')
   if (error) throw error
 
-  return oldDownloads as OldDownload[]
+  return oldDownloads as UserDownload[]
 }
 
 export async function updateDownloadFilename(id: string) {
@@ -39,5 +39,5 @@ export async function getUserDownloads(userId: string) {
     .eq('user_id', userId)
   if (error) throw error
 
-  return userDownloads as OldDownload[]
+  return userDownloads as UserDownload[]
 }
