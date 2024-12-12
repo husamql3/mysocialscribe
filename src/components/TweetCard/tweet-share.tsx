@@ -1,45 +1,34 @@
-// Dependencies: pnpm install lucide-react @remixicon/react
-
 'use client'
 
-import { useRef, useState } from 'react'
-import {
-  RiFacebookFill,
-  RiMailLine,
-  RiTelegramLine,
-  RiTwitterXFill,
-  RiWhatsappLine,
-} from '@remixicon/react'
-import { Check, Copy } from 'lucide-react'
+import { useCallback, useRef, useState } from 'react'
 
 import { cn } from '@/lib/utils'
+import { PlatformType } from '@/types/PlatformType'
+import { createShareableUrl } from '@/utils/createShareableUrl'
+import { shareOnSocialMedia } from '@/utils/shareOnSocialMedia'
+import { SOCIAL_PLATFORMS } from '@/constants/SOCIAL_PLATFORMS'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { createShareableUrl } from '@/utils/createShareableUrl'
-import { shareOnSocialMedia } from '@/utils/shareOnSocialMedia'
-import { RiLinkedinBoxFill } from 'react-icons/ri'
+import AnimatedCopyIcon from '@/components/TweetCard/animated-copy-icon'
 
-const TweetShare = ({ spaceUrl }: { spaceUrl: string }) => {
+const ShareComponent = ({ spaceUrl }: { spaceUrl: string }) => {
   const [copied, setCopied] = useState<boolean>(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
   const shareableUrl = createShareableUrl(spaceUrl)
 
-  const handleCopy = () => {
+  const handleCopy = useCallback(() => {
     if (inputRef.current) {
       navigator.clipboard.writeText(shareableUrl)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1500)
-    }
-  }
 
-  //todo add whatsapp share
-  //todo add telegram share
-  //todo add linkedin share
-  //make them work with the shareableUrl
+      const timeoutId = setTimeout(() => setCopied(false), 1500)
+      return () => clearTimeout(timeoutId)
+    }
+  }, [shareableUrl])
 
   return (
     <div className="flex flex-col gap-4">
@@ -54,74 +43,32 @@ const TweetShare = ({ spaceUrl }: { spaceUrl: string }) => {
         </PopoverTrigger>
         <PopoverContent className="w-72">
           <div className="flex flex-col gap-3 text-center">
-            <div className="text-sm font-medium">Share Space Downlaod Link</div>
+            <div className="text-sm font-medium">Share Space Download Link</div>
+
+            {/* Social Media Share Buttons */}
             <div className="flex flex-wrap justify-center gap-2">
-              <Button
-                size="icon"
-                variant="outline"
-                aria-label="Share on Twitter"
-                onClick={() => shareOnSocialMedia('twitter', shareableUrl)}
-              >
-                <RiTwitterXFill
-                  size={16}
-                  strokeWidth={2}
-                  aria-hidden="true"
-                />
-              </Button>
-              <Button
-                size="icon"
-                variant="outline"
-                aria-label="Share on Facebook"
-                onClick={() => shareOnSocialMedia('facebook', shareableUrl)}
-              >
-                <RiFacebookFill
-                  size={16}
-                  strokeWidth={2}
-                  aria-hidden="true"
-                />
-              </Button>
-              <Button
-                size="icon"
-                variant="outline"
-                aria-label="Share on WhatsApp"
-                onClick={() => shareOnSocialMedia('whatsapp', shareableUrl)}
-              >
-                <RiWhatsappLine
-                  size={16}
-                  strokeWidth={2}
-                  aria-hidden="true"
-                />
-              </Button>
-              <Button
-                size="icon"
-                variant="outline"
-                aria-label="Share on Telegram"
-                onClick={() => shareOnSocialMedia('telegram', shareableUrl)}
-              >
-                <RiTelegramLine
-                  size={16}
-                  strokeWidth={2}
-                  aria-hidden="true"
-                />
-              </Button>
-              <Button
-                size="icon"
-                variant="outline"
-                aria-label="Share on LinkedIn"
-                onClick={() => shareOnSocialMedia('linkedin', shareableUrl)}
-              >
-                <RiLinkedinBoxFill
-                  size={16}
-                  strokeWidth={2}
-                  aria-hidden="true"
-                />
-              </Button>
+              {SOCIAL_PLATFORMS.map(({ platform, Icon, label }) => (
+                <Button
+                  key={platform}
+                  size="icon"
+                  variant="outline"
+                  aria-label={label}
+                  onClick={() => shareOnSocialMedia(platform as PlatformType, shareableUrl)}
+                >
+                  <Icon
+                    size={16}
+                    aria-hidden="true"
+                  />
+                </Button>
+              ))}
             </div>
+
+            {/* URL Copy Input */}
             <div className="space-y-2">
               <div className="relative">
                 <Input
                   ref={inputRef}
-                  id="input-53"
+                  id="share-link-input"
                   className="pe-9"
                   type="text"
                   defaultValue={shareableUrl}
@@ -133,35 +80,18 @@ const TweetShare = ({ spaceUrl }: { spaceUrl: string }) => {
                     <TooltipTrigger asChild>
                       <button
                         onClick={handleCopy}
-                        className="text-muted-foreground/80 hover:text-foreground focus-visible:text-foreground focus-visible:outline-ring/70 absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-lg border border-transparent outline-offset-2 transition-colors focus-visible:outline focus-visible:outline-2 disabled:pointer-events-none disabled:cursor-not-allowed"
+                        className={cn(
+                          'absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-lg',
+                          'text-muted-foreground/80 hover:text-foreground focus-visible:text-foreground',
+                          'border border-transparent outline-offset-2 transition-colors',
+                          'focus-visible:outline-ring/70 focus-visible:outline focus-visible:outline-2',
+                          'disabled:pointer-events-none disabled:cursor-not-allowed'
+                        )}
                         aria-label={copied ? 'Copied' : 'Copy to clipboard'}
                         disabled={copied}
                       >
-                        <div
-                          className={cn(
-                            'transition-all',
-                            copied ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
-                          )}
-                        >
-                          <Check
-                            className="stroke-emerald-500"
-                            size={16}
-                            strokeWidth={2}
-                            aria-hidden="true"
-                          />
-                        </div>
-                        <div
-                          className={cn(
-                            'absolute transition-all',
-                            copied ? 'scale-0 opacity-0' : 'scale-100 opacity-100'
-                          )}
-                        >
-                          <Copy
-                            size={16}
-                            strokeWidth={2}
-                            aria-hidden="true"
-                          />
-                        </div>
+                        {/* Animated Copy/Check Icons */}
+                        <AnimatedCopyIcon copied={copied} />
                       </button>
                     </TooltipTrigger>
                     <TooltipContent className="px-2 py-1 text-xs">Copy to clipboard</TooltipContent>
@@ -176,4 +106,4 @@ const TweetShare = ({ spaceUrl }: { spaceUrl: string }) => {
   )
 }
 
-export default TweetShare
+export default ShareComponent
