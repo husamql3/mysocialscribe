@@ -2,8 +2,7 @@ import { getTweet, type Tweet } from 'react-tweet/api'
 import { enrichTweet } from 'react-tweet'
 
 import TweetCard from '@/components/TweetCard/tweet-card'
-
-type TweetType = Tweet | undefined
+import { TweetType } from '@/types/TweetType'
 
 const Page = async () => {
   const tweet1: TweetType = await getTweet('1666900714667364352')

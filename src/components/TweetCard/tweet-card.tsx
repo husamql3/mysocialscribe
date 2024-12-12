@@ -4,6 +4,8 @@ import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import TweetCardHeader from '@/components/TweetCard/tweet-card-header'
 import TweetCardContent from '@/components/TweetCard/tweet-card-content'
 import TweetShare from '@/components/TweetCard/tweet-share'
+import { Button } from '@/components/ui/button'
+import { HiDownload } from 'react-icons/hi'
 
 const TweetCard = ({ tweet }: { tweet: EnrichedTweet }) => {
   return (
@@ -16,7 +18,16 @@ const TweetCard = ({ tweet }: { tweet: EnrichedTweet }) => {
         <TweetCardContent entities={tweet.entities} />
       </CardContent>
 
-      <CardFooter className="justify-end px-3 pb-3 pt-3">
+      <CardFooter className="justify-end gap-2 px-3 pb-3 pt-3">
+        <Button
+          size="sm"
+          variant="ghost"
+          className="h-7 w-7 rounded-full"
+        >
+          {/*<IoPlay className="h-5 w-5" />*/}
+          <HiDownload className="h-5 w-5" />
+        </Button>
+
         <TweetShare spaceUrl={tweet.url} />
       </CardFooter>
     </Card>
