@@ -1,12 +1,10 @@
-import { getUser } from '@/db/auth.service'
+import { User } from '@supabase/auth-js'
 
 import Logo from '@/components/components/logo'
 import UserProfile from '@/components/auth/user-profile'
 import LoginDialog from '@/components/auth/login-dialog'
 
-const Header = async () => {
-  const { user } = await getUser()
-
+const Header = ({ user }: { user: User | null }) => {
   return (
     <>
       <header className="relative py-4 pb-4">

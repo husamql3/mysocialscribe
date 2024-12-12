@@ -1,11 +1,9 @@
+import { getUser } from '@/db/auth.service'
+
 import HomeView from '@/components/views/home-view'
 
-import { createClient } from '@/db/supabase/server'
-
 const Home = async () => {
-  const supabase = await createClient()
-  const { data } = await supabase.auth.getUser()
-  const user = data?.user
+  const { user } = await getUser()
 
   return <HomeView user={user} />
 }
