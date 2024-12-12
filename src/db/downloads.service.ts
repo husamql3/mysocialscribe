@@ -27,3 +27,17 @@ export async function updateDownloadFilename(id: string) {
   const supabase = createClient()
   return supabase.from('downloads').update({ filename: null }).eq('id', id)
 }
+
+export async function getUserDownloads(userId: string) {
+  const supabase = createClient()
+
+  if (!userId) return []
+
+  const { data: userDownloads, error } = await supabase
+    .from('downloads')
+    .select('*')
+    .eq('user_id', userId)
+  if (error) throw error
+
+  return userDownloads as OldDownload[]
+}
