@@ -1,24 +1,35 @@
 'use client'
 
-import { useState } from 'react'
 import { User } from '@supabase/auth-js'
+import { useEffect, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 
 import { useDownload } from '@/hooks/useDownload'
 import { useLoginDialog } from '@/providers/login-dialog-provider'
+import useLocalStorage from '@/hooks/useLocalStorage'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import useLocalStorage from '@/hooks/useLocalStorage'
 
 const Download = ({ user }: { user: User | null }) => {
+  const searchParams = useSearchParams()
   const { downloadTwitterSpaces } = useDownload()
   const { openLoginDialog } = useLoginDialog()
-  const [spaceUrl, setSpaceUrl] = useLocalStorage('spaceUrl', '')
-  const [inputUrl, setInputUrl] = useState(spaceUrl)
+  const [storedSpaceUrl, setStoredSpaceUrl] = useLocalStorage('spaceUrl', '')
+  const [inputUrl, setInputUrl] = useState('')
+
+  useEffect(() => {
+    const urlFromParams = searchParams.get('spaceUrl')
+    if (urlFromParams) {
+      setInputUrl(urlFromParams)
+    } else if (storedSpaceUrl) {
+      setInputUrl(storedSpaceUrl)
+    }
+  }, [searchParams, storedSpaceUrl])
 
   const handleDownload = async () => {
     if (user === null) {
-      setSpaceUrl(inputUrl)
+      setStoredSpaceUrl(inputUrl)
       openLoginDialog('login')
       return
     }
@@ -29,7 +40,7 @@ const Download = ({ user }: { user: User | null }) => {
       email: user.email!,
     })
 
-    setSpaceUrl('')
+    setStoredSpaceUrl('')
     setInputUrl('')
   }
 

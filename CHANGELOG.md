@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.10] - fix email template
+
+## [1.5.9] - fix dark mode
+
+## [1.5.8] - Implement Audio Player
+
+## [1.4.8] - Implement History Page
+
 ## [1.3.8] - Update Email Template
 
 - Make it dark mode friendly

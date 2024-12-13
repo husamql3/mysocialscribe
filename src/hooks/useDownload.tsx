@@ -1,14 +1,16 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
-import { toast } from '@/hooks/use-toast'
 import { useLoginDialog } from '@/providers/login-dialog-provider'
 import { DownloadTwitterSpacesType, UseDownloadType } from '@/types/UseDownloadType'
+import { sendErrorEmail } from '@/utils/sendDownloadEmail'
 
 export const useDownload = (): UseDownloadType => {
   const { openLoginDialog } = useLoginDialog()
   const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
 
   const downloadTwitterSpaces = async ({
     url,
@@ -22,11 +24,7 @@ export const useDownload = (): UseDownloadType => {
         throw new Error('Invalid Twitter Spaces or Tweet URL')
       }
 
-      toast({
-        variant: 'success',
-        title: 'Space is being downloaded',
-        description: 'Your download is being processed. Check your email for the link.',
-      })
+      router.push('/success')
 
       const response = await fetch('/api/download/twitter', {
         method: 'POST',
@@ -35,9 +33,12 @@ export const useDownload = (): UseDownloadType => {
         },
         body: JSON.stringify({ url, userId, email }),
       })
-      if (!response.ok) throw new Error('Download request failed')
+      if (!response.ok && response.status === 500) {
+        await sendErrorEmail({ to: email })
+      }
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : String(err)
+      console.warn(errorMessage)
 
       if (typeof err === 'object' && err !== null && 'message' in err) {
         const message = (err as { message: string }).message
@@ -46,12 +47,6 @@ export const useDownload = (): UseDownloadType => {
           return
         }
       }
-
-      toast({
-        variant: 'destructive',
-        title: 'Download Error',
-        description: errorMessage,
-      })
     }
   }
 

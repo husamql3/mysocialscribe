@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport({
   },
 })
 
-export const sendEmail = async ({
+export const sendDownloadEmail = async ({
   to,
   href,
   downloadName,
@@ -30,6 +30,29 @@ export const sendEmail = async ({
 
     // Replace placeholders in the HTML template
     htmlContent = htmlContent.replace('{{HREF}}', href).replace('{{DOWNLOAD_NAME}}', downloadName)
+
+    // Configure email options
+    const mailOptions = {
+      from: EMAIL,
+      to,
+      subject: 'Your download is ready!',
+      html: htmlContent,
+    }
+
+    // Send the email
+    await transporter.sendMail(mailOptions)
+    console.log('Email sent successfully', to)
+  } catch (error) {
+    console.error('Error sending email:', error)
+    throw error
+  }
+}
+
+export const sendErrorEmail = async ({ to }: { to: string }): Promise<void> => {
+  try {
+    const projectRoot = process.cwd()
+    const htmlContent = path.join(projectRoot, 'public', 'errorEmailTemplate.html')
+
 
     // Configure email options
     const mailOptions = {

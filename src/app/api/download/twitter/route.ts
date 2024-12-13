@@ -4,7 +4,7 @@ import { writeFile } from 'fs/promises'
 import path from 'path'
 
 import { saveDownloadRecord } from '@/db/downloads.service'
-import { sendEmail } from '@/utils/sendDownloadEmail'
+import { sendDownloadEmail } from '@/utils/sendDownloadEmail'
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
@@ -53,7 +53,11 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
                 url,
                 filename,
               }),
-              sendEmail({ to: email, href: dlUrl, downloadName: filename }),
+              sendDownloadEmail({
+                to: email,
+                href: dlUrl,
+                downloadName: filename,
+              }),
             ])
 
             resolve(NextResponse.json({ downloadUrl: dlUrl }, { status: 200 }))

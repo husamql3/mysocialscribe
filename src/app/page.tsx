@@ -1,21 +1,11 @@
-import { createClient } from '@/db/supabase/server'
+import { getUser } from '@/db/auth.service'
 
-import Title from '@/components/components/title'
-import Download from '@/components/components/download'
-import { CardStackComponent } from '@/components/components/card-stack-component'
+import HomeView from '@/components/views/home-view'
 
 const Home = async () => {
-  const supabase = await createClient()
-  const { data } = await supabase.auth.getUser()
-  const user = data?.user
+  const { user } = await getUser()
 
-  return (
-    <main className="flex h-56 flex-1 flex-col items-center justify-center gap-8">
-      <Title />
-      <Download user={user} />
-      <CardStackComponent />
-    </main>
-  )
+  return <HomeView user={user} />
 }
 
 export default Home

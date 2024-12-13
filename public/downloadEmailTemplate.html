@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      style="background: #f5f8fb; font-family: lato, sans-serif;">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport"
@@ -8,10 +9,12 @@
   <style>
     body {
       font-family: system-ui, sans-serif;
-      margin: 0;
+      margin-inline: auto;
       padding: 0;
-      background-color: #09090b;
-      color: #f4f4f5;
+      color: #0c0a09;
+      text-align: center;
+      background-color: #f5f8fb;
+      max-width: 500px;
     }
 
     a {
@@ -24,12 +27,9 @@
     }
 
     .container {
-      max-width: 600px;
-      margin: 20px auto;
-      background-color: #18181b;
       padding: 20px;
       border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+      text-align: center;
     }
 
     .logo {
@@ -42,8 +42,9 @@
     }
 
     .content {
-      text-align: center;
       padding: 20px;
+      text-align: center;
+      max-width: 400px;
     }
 
     .content h2 {
@@ -61,7 +62,7 @@
     .btn {
       display: inline-block;
       background-color: #3b82f6;
-      color: white;
+      color: #fafafa;
       padding: 12px 24px;
       border-radius: 6px;
       font-size: 16px;
@@ -82,6 +83,7 @@
     .footer {
       text-align: center;
       font-size: 14px;
+      max-width: 400px;
       padding: 20px;
     }
 
@@ -95,34 +97,48 @@
 <body>
 <div class="container">
   <div class="logo">
-    <img src="https://onzqipmlfmrtharffolm.supabase.co/storage/v1/object/sign/logo/icon-white.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJsb2dvL2ljb24td2hpdGUucG5nIiwiaWF0IjoxNzMzNjA3NTk1LCJleHAiOjIwNDg5Njc1OTV9.me2FpSorCVRXvb7yiCOCYZK-k4_W_4cvdEsdFf9ic_g"
+    <img src="https://onzqipmlfmrtharffolm.supabase.co/storage/v1/object/public/logo/icon-black.png"
          alt="mysocialscribe logo">
   </div>
   <div class="content">
-    <h2>🎉 Your Twitter Space Recording is Ready! 🎉</h2>
-    <p>Hi there! We’re thrilled to let you know that your Twitter Space
-      recording has been processed and is ready for download. 😊</p>
-    <p>⏳ The link will only be available for 24 hours. Don’t wait too long!
-      🕒</p>
+    <h2>
+      Your Twitter Space is Ready! 🎉
+    </h2>
+
+    <br />
+
+    <p>
+      Hi there! We’re thrilled to let you know that your Twitter Space
+      recording has been processed and is ready for download. 😊
+    </p>
+
+    <br />
+
+    <p>
+      ⏳ The link will only be available for 24 hours. Don’t wait too long! 🕒
+    </p>
+
+    <br />
+
     <a href="{{HREF}}"
        download="{{DOWNLOAD_NAME}}"
        class="btn">
-      <svg xmlns="http://www.w3.org/2000/svg"
-           width="18"
-           height="18"
-           viewBox="0 0 24 24"
-           fill="none"
-           stroke="currentColor"
-           stroke-width="2"
-           stroke-linecap="round"
-           stroke-linejoin="round">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-        <polyline points="7 10 12 15 17 10" />
-        <line x1="12"
-              x2="12"
-              y1="15"
-              y2="3" />
-      </svg>
+      <!--      <svg xmlns="http://www.w3.org/2000/svg"-->
+      <!--           width="18"-->
+      <!--           height="18"-->
+      <!--           viewBox="0 0 24 24"-->
+      <!--           fill="none"-->
+      <!--           stroke="currentColor"-->
+      <!--           stroke-width="2"-->
+      <!--           stroke-linecap="round"-->
+      <!--           stroke-linejoin="round">-->
+      <!--        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />-->
+      <!--        <polyline points="7 10 12 15 17 10" />-->
+      <!--        <line x1="12"-->
+      <!--              x2="12"-->
+      <!--              y1="15"-->
+      <!--              y2="3" />-->
+      <!--      </svg>-->
       Download Your Recording
     </a>
   </div>
@@ -131,7 +147,7 @@
       <a href="mailto:mysocialscribe.info@gmail.com">mysocialscribe.info@gmail.com</a>
       and we’ll sort it out for you. 💌
     </p>
-    <small>&copy; 2024 mysocialscribe. Crafted with ❤️</small>
+    <small>&copy; 2024 mysocialscribe.️</small>
   </div>
 </div>
 </body>

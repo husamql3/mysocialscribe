@@ -2,7 +2,7 @@ import { HeroHighlight, Highlight } from '@/components/ui/hero-highlight'
 
 export default function Title() {
   return (
-    <div className="max-w-4xl px-4 text-center">
+    <div className="max-w-4xl px-4 pt-4 text-center sm:pt-0">
       <HeroHighlight className="text-lg font-semibold leading-snug text-neutral-700 dark:text-white md:text-3xl lg:leading-tight">
         Your AI Assistant for Twitter Spaces
       </HeroHighlight>
