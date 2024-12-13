@@ -3,7 +3,10 @@ import { NextRequest } from 'next/server'
 import { updateSession } from '@/db/supabase/middleware'
 
 export async function middleware(request: NextRequest) {
-  return await updateSession(request)
+  const response = await updateSession(request)
+  // Set a custom header for the dark theme
+  response.headers.set('theme', 'dark')
+  return response
 }
 
 export const config = {

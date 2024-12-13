@@ -3,7 +3,7 @@ import tailwindcssAnimate from 'tailwindcss-animate'
 import flattenColorPalette from 'tailwindcss/lib/util/flattenColorPalette'
 
 export default {
-  darkMode: ['class'],
+  darkMode: 'class',
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
