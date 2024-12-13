@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 
 import { useLoginDialog } from '@/providers/login-dialog-provider'
 import { DownloadTwitterSpacesType, UseDownloadType } from '@/types/UseDownloadType'
-import { sendErrorEmail } from '@/utils/sendDownloadEmail'
 
 export const useDownload = (): UseDownloadType => {
   const { openLoginDialog } = useLoginDialog()
@@ -34,7 +33,10 @@ export const useDownload = (): UseDownloadType => {
         body: JSON.stringify({ url, userId, email }),
       })
       if (!response.ok && response.status === 500) {
-        await sendErrorEmail({ to: email })
+        setError('Download failed, please recheck the URL')
+        throw new Error('Download failed, please recheck the URL')
+        // todo: fix use `resend`
+        // await sendErrorEmail({ to: email })
       }
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : String(err)

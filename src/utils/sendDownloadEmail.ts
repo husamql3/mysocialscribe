@@ -51,22 +51,22 @@ export const sendDownloadEmail = async ({
 export const sendErrorEmail = async ({ to }: { to: string }): Promise<void> => {
   try {
     const projectRoot = process.cwd()
-    const htmlContent = path.join(projectRoot, 'public', 'errorEmailTemplate.html')
-
+    const templatePath = path.join(projectRoot, 'public', 'errorEmailTemplate.html')
+    const htmlContent = await fs.promises.readFile(templatePath, 'utf-8')
 
     // Configure email options
     const mailOptions = {
       from: EMAIL,
       to,
-      subject: 'Your download is ready!',
+      subject: 'Download Error Notification',
       html: htmlContent,
     }
 
     // Send the email
     await transporter.sendMail(mailOptions)
-    console.log('Email sent successfully', to)
+    console.log('Error email sent successfully', to)
   } catch (error) {
-    console.error('Error sending email:', error)
+    console.error('Error sending error email:', error)
     throw error
   }
 }
