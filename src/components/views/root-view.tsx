@@ -6,7 +6,7 @@ import { Toaster } from '@/components/ui/toaster'
 import Footer from '@/components/layout/footer'
 import DotPattern from '@/components/ui/dot-pattern'
 import Header from '@/components/layout/header'
-import AudioPlayer from '@/components/components/audio-player'
+// import AudioPlayer from '@/components/components/audio-player'
 
 const RootView = async ({ children }: { children: React.ReactNode }) => {
   const { user } = await getUser()
@@ -16,7 +16,7 @@ const RootView = async ({ children }: { children: React.ReactNode }) => {
       <Header user={user} />
       {children}
       <Footer />
-      <AudioPlayer src="/downloads/twitter_space_5ddaaf96.mp3" />
+      {/*<AudioPlayer src="/downloads/twitter_space_5ddaaf96.mp3" />*/}
       <Toaster />
       <DotPattern
         className={cn(

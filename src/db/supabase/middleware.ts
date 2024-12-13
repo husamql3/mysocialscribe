@@ -25,7 +25,16 @@ export const updateSession = async (request: NextRequest) => {
     }
   )
 
-  // refreshing the auth token
-  await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  const isProtectedRoute =
+    request.nextUrl.pathname.startsWith('/history') ||
+    request.nextUrl.pathname.startsWith('/success')
+
+  if (isProtectedRoute && !user) {
+    return NextResponse.redirect(new URL('/', request.url))
+  }
+
   return supabaseResponse
 }
