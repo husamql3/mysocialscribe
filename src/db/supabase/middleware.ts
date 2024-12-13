@@ -33,7 +33,7 @@ export const updateSession = async (request: NextRequest) => {
     request.nextUrl.pathname.startsWith('/success')
 
   if (isProtectedRoute && !user) {
-    return NextResponse.redirect(new URL('/', request.url))
+    return NextResponse.redirect(new URL('/404', request.url))
   }
 
   return supabaseResponse
