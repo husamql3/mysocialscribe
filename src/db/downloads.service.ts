@@ -1,6 +1,9 @@
 import { createClient } from '@/db/supabase/client'
-import { UserDownload, SaveDownloadRecord } from '@/types/DownlodsType'
+import { SaveDownloadRecord, UserDownload } from '@/types/DownlodsType'
 
+/**
+ * Save the download record
+ **/
 export const saveDownloadRecord = async ({ userId, url, filename }: SaveDownloadRecord) => {
   const supabase = createClient()
 
@@ -14,6 +17,9 @@ export const saveDownloadRecord = async ({ userId, url, filename }: SaveDownload
   console.log('Download record saved successfully', url, filename)
 }
 
+/**
+ * Get the most recent downloads (48 hours)
+ **/
 export async function getRecentDownloads() {
   const supabase = createClient()
 
@@ -23,11 +29,17 @@ export async function getRecentDownloads() {
   return oldDownloads as UserDownload[]
 }
 
+/**
+ * Delete a download file name from the dl record
+ **/
 export async function updateDownloadFilename(id: string) {
   const supabase = createClient()
   return supabase.from('downloads').update({ filename: null }).eq('id', id)
 }
 
+/**
+ * Get the user downloads
+ **/
 export async function getUserDownloads(userId: string) {
   const supabase = createClient()
 

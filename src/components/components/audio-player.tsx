@@ -1,18 +1,31 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { CiPause1, CiPlay1 } from 'react-icons/ci'
 import { TbVolume, TbVolume3 } from 'react-icons/tb'
 
+import { cn } from '@/lib/utils'
+import useAudioPlayer from '@/hooks/use-audio-player'
+
 import { Slider } from '@/components/ui/slider'
 
-const AudioPlayer = ({ src }: { src: string }) => {
+const AudioPlayer = () => {
   const [playing, setPlaying] = useState(false)
   const [progress, setProgress] = useState(0)
   const [volume, setVolume] = useState(1)
   const [duration, setDuration] = useState(0)
   const [currentTime, setCurrentTime] = useState(0)
   const audioRef = useRef<HTMLAudioElement>(null)
+  const [src, setSrc] = useState<string | undefined>(undefined)
+
+  const { isVisible, spaceSrc } = useAudioPlayer()
+  useEffect(() => {
+    if (spaceSrc) {
+      setSrc(`${process.env.NEXT_PUBLIC_BASE_URL}/downloads/${spaceSrc}`)
+    } else {
+      setSrc(undefined)
+    }
+  }, [spaceSrc])
 
   const togglePlayPause = () => {
     if (audioRef.current) {
@@ -58,8 +71,24 @@ const AudioPlayer = ({ src }: { src: string }) => {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`
   }
 
+  // Pause and reset audio when component is hidden
+  useEffect(() => {
+    if (!isVisible && audioRef.current) {
+      audioRef.current.pause()
+      audioRef.current.currentTime = 0
+      setPlaying(false)
+      setProgress(0)
+      setCurrentTime(0)
+    }
+  }, [isVisible])
+
   return (
-    <div className="sticky bottom-0 z-50 flex  w-full items-center gap-4 border-t border-y-stone-800 px-4 py-2 text-white dark:bg-neutral-950">
+    <div
+      className={cn(
+        'sticky bottom-0 z-50 flex w-full items-center gap-4 border-t border-y-stone-800 px-4 py-2 text-white dark:bg-neutral-950',
+        isVisible ? 'flex' : 'hidden'
+      )}
+    >
       <audio
         ref={audioRef}
         src={src}
