@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils'
 import useAudioPlayer from '@/hooks/use-audio-player'
 
 import { Slider } from '@/components/ui/slider'
+import { IoClose } from 'react-icons/io5'
 
 const AudioPlayer = () => {
   const [playing, setPlaying] = useState(false)
@@ -18,7 +19,7 @@ const AudioPlayer = () => {
   const audioRef = useRef<HTMLAudioElement>(null)
   const [src, setSrc] = useState<string | undefined>(undefined)
 
-  const { isVisible, spaceSrc } = useAudioPlayer()
+  const { isVisible, spaceSrc, toggle, setSpaceSrc } = useAudioPlayer()
   useEffect(() => {
     if (spaceSrc) {
       setSrc(`${process.env.NEXT_PUBLIC_BASE_URL}/downloads/${spaceSrc}`)
@@ -95,6 +96,15 @@ const AudioPlayer = () => {
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
       />
+      <button
+        className="rounded-full p-2 transition hover:bg-white/10"
+        onClick={() => {
+          toggle()
+          setSpaceSrc('')
+        }}
+      >
+        <IoClose className="h-5 w-5" />
+      </button>
 
       <button
         className="rounded-full p-2 transition hover:bg-white/10"
@@ -102,10 +112,9 @@ const AudioPlayer = () => {
       >
         {playing ? <CiPause1 className="h-5 w-5" /> : <CiPlay1 className="h-5 w-5" />}
       </button>
-
       <div className="flex flex-1 flex-col gap-2">
         <div className="flex items-center gap-2">
-          <span className="w-12 text-right text-xs tabular-nums text-zinc-400">
+          <span className="w-12 text-left text-xs tabular-nums text-zinc-400">
             {formatTime(currentTime)}
           </span>
           <Slider
@@ -118,7 +127,6 @@ const AudioPlayer = () => {
           <span className="w-12 text-xs tabular-nums text-zinc-400">{formatTime(duration)}</span>
         </div>
       </div>
-
       <div className="flex items-center gap-2">
         {audioRef?.current?.volume === 0 ? (
           <TbVolume3 className="h-5 w-5" />

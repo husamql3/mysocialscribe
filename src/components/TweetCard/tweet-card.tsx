@@ -28,6 +28,15 @@ const TweetCard = ({ tweet, filename }: TweetCardType) => {
       </CardContent>
 
       <CardFooter className="justify-end gap-2 px-3 pb-3 pt-3">
+        {/*TODO: Delete button*/}
+        {/*<Button*/}
+        {/*  size="sm"*/}
+        {/*  variant="ghost"*/}
+        {/*  className="h-7 w-7 rounded-full"*/}
+        {/*>*/}
+        {/*  <AiFillDelete />*/}
+        {/*</Button>*/}
+
         <TweetPlayBtn
           tweetUrl={tweet.url}
           filename={filename}
