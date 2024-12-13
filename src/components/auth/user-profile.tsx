@@ -30,7 +30,7 @@ export default function UserProfile({ user }: { user: User | undefined }) {
         >
           <Avatar className="flex h-8 w-8 items-center justify-center">
             <AvatarImage
-              src={user?.user_metadata?.avatar_url || '/avatar.png'}
+              src={user?.user_metadata?.avatar_url}
               alt={user?.user_metadata?.full_name}
               className="w-full rounded-full object-cover object-center"
             />
