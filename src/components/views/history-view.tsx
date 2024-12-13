@@ -20,6 +20,22 @@ const HistoryView = ({ downloadTweets }: { downloadTweets: UserDownloadTweet[] }
           filename={download.filename}
         />
       ))}
+
+      {downloadTweets.map(({ download, tweet }, index) => (
+        <TweetCard
+          key={index}
+          tweet={tweet}
+          filename={download.filename}
+        />
+      ))}
+
+      {downloadTweets.map(({ download, tweet }, index) => (
+        <TweetCard
+          key={index}
+          tweet={tweet}
+          filename={download.filename}
+        />
+      ))}
     </main>
   )
 }
