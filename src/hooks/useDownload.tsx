@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 
 import { useLoginDialog } from '@/providers/login-dialog-provider'
 import { DownloadTwitterSpacesType, UseDownloadType } from '@/types/UseDownloadType'
+import { toast } from '@/hooks/use-toast'
 
 export const useDownload = (): UseDownloadType => {
   const { openLoginDialog } = useLoginDialog()
@@ -19,13 +20,17 @@ export const useDownload = (): UseDownloadType => {
     try {
       const twitterSpacesRegex = /^https?:\/\/(x|twitter)\.com\/[^/]+\/(status|spaces)\/\d+/
       if (!twitterSpacesRegex.test(url)) {
-        setError('Invalid Twitter Spaces or Tweet URL')
+        toast({
+          title: 'Invalid Twitter Spaces or Tweet URL',
+          description: 'Please enter a valid Twitter Spaces or Tweet URL',
+          variant: 'destructive',
+        })
         throw new Error('Invalid Twitter Spaces or Tweet URL')
       }
 
       router.push('/success')
 
-      const response = await fetch('/api/download/twitter', {
+      const response = await fetch('/api/twitter/download', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

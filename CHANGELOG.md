@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+## [1.5.11] - update tweet card design
 
 ## [1.5.10] - fix email template
 
