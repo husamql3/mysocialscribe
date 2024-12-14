@@ -13,6 +13,7 @@ const TweetDelBtn = ({ downloadId, filename }: { downloadId: string; filename?: 
         type="hidden"
         name="downloadId"
         value={downloadId}
+        readOnly
       />
 
       {filename && (
@@ -20,6 +21,7 @@ const TweetDelBtn = ({ downloadId, filename }: { downloadId: string; filename?: 
           type="hidden"
           name="filename"
           value={filename}
+          readOnly
         />
       )}
 
