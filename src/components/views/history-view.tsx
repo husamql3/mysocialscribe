@@ -18,6 +18,7 @@ const HistoryView = ({ downloadTweets }: { downloadTweets: UserDownloadTweet[] }
           key={index}
           tweet={tweet}
           filename={download.filename}
+          downloadId={download.id}
         />
       ))}
     </main>

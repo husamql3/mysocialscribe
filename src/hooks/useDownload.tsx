@@ -25,7 +25,7 @@ export const useDownload = (): UseDownloadType => {
 
       router.push('/success')
 
-      const response = await fetch('/api/download/twitter', {
+      const response = await fetch('/api/twitter/download', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
