@@ -60,8 +60,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
               }),
             ])
 
-            console.log('7')
-
             resolve(NextResponse.json({ downloadUrl: dlUrl }, { status: 200 }))
           } catch (uploadError) {
             console.error('Upload error:', uploadError)
