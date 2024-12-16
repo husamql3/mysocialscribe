@@ -1,4 +1,4 @@
-FROM node:alpine AS base
+FROM node:16-alpine AS base
 
 # Install dependencies
 RUN apk add --no-cache curl python3 py3-pip ffmpeg
@@ -11,23 +11,23 @@ RUN mkdir -p ~/.local/bin && \
 # Add yt-dlp to PATH
 ENV PATH="/root/.local/bin:${PATH}"
 
-# Stage 1: Install dependencies
+# Install dependencies
 FROM base AS deps
 WORKDIR /app
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile --production
+RUN yarn install --frozen-lockfile
 
-# Stage 2: Build the application
+# Build the application
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN yarn build
 
-# Stage 3: Production server
+# Production image
 FROM base AS runner
 WORKDIR /app
-ENV NODE_ENV=production
+ENV NODE_ENV production
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
