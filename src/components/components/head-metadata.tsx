@@ -5,7 +5,7 @@ const HeadMetadata = () => {
     <>
       <link
         rel="icon"
-        href="/icon-black.png"
+        href="/favicon.ico"
         type="image/png"
       />
       <meta
