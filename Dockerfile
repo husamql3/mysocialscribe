@@ -14,7 +14,9 @@ ENV PATH="/root/.local/bin:${PATH}"
 # Install dependencies
 FROM base AS deps
 WORKDIR /app
-COPY package.json yarn.lock ./
+COPY package.json ./
+RUN yarn install && yarn cache clean
+COPY yarn.lock ./
 RUN yarn install --frozen-lockfile
 
 # Build the application
