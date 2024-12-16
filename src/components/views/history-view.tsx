@@ -3,8 +3,6 @@ import { UserDownloadTweet } from '@/types/TweetType'
 import TweetCard from '@/components/TweetCard/tweet-card'
 
 const HistoryView = ({ downloadTweets }: { downloadTweets: UserDownloadTweet[] }) => {
-  console.log(downloadTweets[0])
-
   if (downloadTweets.length === 0) {
     return (
       <main className="mx-auto flex w-full max-w-lg flex-1 items-center justify-center gap-3 px-4 py-6 md:px-0">
