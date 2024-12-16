@@ -15,7 +15,7 @@ ENV PATH="/root/.local/bin:${PATH}"
 FROM base AS deps
 WORKDIR /app
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
+RUN yarn install --frozen-lockfile --production
 
 # Stage 2: Build the application
 FROM base AS builder
@@ -27,16 +27,17 @@ RUN yarn build
 # Stage 3: Production server
 FROM base AS runner
 WORKDIR /app
+ENV NODE_ENV=production
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
 # Set permissions for the downloads directory
 RUN mkdir -p /app/public/downloads && \
-    chmod -R 755 /app/public/downloads
+    chmod -R 755 /app/public/downloads && \
+    chown -R node:node /app/public/downloads
 
-# Set ownership for the downloads directory
-RUN chown -R node:node /app/public/downloads
+USER node
 
 EXPOSE 3000
 CMD ["node", "server.js"]
