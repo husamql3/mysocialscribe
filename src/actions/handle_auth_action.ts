@@ -6,6 +6,11 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/db/supabase/server'
 import { SignupFormData } from '@/types/AuthType'
 
+/**
+ * Logs in the user with the given email and password
+ * @param formData - The form data containing the email and password
+ * @returns A response object with a success flag and an error message if applicable
+ **/
 export async function login(formData: FormData) {
   const supabase = await createClient()
   const data = {
@@ -25,6 +30,10 @@ export async function login(formData: FormData) {
   redirect('/')
 }
 
+/**
+ * Signs up the user with the given email and password
+ * @param formData - The form data containing the email and password
+ **/
 export async function signup(formData: SignupFormData) {
   const supabase = await createClient()
 
@@ -41,6 +50,9 @@ export async function signup(formData: SignupFormData) {
   redirect('/')
 }
 
+/**
+ * Logs out the user
+ **/
 export async function logout() {
   console.log('Logging out...')
   const supabase = await createClient()
@@ -55,6 +67,9 @@ export async function logout() {
   redirect('/')
 }
 
+/**
+ * Signs in the user with GitHub
+ **/
 export async function signInWithGithub() {
   const supabase = await createClient()
 
@@ -77,6 +92,9 @@ export async function signInWithGithub() {
   redirect('/')
 }
 
+/**
+ * Signs in the user with Google
+ **/
 export async function signInWithGoogle() {
   const supabase = await createClient()
 

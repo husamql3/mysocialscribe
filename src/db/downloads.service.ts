@@ -12,20 +12,15 @@ const supabase = createClient()
  * @param {string} params.filename - The name of the downloaded file.
  *
  * @throws Will throw an error if the upsert operation fails.
- */
+ **/
 export const saveDownloadRecord = async ({ userId, url, filename }: SaveDownloadRecord) => {
-  const { error } = await supabase.from('downloads').upsert(
-    {
-      user_id: userId,
-      space_url: url,
-      filename,
-    },
-    {
-      onConflict: 'space_url',
-      ignoreDuplicates: false,
-    }
-  )
-  if (error) throw error
+  const { error: saveError } = await supabase.from('downloads').insert({
+    user_id: userId,
+    space_url: url,
+    filename,
+  })
+  if (saveError) throw saveError
+
   console.log('Download record saved successfully', url, filename)
 }
 
@@ -34,7 +29,7 @@ export const saveDownloadRecord = async ({ userId, url, filename }: SaveDownload
  *
  * @throws Will throw an error if the database query fails.
  * @returns An array of recent downloads.
- */
+ **/
 export async function getRecentDownloads() {
   const { data: oldDownloads, error } = await supabase.rpc('get_recent_downloads')
   if (error) throw error
@@ -49,7 +44,7 @@ export async function getRecentDownloads() {
  *
  * @throws Will throw an error if the database query fails.
  * @returns The updated download.
- */
+ **/
 export async function updateDownloadFilename(id: string) {
   return supabase.from('downloads').update({ filename: null }).eq('id', id)
 }
@@ -61,7 +56,7 @@ export async function updateDownloadFilename(id: string) {
  *
  * @throws Will throw an error if the database query fails.
  * @returns An array of downloads for the user.
- */
+ **/
 export async function getUserDownloads(userId: string) {
   if (!userId) return []
 
@@ -79,7 +74,7 @@ export async function getUserDownloads(userId: string) {
  *
  * @param {string} id - The ID of the download to delete.
  * @throws Will throw an error if the database query fails.
- */
+ **/
 export async function deleteDownload(id: string) {
   const { error } = await supabase.from('downloads').delete().eq('id', id)
   if (error) throw error
