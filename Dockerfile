@@ -15,15 +15,14 @@ ENV PATH="/root/.local/bin:${PATH}"
 FROM base AS deps
 WORKDIR /app
 COPY package.json ./
-RUN yarn install && yarn cache clean
-COPY yarn.lock ./
+RUN yarn install
+COPY . .
 RUN yarn install --frozen-lockfile
 
 # Build the application
 FROM base AS builder
 WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+COPY --from=deps /app ./
 RUN yarn build
 
 # Production image
