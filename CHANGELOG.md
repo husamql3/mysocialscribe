@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.5.15] - update logo & favicon
+
+## [1.5.13] - add del tweet button
+
 ## [1.5.11] - update tweet card design
 
 ## [1.5.10] - fix email template

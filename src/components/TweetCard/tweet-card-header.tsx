@@ -51,6 +51,7 @@ const TweetCardHeader = ({ tweet }: { tweet: EnrichedTweet }) => {
         href={tweet.url}
         target="_blank"
         rel="noreferrer"
+        className="size-fit"
       >
         <span className="sr-only">Link to tweet</span>
         <Twitter />
