@@ -28,9 +28,15 @@ RUN yarn build
 FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
+
+# Ensure .next directory exists and copy contents
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
+
+# Ensure .next directory is created if it doesn't exist
+RUN mkdir -p ./.next && \
+    mkdir -p ./.next/static
 
 # Set permissions for the downloads directory
 RUN mkdir -p /app/public/downloads && \
