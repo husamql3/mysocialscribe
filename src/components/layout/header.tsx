@@ -8,7 +8,7 @@ const Header = ({ user }: { user: User | null }) => {
   return (
     <>
       <header className="relative py-4 pb-4">
-        <div className="container mx-auto flex max-w-3xl items-center justify-between px-4 md:px-0">
+        <div className="container mx-auto flex max-w-3xl items-center justify-between px-4 md:px-1">
           <Logo />
 
           {user && <UserProfile user={user} />}

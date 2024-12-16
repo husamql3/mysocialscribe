@@ -2,7 +2,7 @@ import { VERSION } from '@/constants/VERSION'
 
 const Footer = () => {
   return (
-    <footer className="container mx-auto flex w-full max-w-3xl flex-col-reverse items-center justify-between gap-2 px-4 py-6 text-gray-200 md:flex-row md:px-0">
+    <footer className="container mx-auto flex w-full max-w-3xl flex-col-reverse items-center justify-between gap-2 px-4 py-6 text-gray-200 md:flex-row md:px-1">
       <div className="text-sm font-light">
         <p>
           © {new Date().getFullYear()} MySocialScribe | v{VERSION}
