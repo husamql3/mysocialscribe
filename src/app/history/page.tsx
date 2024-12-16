@@ -24,7 +24,12 @@ const Page = async () => {
     })
   )
 
-  return <HistoryView downloadTweets={downloadTweets} />
+  return (
+    <HistoryView
+      downloadTweets={downloadTweets}
+      user={user!}
+    />
+  )
 }
 
 export default Page

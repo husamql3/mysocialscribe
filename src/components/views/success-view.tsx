@@ -12,7 +12,7 @@ const SucessView = () => {
 
   return (
     <main className="flex h-full flex-1 flex-col items-center justify-center gap-8 p-6">
-      <Card className="relative z-50 flex w-full max-w-sm flex-col items-center justify-center overflow-auto rounded-lg px-6 pb-4 pt-8 shadow-xl dark:bg-zinc-950">
+      <Card className="relative z-50 flex w-full max-w-sm flex-col items-center justify-center overflow-auto overflow-y-hidden rounded-lg px-6 pb-4 pt-8 shadow-xl dark:bg-zinc-950">
         <Confetti
           ref={confettiRef}
           className="absolute z-0 size-full"

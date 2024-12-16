@@ -1,5 +1,7 @@
 'use client'
 
+import { AiOutlineDelete } from 'react-icons/ai'
+
 import useDeleteDownload from '@/hooks/use-delete-download'
 
 import { Button } from '@/components/ui/button'
@@ -26,12 +28,13 @@ const TweetDelBtn = ({ downloadId, filename }: { downloadId: string; filename?: 
       )}
 
       <Button
-        size="sm"
         variant="destructive"
         type="submit"
+        size="sm"
+        className="h-7 w-7"
         disabled={isDeleting}
       >
-        {isDeleting ? 'Deleting...' : 'Delete'}
+        <AiOutlineDelete />
       </Button>
     </form>
   )

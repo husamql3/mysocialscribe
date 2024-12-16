@@ -1,8 +1,8 @@
-import { UserDownloadTweet } from '@/types/TweetType'
+import { HistoryViewTypes } from '@/types/HistoryViewTypes'
 
 import TweetCard from '@/components/TweetCard/tweet-card'
 
-const HistoryView = ({ downloadTweets }: { downloadTweets: UserDownloadTweet[] }) => {
+const HistoryView = ({ downloadTweets, user }: HistoryViewTypes) => {
   if (downloadTweets.length === 0) {
     return (
       <main className="mx-auto flex w-full max-w-lg flex-1 items-center justify-center gap-3 px-4 py-6 md:px-0">
@@ -22,6 +22,7 @@ const HistoryView = ({ downloadTweets }: { downloadTweets: UserDownloadTweet[] }
           downloadAtdAt={download.created_at}
           likes={tweet?.favorite_count}
           createdAt={tweet?.created_at}
+          user={user}
         />
       ))}
     </main>

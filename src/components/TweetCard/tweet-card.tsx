@@ -1,3 +1,5 @@
+import { IoHeartOutline } from 'react-icons/io5'
+
 import { TweetCardType } from '@/types/TweetCardType'
 import { formatDate, formatNumber } from '@/utils/format'
 
@@ -5,11 +7,18 @@ import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import TweetCardHeader from '@/components/TweetCard/tweet-card-header'
 import TweetCardContent from '@/components/TweetCard/tweet-card-content'
 import TweetShare from '@/components/TweetCard/tweet-share'
-import TweetPlayBtn from '@/components/TweetCard/tweet-play-btn'
 import TweetDelBtn from '@/components/TweetCard/tweet-delete-btn'
-import { IoHeartOutline } from 'react-icons/io5'
+import TweetDownloadBtn from '@/components/TweetCard/tweet-download-btn'
+import TweetPlayBtn from '@/components/TweetCard/tweet-play-btn'
 
-const TweetCard = ({ tweet, filename, downloadId, downloadAtdAt,createdAt }: TweetCardType) => {
+const TweetCard = ({
+  tweet,
+  filename,
+  downloadId,
+  downloadAtdAt,
+  createdAt,
+  user,
+}: TweetCardType) => {
   if (!tweet) {
     return (
       <Card className="z-50 flex h-fit w-full flex-col overflow-auto rounded-lg shadow-xl dark:bg-zinc-950">
@@ -34,7 +43,7 @@ const TweetCard = ({ tweet, filename, downloadId, downloadAtdAt,createdAt }: Twe
         </CardContent>
 
         <CardFooter className="justify-between px-3 pb-3 pt-3">
-          <div className="flex gap-1 text-xs text-stone-400">
+          <div className="flex gap-1 text-xs text-zinc-400">
             <p>{formatDate(createdAt!, false)}</p>
             <p>·</p>
             <p className="flex items-center gap-0.5">
@@ -43,15 +52,18 @@ const TweetCard = ({ tweet, filename, downloadId, downloadAtdAt,createdAt }: Twe
             </p>
           </div>
 
-          <div className="flex gap-2 items-center">
-            <TweetPlayBtn
-              tweetUrl={tweet.url}
-              filename={filename}
-            />
-
+          <div className="flex items-center gap-2">
             <TweetDelBtn
               downloadId={downloadId}
               filename={filename}
+            />
+
+            <TweetPlayBtn filename={filename} />
+
+            <TweetDownloadBtn
+              filename={filename}
+              tweetUrl={tweet.url}
+              user={user}
             />
 
             <TweetShare spaceUrl={tweet.url} />

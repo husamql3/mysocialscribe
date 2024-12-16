@@ -1,4 +1,5 @@
 import { type EnrichedTweet } from 'react-tweet'
+import { User } from '@supabase/auth-js'
 
 export type TweetCardType = {
   tweet: EnrichedTweet | undefined
@@ -7,9 +8,9 @@ export type TweetCardType = {
   createdAt: string | undefined
   downloadAtdAt: string
   likes: number | undefined
+  user: User
 }
 
 export type TweetPlayBtnType = {
-  tweetUrl: string
   filename: string | undefined
 }

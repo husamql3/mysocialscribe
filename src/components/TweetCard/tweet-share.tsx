@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useRef, useState } from 'react'
+import { PiShareFatFill } from 'react-icons/pi'
 
 import { cn } from '@/lib/utils'
 import { PlatformType } from '@/types/PlatformType'
@@ -37,8 +38,9 @@ const ShareComponent = ({ spaceUrl }: { spaceUrl: string }) => {
           <Button
             variant="outline"
             size="sm"
+            className="h-7 w-7"
           >
-            Share
+            <PiShareFatFill className="h-7 w-7" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-72">
