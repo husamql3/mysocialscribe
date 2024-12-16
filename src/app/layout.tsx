@@ -25,6 +25,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      className="dark"
       suppressHydrationWarning
     >
       <head>
@@ -36,6 +37,7 @@ export default function RootLayout({
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
+          forcedTheme="dark"
         >
           <RootView>{children}</RootView>
           <GoogleAnalytics gaId={gaId} />
