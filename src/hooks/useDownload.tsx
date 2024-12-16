@@ -3,9 +3,9 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
+import { toast } from '@/hooks/use-toast'
 import { useLoginDialog } from '@/providers/login-dialog-provider'
 import { DownloadTwitterSpacesType, UseDownloadType } from '@/types/UseDownloadType'
-import { toast } from '@/hooks/use-toast'
 
 export const useDownload = (): UseDownloadType => {
   const { openLoginDialog } = useLoginDialog()
@@ -16,6 +16,7 @@ export const useDownload = (): UseDownloadType => {
     url,
     userId,
     email,
+    redirect,
   }: DownloadTwitterSpacesType): Promise<void> => {
     try {
       const twitterSpacesRegex = /^https?:\/\/(x|twitter)\.com\/[^/]+\/(status|spaces)\/\d+/
@@ -28,7 +29,7 @@ export const useDownload = (): UseDownloadType => {
         throw new Error('Invalid Twitter Spaces or Tweet URL')
       }
 
-      router.push('/success')
+      if (redirect) router.push('/success')
 
       const response = await fetch('/api/twitter/download', {
         method: 'POST',

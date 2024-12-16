@@ -52,7 +52,7 @@ const TweetCard = ({
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center z-50 gap-2">
             <TweetDelBtn
               downloadId={downloadId}
               filename={filename}

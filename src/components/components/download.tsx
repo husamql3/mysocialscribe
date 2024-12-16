@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation'
 
 import { useDownload } from '@/hooks/useDownload'
 import { useLoginDialog } from '@/providers/login-dialog-provider'
-import useLocalStorage from '@/hooks/useLocalStorage'
+import { useLocalStorage } from '@/hooks/useLocalStorage'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -38,6 +38,7 @@ const Download = ({ user }: { user: User | null }) => {
       url: inputUrl,
       userId: user.id,
       email: user.email!,
+      redirect: true,
     })
 
     setStoredSpaceUrl('')

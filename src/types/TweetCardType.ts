@@ -14,3 +14,10 @@ export type TweetCardType = {
 export type TweetPlayBtnType = {
   filename: string | undefined
 }
+
+
+export type TweetDownloadBtnProps = {
+  filename?: string
+  tweetUrl: string
+  user: User
+}
