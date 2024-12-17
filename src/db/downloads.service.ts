@@ -14,14 +14,28 @@ const supabase = createClient()
  * @throws Will throw an error if the upsert operation fails.
  **/
 export const saveDownloadRecord = async ({ userId, url, filename }: SaveDownloadRecord) => {
-  const { error: saveError } = await supabase.from('downloads').insert({
-    user_id: userId,
-    space_url: url,
-    filename,
-  })
-  if (saveError) throw saveError
+  const { data, error } = await supabase
+    .from('downloads')
+    .upsert(
+      {
+        user_id: userId,
+        space_url: url,
+        filename,
+      },
+      {
+        onConflict: 'user_id,space_url',
+        ignoreDuplicates: false,
+      }
+    )
+    .select()
 
-  console.log('Download record saved successfully', url, filename)
+  if (error) throw error
+
+  if (data && data.length > 0) {
+    console.log('Download record saved or updated successfully', url, filename)
+  } else {
+    console.log('No changes were made to the download record')
+  }
 }
 
 /**
