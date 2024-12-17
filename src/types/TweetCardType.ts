@@ -38,6 +38,7 @@ export type TweetDownloadBtnProps = {
   filename?: string
   tweetUrl: string
   user: User
+  isDeleted: boolean
 }
 
 export type DeleteOptions = {

@@ -1,13 +1,13 @@
 'use client'
 
-import { AiOutlineDelete } from 'react-icons/ai'
 import { useEffect } from 'react'
+import { AiOutlineDelete } from 'react-icons/ai'
 
 import { toast } from '@/hooks/use-toast'
 import { TweetDelBtnType } from '@/types/TweetCardType'
+import useDeleteDownload from '@/hooks/use-delete-download'
 
 import { Button } from '@/components/ui/button'
-import useDeleteDownload from '@/hooks/use-delete-download'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -40,12 +40,12 @@ const TweetDelBtn = ({ downloadId, filename }: TweetDelBtnType) => {
     <AlertDialog>
       <AlertDialogTrigger>
         <Button
-          variant="destructive"
+          variant="ghost"
           size="sm"
-          className="h-7 w-7"
+          className="h-7 w-7 text-red-600 hover:!bg-red-950 hover:!text-red-500"
           disabled={isDeleting}
         >
-          <AiOutlineDelete />
+          <AiOutlineDelete className="opacity-60" />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
