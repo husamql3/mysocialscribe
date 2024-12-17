@@ -26,9 +26,6 @@ const TweetPlayBtn = ({ filename }: TweetPlayBtnType) => {
     }
   }
 
-  // Return null if the file is deleted from the server
-  if (!filename) return null
-
   return (
     <Button
       size="sm"

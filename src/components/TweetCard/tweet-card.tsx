@@ -70,13 +70,21 @@ const TweetCard = ({
 
             <TweetPlayBtn filename={filename} />
 
-            <TweetDownloadBtn
-              filename={filename}
-              tweetUrl={tweet.url}
-              user={user}
-            />
+            {!isDeleted && (
+              <TweetDownloadBtn
+                filename={filename}
+                tweetUrl={tweet.url}
+                user={user}
+              />
+            )}
 
-            {!isDeleted && <TweetShare spaceUrl={tweet.url} />}
+            {!isDeleted && (
+              <TweetShare
+                downloadId={downloadId}
+                spaceUrl={tweet.url}
+                filename={filename!}
+              />
+            )}
           </div>
         </CardFooter>
       </Card>
