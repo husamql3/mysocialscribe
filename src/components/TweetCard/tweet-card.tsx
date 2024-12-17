@@ -73,14 +73,12 @@ const TweetCard = ({
             {filename && <TweetPlayBtn filename={filename} />}
 
             {/* Download button */}
-            {/*{!isDeleted && (*/}
-              <TweetDownloadBtn
-                filename={filename}
-                tweetUrl={tweet.url}
-                user={user}
-                isDeleted={isDeleted}
-              />
-            {/*)}*/}
+            <TweetDownloadBtn
+              filename={filename}
+              tweetUrl={tweet.url}
+              user={user}
+              isDeleted={isDeleted}
+            />
 
             {/* Share button */}
             {!isDeleted && filename && (

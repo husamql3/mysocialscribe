@@ -12,6 +12,7 @@ import { Confetti, ConfettiRef } from '@/components/ui/confetti'
 import { Dialog, DialogContent, DialogDescription } from '@/components/ui/dialog'
 import { HiArrowPath } from 'react-icons/hi2'
 import { cn } from '@/lib/utils'
+import { History } from 'lucide-react'
 
 const TweetDownloadBtn = ({ filename, tweetUrl, user, isDeleted }: TweetDownloadBtnProps) => {
   const { downloadTwitterSpaces } = useDownload()
@@ -67,7 +68,7 @@ const TweetDownloadBtn = ({ filename, tweetUrl, user, isDeleted }: TweetDownload
           onClick={handleDownloadAgain}
           className={cn('h-7', isDeleted ? 'w-7' : 'w-auto')}
         >
-          {isDeleted ? <HiArrowPath /> : 'Download Again'}
+          {isDeleted ? <History /> : 'Download Again'}
         </Button>
       )}
 
