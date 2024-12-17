@@ -60,7 +60,8 @@ const TweetCard = ({
           </div>
 
           <div className="z-50 flex items-center gap-2">
-            {isDeleted && (
+            {/* Delete button */}
+            {(isDeleted || (!filename && !isDeleted)) && (
               <TweetDelBtn
                 downloadId={downloadId}
                 filename={filename}
@@ -68,17 +69,21 @@ const TweetCard = ({
               />
             )}
 
-            <TweetPlayBtn filename={filename} />
+            {/* Play button */}
+            {filename && <TweetPlayBtn filename={filename} />}
 
-            {!isDeleted && (
+            {/* Download button */}
+            {/*{!isDeleted && (*/}
               <TweetDownloadBtn
                 filename={filename}
                 tweetUrl={tweet.url}
                 user={user}
+                isDeleted={isDeleted}
               />
-            )}
+            {/*)}*/}
 
-            {!isDeleted && (
+            {/* Share button */}
+            {!isDeleted && filename && (
               <TweetShare
                 downloadId={downloadId}
                 spaceUrl={tweet.url}

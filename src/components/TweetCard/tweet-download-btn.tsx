@@ -10,8 +10,10 @@ import { useDownload } from '@/hooks/use-download'
 import { Button } from '@/components/ui/button'
 import { Confetti, ConfettiRef } from '@/components/ui/confetti'
 import { Dialog, DialogContent, DialogDescription } from '@/components/ui/dialog'
+import { HiArrowPath } from 'react-icons/hi2'
+import { cn } from '@/lib/utils'
 
-const TweetDownloadBtn = ({ filename, tweetUrl, user }: TweetDownloadBtnProps) => {
+const TweetDownloadBtn = ({ filename, tweetUrl, user, isDeleted }: TweetDownloadBtnProps) => {
   const { downloadTwitterSpaces } = useDownload()
   const confettiRef = useRef<ConfettiRef>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -52,8 +54,8 @@ const TweetDownloadBtn = ({ filename, tweetUrl, user }: TweetDownloadBtnProps) =
       {filename ? (
         <Button
           size="sm"
-          variant="outline"
-          className="!hover:bg-indigo-900 h-7 w-7 !bg-indigo-500 !text-stone-50"
+          variant="ghost"
+          className="h-7 w-7 bg-indigo-500 text-stone-50 hover:!bg-indigo-700"
           onClick={handleDownload}
         >
           <HiDownload className="h-5 w-5" />
@@ -61,11 +63,11 @@ const TweetDownloadBtn = ({ filename, tweetUrl, user }: TweetDownloadBtnProps) =
       ) : (
         <Button
           size="sm"
-          variant="outline"
+          variant="secondary"
           onClick={handleDownloadAgain}
-          className="h-7"
+          className={cn('h-7', isDeleted ? 'w-7' : 'w-auto')}
         >
-          Download Again
+          {isDeleted ? <HiArrowPath /> : 'Download Again'}
         </Button>
       )}
 
@@ -103,3 +105,16 @@ const TweetDownloadBtn = ({ filename, tweetUrl, user }: TweetDownloadBtnProps) =
 }
 
 export default TweetDownloadBtn
+// // Dependencies: pnpm install lucide-react
+//
+// import { Button } from "@/components/ui/button";
+// import { X } from "lucide-react";
+//
+// export default function ButtonDemo() {
+//   return (
+//     <Button variant="secondary">
+//       <X className="-ms-1 me-2 opacity-60" size={16} strokeWidth={2} aria-hidden="true" />
+//       Button
+//     </Button>
+//   );
+// }
