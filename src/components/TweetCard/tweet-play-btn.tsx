@@ -32,7 +32,7 @@ const TweetPlayBtn = ({ filename }: TweetPlayBtnType) => {
   return (
     <Button
       size="sm"
-      variant="outline"
+      variant="secondary"
       className="h-7 w-7"
       onClick={handleClick}
     >
