@@ -3,16 +3,15 @@
 import Image from 'next/image'
 import { useRef, useState } from 'react'
 import { HiDownload } from 'react-icons/hi'
+import { History } from 'lucide-react'
 
 import { TweetDownloadBtnProps } from '@/types/TweetCardType'
 import { useDownload } from '@/hooks/use-download'
+import { cn } from '@/lib/utils'
 
 import { Button } from '@/components/ui/button'
 import { Confetti, ConfettiRef } from '@/components/ui/confetti'
 import { Dialog, DialogContent, DialogDescription } from '@/components/ui/dialog'
-import { HiArrowPath } from 'react-icons/hi2'
-import { cn } from '@/lib/utils'
-import { History } from 'lucide-react'
 
 const TweetDownloadBtn = ({ filename, tweetUrl, user, isDeleted }: TweetDownloadBtnProps) => {
   const { downloadTwitterSpaces } = useDownload()
