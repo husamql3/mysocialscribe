@@ -18,6 +18,7 @@ const TweetCard = ({
   downloadAtdAt,
   createdAt,
   user,
+  isDeleted,
 }: TweetCardType) => {
   if (!tweet) {
     return (
@@ -31,15 +32,21 @@ const TweetCard = ({
 
   return (
     <div className="z-50 space-y-1">
-      <p className="text-sm">Downloaded at {formatDate(downloadAtdAt)}</p>
+      {!isDeleted && <p className="text-sm">Downloaded at {formatDate(downloadAtdAt)}</p>}
 
       <Card className="flex h-fit w-full flex-col overflow-auto rounded-lg shadow-xl dark:bg-zinc-950">
         <CardHeader className="flex flex-row justify-between gap-3 p-3">
-          <TweetCardHeader tweet={tweet} />
+          <TweetCardHeader
+            tweet={tweet}
+            isDeleted={isDeleted}
+          />
         </CardHeader>
 
         <CardContent className="px-3 py-1">
-          <TweetCardContent entities={tweet.entities} />
+          <TweetCardContent
+            entities={tweet.entities}
+            isDeleted={isDeleted}
+          />
         </CardContent>
 
         <CardFooter className="justify-between px-3 pb-3 pt-3">
@@ -52,11 +59,14 @@ const TweetCard = ({
             </p>
           </div>
 
-          <div className="flex items-center z-50 gap-2">
-            <TweetDelBtn
-              downloadId={downloadId}
-              filename={filename}
-            />
+          <div className="z-50 flex items-center gap-2">
+            {isDeleted && (
+              <TweetDelBtn
+                downloadId={downloadId}
+                filename={filename}
+                isDeleted={isDeleted}
+              />
+            )}
 
             <TweetPlayBtn filename={filename} />
 
@@ -66,7 +76,7 @@ const TweetCard = ({
               user={user}
             />
 
-            <TweetShare spaceUrl={tweet.url} />
+            {!isDeleted && <TweetShare spaceUrl={tweet.url} />}
           </div>
         </CardFooter>
       </Card>

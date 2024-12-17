@@ -1,12 +1,13 @@
 import Image from 'next/image'
-import { type EnrichedTweet } from 'react-tweet'
 
 import { truncate } from '@/utils/truncate'
+import { cn } from '@/lib/utils'
+import { TweetCardHeaderType } from '@/types/TweetCardType'
 
 import Verified from '@/components/TweetCard/verified'
 import Twitter from '@/components/TweetCard/twitter'
 
-const TweetCardHeader = ({ tweet }: { tweet: EnrichedTweet }) => {
+const TweetCardHeader = ({ tweet, isDeleted }: TweetCardHeaderType) => {
   return (
     <div className="flex w-full flex-row justify-between">
       <div className="flex flex-row items-center gap-3">
@@ -18,7 +19,10 @@ const TweetCardHeader = ({ tweet }: { tweet: EnrichedTweet }) => {
             alt="Profile picture"
             width={40}
             height={40}
-            className="overflow-hidden rounded-full border border-transparent object-cover object-center"
+            className={cn(
+              'overflow-hidden rounded-full border border-transparent object-cover object-center',
+              isDeleted ? 'opacity-50 grayscale' : ''
+            )}
           />
         </a>
 
@@ -28,7 +32,10 @@ const TweetCardHeader = ({ tweet }: { tweet: EnrichedTweet }) => {
             href={tweet.user.url}
             target="_blank"
             rel="noreferrer"
-            className="flex items-center whitespace-nowrap font-semibold"
+            className={cn(
+              'flex items-center whitespace-nowrap font-semibold',
+              isDeleted ? 'text-zinc-600 line-through' : ''
+            )}
           >
             {truncate(tweet.user.name, 20)}
             {tweet.user.verified || (tweet.user.is_blue_verified && <Verified />)}
@@ -39,7 +46,10 @@ const TweetCardHeader = ({ tweet }: { tweet: EnrichedTweet }) => {
             href={tweet.user.url}
             target="_blank"
             rel="noreferrer"
-            className="text-sm text-gray-500 transition-all duration-75"
+            className={cn(
+              'text-sm text-gray-500 transition-all duration-75',
+              isDeleted ? 'text-zinc-600 line-through' : ''
+            )}
           >
             @{truncate(tweet.user.screen_name, 16)}
           </a>

@@ -10,4 +10,5 @@ export type UserDownload = {
   user_id: string
   filename: string
   space_url: string
+  is_deleted: boolean
 }

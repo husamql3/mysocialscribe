@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
-import { type EnrichedTweet } from 'react-tweet'
 
-type TweetEntity = EnrichedTweet['entities'][number]
+import { TweetCardContentProps } from '@/types/TweetCardType'
+import { cn } from '@/lib/utils'
 
-const TweetCardContent = ({ entities }: { entities: TweetEntity[] }) => {
+const TweetCardContent = ({ entities, isDeleted }: TweetCardContentProps) => {
   const renderEntities = useMemo(() => {
     return entities
       .map((entity, idx) => {
@@ -45,7 +45,11 @@ const TweetCardContent = ({ entities }: { entities: TweetEntity[] }) => {
       .filter(Boolean)
   }, [entities])
 
-  return <div className="break-words">{renderEntities}</div>
+  return (
+    <div className={cn('break-words', isDeleted ? 'text-zinc-600 line-through' : '')}>
+      {renderEntities}
+    </div>
+  )
 }
 
 export default TweetCardContent
