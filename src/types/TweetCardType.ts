@@ -39,3 +39,13 @@ export type TweetDownloadBtnProps = {
   tweetUrl: string
   user: User
 }
+
+export type DeleteOptions = {
+  endpoint: string
+  body: Record<string, string>
+}
+
+export type DeleteParams = {
+  downloadId: string
+  filename?: string
+}

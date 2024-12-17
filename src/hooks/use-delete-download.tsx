@@ -3,15 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-type DeleteOptions = {
-  endpoint: string
-  body: Record<string, string>
-}
-
-type DeleteParams = {
-  downloadId: string
-  filename?: string
-}
+import { DeleteOptions, DeleteParams } from '@/types/TweetCardType'
 
 const useDeleteDownload = () => {
   const router = useRouter()

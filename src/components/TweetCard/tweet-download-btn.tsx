@@ -10,7 +10,7 @@ import { TweetDownloadBtnProps } from '@/types/TweetCardType'
 import { Button } from '@/components/ui/button'
 import { Confetti, ConfettiRef } from '@/components/ui/confetti'
 import { Dialog, DialogContent, DialogDescription } from '@/components/ui/dialog'
-import { useDownload } from '@/hooks/useDownload'
+import { useDownload } from '@/hooks/use-download'
 
 const TweetDownloadBtn = ({ filename, tweetUrl, user }: TweetDownloadBtnProps) => {
   const { downloadTwitterSpaces } = useDownload()
