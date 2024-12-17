@@ -11,18 +11,20 @@ const useDeleteDownload = () => {
   const [deleteError, setDeleteError] = useState<string | null>(null)
 
   const performDelete = async (deleteType: 'soft' | 'hard', params: DeleteParams) => {
+    const normalizedUrl = params.downloadId.replace(/^https?:\/\/twitter\.com/, 'https://x.com') as string
+
     const deleteOptions: Record<'soft' | 'hard', DeleteOptions> = {
       soft: {
         endpoint: '/api/twitter/soft-delete',
         body: {
-          downloadId: params.downloadId,
+          downloadId: normalizedUrl,
           filename: params.filename || '',
         },
       },
       hard: {
         endpoint: '/api/twitter/hard-delete',
         body: {
-          downloadId: params.downloadId,
+          downloadId: normalizedUrl,
           filename: params.filename || '',
         },
       },

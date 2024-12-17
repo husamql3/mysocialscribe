@@ -23,9 +23,4 @@ export const SOCIAL_PLATFORMS = [
     Icon: RiTelegram2Line,
     label: 'Share on Telegram',
   },
-  {
-    platform: 'linkedin',
-    Icon: FaLinkedinIn,
-    label: 'Share on LinkedIn',
-  },
 ]
