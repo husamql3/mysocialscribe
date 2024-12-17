@@ -14,14 +14,28 @@ const supabase = createClient()
  * @throws Will throw an error if the upsert operation fails.
  **/
 export const saveDownloadRecord = async ({ userId, url, filename }: SaveDownloadRecord) => {
-  const { error: saveError } = await supabase.from('downloads').insert({
-    user_id: userId,
-    space_url: url,
-    filename,
-  })
-  if (saveError) throw saveError
+  const { data, error } = await supabase
+    .from('downloads')
+    .upsert(
+      {
+        user_id: userId,
+        space_url: url,
+        filename,
+      },
+      {
+        onConflict: 'user_id,space_url',
+        ignoreDuplicates: false,
+      }
+    )
+    .select()
 
-  console.log('Download record saved successfully', url, filename)
+  if (error) throw error
+
+  if (data && data.length > 0) {
+    console.log('Download record saved or updated successfully', url, filename)
+  } else {
+    console.log('No changes were made to the download record')
+  }
 }
 
 /**
@@ -64,6 +78,28 @@ export async function getUserDownloads(userId: string) {
     .from('downloads')
     .select('*')
     .eq('user_id', userId)
+    .eq('is_deleted', false)
+    .order('created_at', { ascending: false })
+  if (error) throw error
+
+  return userDownloads as UserDownload[]
+}
+
+/**
+ * Gets the deleted downloads for a specific user.
+ *
+ * @param {string} userId - The ID of the user to get the deleted downloads for.
+ * @throws Will throw an error if the database query fails.
+ **/
+export async function getUserDeletedDownloads(userId: string) {
+  if (!userId) return []
+
+  const { data: userDownloads, error } = await supabase
+    .from('downloads')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('is_deleted', true)
+    .order('created_at', { ascending: false })
   if (error) throw error
 
   return userDownloads as UserDownload[]
@@ -75,7 +111,18 @@ export async function getUserDownloads(userId: string) {
  * @param {string} id - The ID of the download to delete.
  * @throws Will throw an error if the database query fails.
  **/
-export async function deleteDownload(id: string) {
+export async function hardDeleteDownload(id: string) {
   const { error } = await supabase.from('downloads').delete().eq('id', id)
+  if (error) throw error
+}
+
+/**
+ * Soft deletes a download record from the database.
+ *
+ * @param {string} id - The ID of the download to softly delete.
+ * @throws Will throw an error if the database query fails.
+ **/
+export async function softDeleteDownload(id: string) {
+  const { error } = await supabase.from('downloads').update({ is_deleted: true }).eq('id', id)
   if (error) throw error
 }

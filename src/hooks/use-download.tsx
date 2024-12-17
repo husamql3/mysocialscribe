@@ -31,12 +31,14 @@ export const useDownload = (): UseDownloadType => {
 
       if (redirect) router.push('/success')
 
+      const normalizedUrl = url.replace(/^https?:\/\/twitter\.com/, 'https://x.com')
+
       const response = await fetch('/api/twitter/download', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ url, userId, email }),
+        body: JSON.stringify({ normalizedUrl, userId, email }),
       })
       if (!response.ok && response.status === 500) {
         setError('Download failed, please recheck the URL')

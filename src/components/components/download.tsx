@@ -4,7 +4,7 @@ import { User } from '@supabase/auth-js'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 
-import { useDownload } from '@/hooks/useDownload'
+import { useDownload } from '@/hooks/use-download'
 import { useLoginDialog } from '@/providers/login-dialog-provider'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
 

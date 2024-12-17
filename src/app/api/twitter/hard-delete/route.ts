@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import path from 'path'
 import { unlink } from 'fs/promises'
 
-import { deleteDownload } from '@/db/downloads.service'
+import { hardDeleteDownload } from '@/db/downloads.service'
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Delete download record
-    await deleteDownload(downloadId)
+    await hardDeleteDownload(downloadId)
 
     return NextResponse.json(
       {
