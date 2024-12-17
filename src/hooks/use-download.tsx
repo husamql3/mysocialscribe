@@ -38,7 +38,7 @@ export const useDownload = (): UseDownloadType => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ normalizedUrl, userId, email }),
+        body: JSON.stringify({ url: normalizedUrl, userId, email }),
       })
       if (!response.ok && response.status === 500) {
         setError('Download failed, please recheck the URL')

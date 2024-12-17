@@ -21,6 +21,7 @@ export const saveDownloadRecord = async ({ userId, url, filename }: SaveDownload
         user_id: userId,
         space_url: url,
         filename,
+        is_deleted: false,
       },
       {
         onConflict: 'user_id,space_url',

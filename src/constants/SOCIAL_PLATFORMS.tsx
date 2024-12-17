@@ -1,5 +1,4 @@
 import { RiFacebookFill, RiTwitterXFill, RiWhatsappLine } from '@remixicon/react'
-import { FaLinkedinIn } from 'react-icons/fa'
 import { RiTelegram2Line } from 'react-icons/ri'
 
 export const SOCIAL_PLATFORMS = [
@@ -22,10 +21,5 @@ export const SOCIAL_PLATFORMS = [
     platform: 'telegram',
     Icon: RiTelegram2Line,
     label: 'Share on Telegram',
-  },
-  {
-    platform: 'linkedin',
-    Icon: FaLinkedinIn,
-    label: 'Share on LinkedIn',
   },
 ]
