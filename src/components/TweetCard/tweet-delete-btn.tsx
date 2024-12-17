@@ -19,8 +19,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
+import { cn } from '@/lib/utils'
 
-const TweetDelBtn = ({ downloadId, filename }: TweetDelBtnType) => {
+const TweetDelBtn = ({ downloadId, filename, isDeleted }: TweetDelBtnType) => {
   const { hardDeleteDownload, isDeleting, deleteError } = useDeleteDownload()
 
   useEffect(() => {
@@ -42,10 +43,13 @@ const TweetDelBtn = ({ downloadId, filename }: TweetDelBtnType) => {
         <Button
           variant="ghost"
           size="sm"
-          className="h-7 w-7 text-red-600 hover:!bg-red-950 hover:!text-red-500"
+          className={cn(
+            'h-7 text-red-600 opacity-60 hover:!bg-red-950 hover:!text-red-500',
+            isDeleted ? '' : 'w-7'
+          )}
           disabled={isDeleting}
         >
-          <AiOutlineDelete className="opacity-60" />
+          {isDeleted ? 'Delete Permanently' : <AiOutlineDelete />}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
