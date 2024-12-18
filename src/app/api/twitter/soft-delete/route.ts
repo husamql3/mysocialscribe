@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import path from 'path'
 import { unlink } from 'fs/promises'
 
@@ -17,6 +18,9 @@ export async function POST(request: NextRequest) {
 
     // Delete download record
     await softDeleteDownload(downloadId)
+
+    // Revalidate the history route
+    revalidatePath('/history')
 
     return NextResponse.json(
       {

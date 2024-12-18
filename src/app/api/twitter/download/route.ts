@@ -1,3 +1,4 @@
+import { revalidatePath } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
 import { spawn } from 'child_process'
 import { writeFile } from 'fs/promises'
@@ -64,6 +65,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
           } catch (uploadError) {
             console.error('Upload error:', uploadError)
             resolve(NextResponse.json({ error: 'Upload failed' }, { status: 500 }))
+          } finally {
+            // Revalidate the history route
+            revalidatePath('/history')
           }
         } else {
           resolve(NextResponse.json({ error: 'Download failed' }, { status: 500 }))

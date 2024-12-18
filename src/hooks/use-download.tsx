@@ -10,6 +10,7 @@ import { DownloadTwitterSpacesType, UseDownloadType } from '@/types/UseDownloadT
 export const useDownload = (): UseDownloadType => {
   const { openLoginDialog } = useLoginDialog()
   const [error, setError] = useState<string | null>(null)
+  const [isDownloading, setIsDownloading] = useState<boolean>(false)
   const router = useRouter()
 
   const downloadTwitterSpaces = async ({
@@ -18,6 +19,9 @@ export const useDownload = (): UseDownloadType => {
     email,
     redirect,
   }: DownloadTwitterSpacesType): Promise<void> => {
+    setIsDownloading(true)
+    setError(null)
+
     try {
       const twitterSpacesRegex = /^https?:\/\/(x|twitter)\.com\/[^/]+\/(status|spaces)\/\d+/
       if (!twitterSpacesRegex.test(url)) {
@@ -40,6 +44,7 @@ export const useDownload = (): UseDownloadType => {
         },
         body: JSON.stringify({ url: normalizedUrl, userId, email }),
       })
+
       if (!response.ok && response.status === 500) {
         setError('Download failed, please recheck the URL')
         throw new Error('Download failed, please recheck the URL')
@@ -56,9 +61,14 @@ export const useDownload = (): UseDownloadType => {
           openLoginDialog('login')
           return
         }
+
+        // Set error state for other errors
+        setError(message)
       }
+    } finally {
+      setIsDownloading(false)
     }
   }
 
-  return { error, downloadTwitterSpaces }
+  return { error, isDownloading, downloadTwitterSpaces }
 }

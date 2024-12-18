@@ -35,7 +35,7 @@ const HistoryView = ({ downloadTweets, deletedDownloads, user }: HistoryViewType
       {/* Deleted downloads */}
       {deletedDownloads.length > 0 && (
         <>
-          <Hr className="mt-4" />
+          {hasActiveDownloads && <Hr className="mt-4" />}
 
           <div className="flex flex-col gap-3">
             <p className="text-center text-lg text-stone-50">Deleted Spaces</p>

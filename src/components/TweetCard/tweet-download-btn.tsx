@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { useRef, useState } from 'react'
 import { HiDownload } from 'react-icons/hi'
 import { History } from 'lucide-react'
+import { LuLoaderCircle } from 'react-icons/lu'
 
 import { TweetDownloadBtnProps } from '@/types/TweetCardType'
 import { useDownload } from '@/hooks/use-download'
@@ -14,7 +15,7 @@ import { Confetti, ConfettiRef } from '@/components/ui/confetti'
 import { Dialog, DialogContent, DialogDescription } from '@/components/ui/dialog'
 
 const TweetDownloadBtn = ({ filename, tweetUrl, user, isDeleted }: TweetDownloadBtnProps) => {
-  const { downloadTwitterSpaces } = useDownload()
+  const { downloadTwitterSpaces, isDownloading } = useDownload()
   const confettiRef = useRef<ConfettiRef>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -51,7 +52,7 @@ const TweetDownloadBtn = ({ filename, tweetUrl, user, isDeleted }: TweetDownload
 
   return (
     <>
-      {filename ? (
+      {filename && !isDeleted ? (
         <Button
           size="sm"
           variant="ghost"
@@ -65,9 +66,19 @@ const TweetDownloadBtn = ({ filename, tweetUrl, user, isDeleted }: TweetDownload
           size="sm"
           variant="secondary"
           onClick={handleDownloadAgain}
+          disabled={isDownloading}
           className={cn('h-7', isDeleted ? 'w-7' : 'w-auto')}
         >
-          {isDeleted ? <History /> : 'Download Again'}
+          {isDownloading ? (
+            <>
+              <LuLoaderCircle className="h-5 w-5 animate-spin" />
+              <span className="sr-only">Downloading</span>
+            </>
+          ) : isDeleted ? (
+            <History className="h-5 w-5" />
+          ) : (
+            'Download Again'
+          )}
         </Button>
       )}
 

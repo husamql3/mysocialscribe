@@ -8,4 +8,5 @@ export type DownloadTwitterSpacesType = {
 export type UseDownloadType = {
   error: string | null
   downloadTwitterSpaces: ({ url, userId }: DownloadTwitterSpacesType) => Promise<void>
+  isDownloading: boolean
 }

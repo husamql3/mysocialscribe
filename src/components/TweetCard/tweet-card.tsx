@@ -70,7 +70,7 @@ const TweetCard = ({
             )}
 
             {/* Play button */}
-            {filename && <TweetPlayBtn filename={filename} />}
+            {filename && !isDeleted && <TweetPlayBtn filename={filename} />}
 
             {/* Download button */}
             <TweetDownloadBtn

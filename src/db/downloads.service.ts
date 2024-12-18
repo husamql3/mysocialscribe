@@ -124,6 +124,12 @@ export async function hardDeleteDownload(id: string) {
  * @throws Will throw an error if the database query fails.
  **/
 export async function softDeleteDownload(id: string) {
-  const { error } = await supabase.from('downloads').update({ is_deleted: true }).eq('id', id)
+  const { error } = await supabase
+    .from('downloads')
+    .update({
+      is_deleted: true,
+      filename: null,
+    })
+    .eq('id', id)
   if (error) throw error
 }
