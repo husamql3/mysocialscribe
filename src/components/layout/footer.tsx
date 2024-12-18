@@ -18,10 +18,7 @@ const Footer = () => {
         >
           @Hüsam
         </a>
-
-        <br className="hidden md:block" />
-
-        <span>Mentored by</span>
+        <span>and</span>
         <a
           href="https://www.linkedin.com/in/julienbarbier/"
           target="_blank"
