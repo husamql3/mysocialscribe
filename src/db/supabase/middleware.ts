@@ -28,9 +28,7 @@ export const updateSession = async (request: NextRequest) => {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  const isProtectedRoute =
-    request.nextUrl.pathname.startsWith('/history') ||
-    request.nextUrl.pathname.startsWith('/success')
+  const isProtectedRoute = request.nextUrl.pathname.startsWith('/history')
 
   if (isProtectedRoute && !user) {
     return NextResponse.redirect(new URL('/404', request.url))

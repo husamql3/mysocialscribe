@@ -2,7 +2,6 @@ export type DownloadTwitterSpacesType = {
   url: string
   userId: string
   email: string
-  redirect?: boolean
 }
 
 export type UseDownloadType = {

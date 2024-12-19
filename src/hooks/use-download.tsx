@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 
 import { toast } from '@/hooks/use-toast'
 import { useLoginDialog } from '@/providers/login-dialog-provider'
@@ -11,13 +10,11 @@ export const useDownload = (): UseDownloadType => {
   const { openLoginDialog } = useLoginDialog()
   const [error, setError] = useState<string | null>(null)
   const [isDownloading, setIsDownloading] = useState<boolean>(false)
-  const router = useRouter()
 
   const downloadTwitterSpaces = async ({
     url,
     userId,
     email,
-    redirect,
   }: DownloadTwitterSpacesType): Promise<void> => {
     setIsDownloading(true)
     setError(null)
@@ -32,8 +29,6 @@ export const useDownload = (): UseDownloadType => {
         })
         throw new Error('Invalid Twitter Spaces or Tweet URL')
       }
-
-      if (redirect) router.push('/success')
 
       const normalizedUrl = url.replace(/^https?:\/\/twitter\.com/, 'https://x.com')
 
