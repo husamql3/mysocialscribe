@@ -1,9 +1,10 @@
 import { User } from '@supabase/auth-js'
 
-import Logo from '@/components/components/logo'
+import Logo from '@/components/header/logo'
 import UserProfile from '@/components/auth/user-profile'
 import LoginDialog from '@/components/auth/login-dialog'
 import Hr from '@/components/components/hr'
+import MySpacesBtn from '@/components/header/my-spaces-btn'
 
 const Header = ({ user }: { user: User | null }) => {
   return (
@@ -12,8 +13,16 @@ const Header = ({ user }: { user: User | null }) => {
         <div className="container mx-auto flex max-w-3xl items-center justify-between px-4 md:px-1">
           <Logo />
 
-          {user && <UserProfile user={user} />}
-          {!user && <LoginDialog />}
+          <div className="flex items-center gap-3">
+            {user && (
+              <>
+                <MySpacesBtn />
+                <UserProfile email={user?.email} />
+              </>
+            )}
+
+            {!user && <LoginDialog />}
+          </div>
         </div>
       </header>
 

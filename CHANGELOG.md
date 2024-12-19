@@ -1,5 +1,7 @@
 # Changelog
 
+## [1.5.16] - add myspaces button
+
 ## [1.5.15] - update logo & favicon
 
 ## [1.5.13] - add del tweet button
@@ -24,35 +26,19 @@
 
 ## [1.3.6] - Update Cleanup Process
 
-- Improved the cleanup process.
-
 ## [1.3.5] - Save URL Before Logging In
-
-- Added functionality to save the link in the URL before logging in.
 
 ## [1.3.4] - Update Downloading Approach
 
-- Enhanced the downloading approach for better performance.
-
 ## [1.2.3] - Update Loading Statement
 
-- Improved the loading statement for better user experience.
+## [1.2.2] - Remove Theme Toggle Feature
 
-## [1.2.2] - Remove Theme Toggle
-
-- Removed the theme toggle feature.
-
-## [1.2.1] - Update Footer
-
-- Updated the footer design.
+## [1.2.1] - Update Footer Design
 
 ## [1.2.0] - Add Google OAuth
 
-- Integrated Google OAuth for authentication.
-
 ## [1.1.0] - Add GitHub OAuth
-
-- Integrated GitHub OAuth for authentication.
 
 ## [1.0.0] - Initial Release
 
