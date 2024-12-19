@@ -25,8 +25,6 @@ const TweetDelBtn = ({ downloadId, filename }: TweetDelBtnType) => {
   const { isDownloading } = useDownload()
   const { hardDeleteDownload, isDeleting, deleteError } = useDeleteDownload()
 
-  console.log('TweetDelBtn', isDownloading)
-
   useEffect(() => {
     if (deleteError) {
       toast({
@@ -46,6 +44,7 @@ const TweetDelBtn = ({ downloadId, filename }: TweetDelBtnType) => {
         <Button
           type="button"
           variant="ghost"
+          size="sm"
           className="h-7 w-7 text-neutral-600"
           disabled={isDeleting || isDownloading}
         >

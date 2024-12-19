@@ -34,7 +34,7 @@ const TweetCardHeader = ({ tweet, isDeleted }: TweetCardHeaderType) => {
             rel="noreferrer"
             className={cn(
               'flex items-center whitespace-nowrap font-semibold',
-              isDeleted ? 'text-zinc-600 line-through' : ''
+              isDeleted ? 'text-zinc-600' : ''
             )}
           >
             {truncate(tweet.user.name, 20)}
@@ -48,7 +48,7 @@ const TweetCardHeader = ({ tweet, isDeleted }: TweetCardHeaderType) => {
             rel="noreferrer"
             className={cn(
               'text-sm text-gray-500 transition-all duration-75',
-              isDeleted ? 'text-zinc-600 line-through' : ''
+              isDeleted ? 'text-zinc-600' : ''
             )}
           >
             @{truncate(tweet.user.screen_name, 16)}

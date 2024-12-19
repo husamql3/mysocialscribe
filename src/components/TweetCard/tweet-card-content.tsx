@@ -46,7 +46,7 @@ const TweetCardContent = ({ entities, isDeleted }: TweetCardContentProps) => {
   }, [entities])
 
   return (
-    <div className={cn('break-words', isDeleted ? 'text-zinc-600 line-through' : '')}>
+    <div className={cn('break-words', isDeleted ? 'text-zinc-600' : '')}>
       {renderEntities}
     </div>
   )

@@ -2,6 +2,7 @@ import { IoHeartOutline } from 'react-icons/io5'
 
 import { TweetCardType } from '@/types/TweetCardType'
 import { formatDate, formatNumber } from '@/utils/format'
+import { cn } from '@/lib/utils'
 
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import TweetCardHeader from '@/components/TweetCard/tweet-card-header'
@@ -50,7 +51,7 @@ const TweetCard = ({
         </CardContent>
 
         <CardFooter className="justify-between px-3 pb-3 pt-3">
-          <div className="flex gap-1 text-xs text-zinc-400">
+          <div className={cn('flex gap-1 text-xs text-zinc-400', isDeleted && 'text-zinc-600')}>
             <p>{formatDate(createdAt!, false)}</p>
             <p>·</p>
             <p className="flex items-center gap-0.5">
