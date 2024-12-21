@@ -2,7 +2,7 @@
 
 import { CircleUserRound } from 'lucide-react'
 
-import { logout } from '@/actions/handle_auth_action'
+import { logout } from '@/db/auth.service'
 
 import { Button } from '@/components/ui/button'
 import {
