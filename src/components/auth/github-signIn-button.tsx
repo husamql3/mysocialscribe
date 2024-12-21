@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { LuGithub, LuLoaderCircle } from 'react-icons/lu'
 
-import { signInWithGithub } from '@/db/auth.service'
+import { signInWithGithub } from '@/db/supabase/services/auth.service'
 
 import { Button } from '@/components/ui/button'
 

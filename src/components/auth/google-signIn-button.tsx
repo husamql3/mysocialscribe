@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form'
 import { LuLoaderCircle } from 'react-icons/lu'
 import { IoLogoGoogle } from 'react-icons/io5'
 
-import { signInWithGoogle } from '@/db/auth.service'
+import { signInWithGoogle } from '@/db/supabase/services/auth.service'
 
 import { Button } from '@/components/ui/button'
 
