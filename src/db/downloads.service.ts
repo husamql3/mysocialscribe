@@ -80,6 +80,7 @@ export async function getUserDownloads(userId: string) {
     .select('*')
     .eq('user_id', userId)
     .eq('is_deleted', false)
+    .not('filename', 'is', null)
     .order('created_at', { ascending: false })
   if (error) throw error
 
@@ -99,7 +100,7 @@ export async function getUserDeletedDownloads(userId: string) {
     .from('downloads')
     .select('*')
     .eq('user_id', userId)
-    .eq('is_deleted', true)
+    .or('is_deleted.eq.true,filename.is.null')
     .order('created_at', { ascending: false })
   if (error) throw error
 

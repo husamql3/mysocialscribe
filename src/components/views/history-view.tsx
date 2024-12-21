@@ -28,7 +28,7 @@ const HistoryView = ({ downloadTweets, deletedDownloads, user }: HistoryViewType
           likes={tweet?.favorite_count}
           createdAt={tweet?.created_at}
           user={user}
-          isDeleted={download.is_deleted}
+          isDeleted={download.is_deleted || !download.filename}
         />
       ))}
 
@@ -38,7 +38,7 @@ const HistoryView = ({ downloadTweets, deletedDownloads, user }: HistoryViewType
           {hasActiveDownloads && <Hr className="mt-4" />}
 
           <div className="flex flex-col gap-3">
-            <p className="text-center text-lg text-stone-50">Deleted Spaces</p>
+            <p className="text-center text-lg text-stone-50">Unavailable Spaces</p>
 
             {deletedDownloads.map(({ download, tweet }, index) => (
               <TweetCard
@@ -50,7 +50,7 @@ const HistoryView = ({ downloadTweets, deletedDownloads, user }: HistoryViewType
                 likes={tweet?.favorite_count}
                 createdAt={tweet?.created_at}
                 user={user}
-                isDeleted={download.is_deleted}
+                isDeleted={download.is_deleted || !download.filename}
               />
             ))}
           </div>

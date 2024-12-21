@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.6.18] - update deleted downloads section
+
+## [1.5.17] - update delete spaces styles
+
 ## [1.5.16] - add myspaces button
 
 ## [1.5.15] - update logo & favicon

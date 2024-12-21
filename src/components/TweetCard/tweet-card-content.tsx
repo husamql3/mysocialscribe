@@ -1,14 +1,13 @@
 import { useMemo } from 'react'
 
 import { TweetCardContentProps } from '@/types/TweetCardType'
-import { cn } from '@/lib/utils'
 
 const TweetCardContent = ({ entities, isDeleted }: TweetCardContentProps) => {
   const renderEntities = useMemo(() => {
     return entities
       .map((entity, idx) => {
         const commonProps = {
-          className: 'text-sm font-normal',
+          className: `text-sm font-normal ${isDeleted ? 'text-zinc-600' : ''}`,
         }
 
         switch (entity.type) {
@@ -45,11 +44,7 @@ const TweetCardContent = ({ entities, isDeleted }: TweetCardContentProps) => {
       .filter(Boolean)
   }, [entities])
 
-  return (
-    <div className={cn('break-words', isDeleted ? 'text-zinc-600' : '')}>
-      {renderEntities}
-    </div>
-  )
+  return <div className="break-words">{renderEntities}</div>
 }
 
 export default TweetCardContent

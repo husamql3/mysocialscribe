@@ -8,11 +8,10 @@ import { LuLoaderCircle } from 'react-icons/lu'
 
 import { TweetDownloadBtnProps } from '@/types/TweetCardType'
 import { useDownload } from '@/hooks/use-download'
-import { cn } from '@/lib/utils'
 
 import { Button } from '@/components/ui/button'
 import { Confetti, ConfettiRef } from '@/components/ui/confetti'
-import { Dialog, DialogContent, DialogDescription } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 
 const TweetDownloadBtn = ({ filename, tweetUrl, user, isDeleted }: TweetDownloadBtnProps) => {
   const { downloadTwitterSpaces, isDownloading } = useDownload()
@@ -66,17 +65,20 @@ const TweetDownloadBtn = ({ filename, tweetUrl, user, isDeleted }: TweetDownload
           variant="secondary"
           onClick={handleDownloadAgain}
           disabled={isDownloading}
-          className={cn('h-7', isDeleted ? 'w-7' : 'w-auto')}
+          className="h-7"
         >
           {isDownloading ? (
             <>
               <LuLoaderCircle className="h-5 w-5 animate-spin" />
               <span className="sr-only">Downloading</span>
             </>
-          ) : isDeleted ? (
-            <History className="h-5 w-5" />
           ) : (
-            'Download Again'
+            isDeleted && (
+              <>
+                <History className="h-5 w-5" />
+                <span>Download Again</span>
+              </>
+            )
           )}
         </Button>
       )}
@@ -104,6 +106,10 @@ const TweetDownloadBtn = ({ filename, tweetUrl, user, isDeleted }: TweetDownload
             quality={80}
             loading="eager"
           />
+
+          <DialogTitle className="sr-only">
+            <span className="sr-only">Success!</span>
+          </DialogTitle>
 
           <DialogDescription className="w-full pb-5 text-center font-semibold dark:text-stone-50">
             Your download is starting now. We&#39;ll send you an email as soon as it&#39;s ready!
