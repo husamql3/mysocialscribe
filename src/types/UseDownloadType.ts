@@ -11,7 +11,6 @@ export type DownloadTwitterSpacesReturnType = {
 
 export type UseDownloadType = {
   error: string | null
-  isDownloading: boolean
   downloadTwitterSpaces: (
     params: DownloadTwitterSpacesParamsType
   ) => Promise<DownloadTwitterSpacesReturnType>

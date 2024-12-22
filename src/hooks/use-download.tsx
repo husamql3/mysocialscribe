@@ -9,17 +9,19 @@ import {
   DownloadTwitterSpacesReturnType,
   UseDownloadType,
 } from '@/types/UseDownloadType'
+import useLoadingStore from '@/store/useStore'
 
 export const useDownload = (): UseDownloadType => {
   const { openLoginDialog } = useLoginDialog()
   const [error, setError] = useState<string | null>(null)
-  const [isDownloading, setIsDownloading] = useState<boolean>(false)
+  const setLoading = useLoadingStore((state) => state.setLoading)
+  const setStale = useLoadingStore((state) => state.setStale)
 
   const downloadTwitterSpaces = async (
     params: DownloadTwitterSpacesParamsType
   ): Promise<DownloadTwitterSpacesReturnType> => {
-    setIsDownloading(true)
     setError(null)
+    setLoading()
 
     try {
       const twitterSpacesRegex = /^https?:\/\/(x|twitter)\.com\/[^/]+\/(status|spaces)\/\d+/
@@ -92,9 +94,9 @@ export const useDownload = (): UseDownloadType => {
         error: errorMessage,
       }
     } finally {
-      setIsDownloading(false)
+      setStale()
     }
   }
 
-  return { error, isDownloading, downloadTwitterSpaces }
+  return { error, downloadTwitterSpaces }
 }

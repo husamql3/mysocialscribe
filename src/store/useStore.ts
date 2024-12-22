@@ -2,17 +2,17 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 type LoadingState = {
-  status: 'stale' | 'loading'
+  isLoading: boolean
   setLoading: () => void
-  setStale: () => void
+  setNotLoading: () => void
 }
 
 const useLoadingStore = create<LoadingState>()(
   persist(
     (set) => ({
-      status: 'stale',
-      setLoading: () => set({ status: 'loading' }),
-      setStale: () => set({ status: 'stale' }),
+      isLoading: false,
+      setLoading: () => set({ isLoading: true }),
+      setNotLoading: () => set({ isLoading: false }),
     }),
     {
       name: 'loading-storage',
