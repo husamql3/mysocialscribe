@@ -9,3 +9,9 @@
 	--color-4: 195 100% 63%;
 	--color-5: 90 100% 63%;
 }
+
+@layer utilities {
+	.dark-fit {
+		@apply w-fit h-fit bg-zinc-950 z-50
+	}
+}

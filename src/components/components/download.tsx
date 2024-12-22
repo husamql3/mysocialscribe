@@ -15,6 +15,7 @@ import Link from 'next/link'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter } from '@/components/ui/dialog'
+import { toast } from '@/hooks/use-toast'
 
 const Download = ({ user }: { user: User | null }) => {
   const searchParams = useSearchParams()
@@ -35,18 +36,39 @@ const Download = ({ user }: { user: User | null }) => {
   }, [searchParams, storedSpaceUrl])
 
   const handleDownload = async () => {
+    // if the user is not logged in, open the login dialog
     if (user === null) {
       setStoredSpaceUrl(inputUrl)
       openLoginDialog('login')
       return
     }
 
-    setIsModalOpen(true)
-    downloadTwitterSpaces({
+    // if the input is empty, show a toast
+    if (!inputUrl.trim()) {
+      toast({
+        title: 'Invalid Twitter Spaces or Tweet URL',
+        description: 'Please enter a valid Twitter Spaces or Tweet URL',
+        variant: 'destructive',
+      })
+      return
+    }
+
+    // if the input is not a valid Twitter Spaces or Tweet URL, show a toast
+    const res = await downloadTwitterSpaces({
       url: inputUrl,
       userId: user.id,
       email: user.email!,
     })
+    if (!res.success) {
+      toast({
+        title: 'Failed to download',
+        description: res.error,
+        variant: 'destructive',
+      })
+      return
+    }
+
+    setIsModalOpen(true)
     setStoredSpaceUrl('')
     setInputUrl('')
   }
