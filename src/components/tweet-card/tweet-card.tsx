@@ -5,12 +5,12 @@ import { formatDate, formatNumber } from '@/utils/format'
 import { cn } from '@/lib/utils'
 
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
-import TweetCardHeader from '@/components/TweetCard/tweet-card-header'
-import TweetCardContent from '@/components/TweetCard/tweet-card-content'
-import TweetShare from '@/components/TweetCard/tweet-share'
-import TweetDelBtn from '@/components/TweetCard/tweet-delete-btn'
-import TweetDownloadBtn from '@/components/TweetCard/tweet-download-btn'
-import TweetPlayBtn from '@/components/TweetCard/tweet-play-btn'
+import TweetCardHeader from '@/components/tweet-card/tweet-card-header'
+import TweetCardContent from '@/components/tweet-card/tweet-card-content'
+import TweetShare from '@/components/tweet-card/tweet-share'
+import TweetDelBtn from '@/components/tweet-card/tweet-delete-btn'
+import TweetDownloadBtn from '@/components/tweet-card/tweet-download-btn'
+import TweetPlayBtn from '@/components/tweet-card/tweet-play-btn'
 
 const TweetCard = ({
   tweet,
@@ -33,7 +33,7 @@ const TweetCard = ({
 
   return (
     <div className="z-50 space-y-1">
-      {!isDeleted && <p className="text-sm">Downloaded at {formatDate(downloadAtdAt)}</p>}
+      {!isDeleted && <p className="dark-fit text-xs">Downloaded at {formatDate(downloadAtdAt)}</p>}
 
       <Card className="flex h-fit w-full flex-col overflow-auto rounded-lg shadow-xl dark:bg-zinc-950">
         <CardHeader className="flex flex-row justify-between gap-3 p-3">

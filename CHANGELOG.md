@@ -1,5 +1,7 @@
 # Changelog
 
+## [1.6.19] - fix bug & showing success before checking input
+
 ## [1.6.18] - update deleted downloads section
 
 ## [1.5.17] - update delete spaces styles

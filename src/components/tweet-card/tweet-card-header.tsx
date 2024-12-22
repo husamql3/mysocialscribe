@@ -4,8 +4,8 @@ import { truncate } from '@/utils/truncate'
 import { cn } from '@/lib/utils'
 import { TweetCardHeaderType } from '@/types/TweetCardType'
 
-import Verified from '@/components/TweetCard/verified'
-import Twitter from '@/components/TweetCard/twitter'
+import Verified from '@/components/tweet-card/verified'
+import Twitter from '@/components/tweet-card/twitter'
 
 const TweetCardHeader = ({ tweet, isDeleted }: TweetCardHeaderType) => {
   return (
