@@ -18,24 +18,27 @@ const HistoryView = ({ downloadTweets, deletedDownloads, user }: HistoryViewType
   return (
     <main className="mx-auto flex w-full max-w-lg flex-1 flex-col gap-4 px-4 py-6 md:px-0">
       {/* Active downloads */}
-      <div className="flex flex-col gap-3">
-        <p className="dark-fit mx-auto text-center text-lg text-stone-50">
-          Downloads <span className="text-xs">(Expires After 24 Hours)</span>
-        </p>
-        {downloadTweets.map(({ download, tweet }, index) => (
-          <TweetCard
-            key={index}
-            tweet={tweet}
-            filename={download.filename}
-            downloadId={download.id}
-            downloadAtdAt={download.created_at}
-            likes={tweet?.favorite_count}
-            createdAt={tweet?.created_at}
-            user={user}
-            isDeleted={download.is_deleted || !download.filename}
-          />
-        ))}
-      </div>
+      {hasActiveDownloads && (
+        <div className="flex flex-col gap-3">
+          <p className="dark-fit mx-auto text-center text-lg text-stone-50">
+            Downloads <span className="text-xs">(Expires After 24 Hours)</span>
+          </p>
+
+          {downloadTweets.map(({ download, tweet }, index) => (
+            <TweetCard
+              key={index}
+              tweet={tweet}
+              filename={download.filename}
+              downloadId={download.id}
+              downloadAtdAt={download.created_at}
+              likes={tweet?.favorite_count}
+              createdAt={tweet?.created_at}
+              user={user}
+              isDeleted={download.is_deleted || !download.filename}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Deleted downloads */}
       {deletedDownloads.length > 0 && (

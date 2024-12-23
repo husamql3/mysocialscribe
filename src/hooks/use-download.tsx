@@ -15,7 +15,7 @@ export const useDownload = (): UseDownloadType => {
   const { openLoginDialog } = useLoginDialog()
   const [error, setError] = useState<string | null>(null)
   const setLoading = useLoadingStore((state) => state.setLoading)
-  const setStale = useLoadingStore((state) => state.setStale)
+  const setNotLoading = useLoadingStore((state) => state.setNotLoading)
 
   const downloadTwitterSpaces = async (
     params: DownloadTwitterSpacesParamsType
@@ -37,6 +37,7 @@ export const useDownload = (): UseDownloadType => {
         }
       }
 
+      // Replace 'https://twitter.com' with 'https://x.com'
       const normalizedUrl = params.url.replace(/^https?:\/\/twitter\.com/, 'https://x.com')
 
       const response = await fetch('/api/twitter/download', {
@@ -94,7 +95,10 @@ export const useDownload = (): UseDownloadType => {
         error: errorMessage,
       }
     } finally {
-      setStale()
+      setNotLoading()
+
+      // Reload the page after the download is complete
+      window.location.reload()
     }
   }
 
