@@ -6,7 +6,7 @@ import { AiOutlineDelete } from 'react-icons/ai'
 import { toast } from '@/hooks/use-toast'
 import { TweetDelBtnType } from '@/types/TweetCardType'
 import useDeleteDownload from '@/hooks/use-delete-download'
-import { useDownload } from '@/hooks/use-download'
+import useLoadingStore from '@/store/useStore'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -22,9 +22,9 @@ import {
 } from '@/components/ui/alert-dialog'
 
 const TweetDelBtn = ({ downloadId, filename }: TweetDelBtnType) => {
-  const { isDownloading } = useDownload()
-  const { hardDeleteDownload, isDeleting, deleteError } = useDeleteDownload()
-
+  const isDownloading = useLoadingStore((state) => state.isLoading)
+  const { hardDeleteDownload, deleteError } = useDeleteDownload()
+  console.log(isDownloading)
   useEffect(() => {
     if (deleteError) {
       toast({
@@ -40,13 +40,13 @@ const TweetDelBtn = ({ downloadId, filename }: TweetDelBtnType) => {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger>
+      <AlertDialogTrigger disabled={isDownloading}>
         <Button
           type="button"
           variant="ghost"
           size="sm"
           className="h-7 w-7 text-neutral-600"
-          disabled={isDeleting || isDownloading}
+          disabled={isDownloading}
         >
           <AiOutlineDelete className="h-5 w-5" />
         </Button>

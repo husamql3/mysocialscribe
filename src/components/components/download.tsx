@@ -1,21 +1,21 @@
 'use client'
 
-import { User } from '@supabase/auth-js'
 import { useEffect, useRef, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
-import { IoArrowForward } from 'react-icons/io5'
-
-import { useDownload } from '@/hooks/use-download'
-import { useLoginDialog } from '@/providers/login-dialog-provider'
-import { useLocalStorage } from '@/hooks/useLocalStorage'
-import { Confetti, ConfettiRef } from '@/components/ui/confetti'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
+import { User } from '@supabase/auth-js'
+import { IoArrowForward } from 'react-icons/io5'
 
+import { toast } from '@/hooks/use-toast'
+import { useLocalStorage } from '@/hooks/useLocalStorage'
+import { useDownload } from '@/hooks/use-download'
+import { useLoginDialog } from '@/providers/login-dialog-provider'
+
+import { Confetti, ConfettiRef } from '@/components/ui/confetti'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter } from '@/components/ui/dialog'
-import { toast } from '@/hooks/use-toast'
 
 const Download = ({ user }: { user: User | null }) => {
   const searchParams = useSearchParams()

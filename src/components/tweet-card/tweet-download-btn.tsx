@@ -8,15 +8,17 @@ import { LuLoaderCircle } from 'react-icons/lu'
 
 import { TweetDownloadBtnProps } from '@/types/TweetCardType'
 import { useDownload } from '@/hooks/use-download'
+import useLoadingStore from '@/store/useStore'
 
 import { Button } from '@/components/ui/button'
 import { Confetti, ConfettiRef } from '@/components/ui/confetti'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 
 const TweetDownloadBtn = ({ filename, tweetUrl, user, isDeleted }: TweetDownloadBtnProps) => {
-  const { downloadTwitterSpaces, isDownloading } = useDownload()
-  const confettiRef = useRef<ConfettiRef>(null)
+  const { downloadTwitterSpaces } = useDownload()
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const confettiRef = useRef<ConfettiRef>(null)
+  const isDownloading = useLoadingStore((state) => state.isLoading)
 
   // if the file is on the server, download it
   const handleDownload = async () => {
@@ -56,6 +58,7 @@ const TweetDownloadBtn = ({ filename, tweetUrl, user, isDeleted }: TweetDownload
           variant="ghost"
           className="h-7 w-7 bg-indigo-500 text-stone-50 hover:!bg-indigo-700"
           onClick={handleDownload}
+          type="button"
         >
           <HiDownload className="h-5 w-5" />
         </Button>
@@ -66,6 +69,7 @@ const TweetDownloadBtn = ({ filename, tweetUrl, user, isDeleted }: TweetDownload
           onClick={handleDownloadAgain}
           disabled={isDownloading}
           className="h-7"
+          type="button"
         >
           {isDownloading ? (
             <>

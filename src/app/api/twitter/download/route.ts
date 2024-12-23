@@ -65,9 +65,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
           } catch (uploadError) {
             console.error('Upload error:', uploadError)
             resolve(NextResponse.json({ error: 'Upload failed' }, { status: 500 }))
-          } finally {
-            // Revalidate the history route
-            revalidatePath('/history')
           }
         } else {
           resolve(NextResponse.json({ error: 'Download failed' }, { status: 500 }))
@@ -77,5 +74,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   } catch (error) {
     console.error('Error:', error)
     return NextResponse.json({ error: 'Download failed' }, { status: 500 })
+  } finally {
+    // Revalidate the history route
+    revalidatePath('/history')
   }
 }

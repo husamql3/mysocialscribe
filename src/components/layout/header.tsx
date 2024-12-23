@@ -14,14 +14,14 @@ const Header = ({ user }: { user: User | null }) => {
           <Logo />
 
           <div className="flex items-center gap-3">
-            {user && (
+            {user ? (
               <>
                 <MySpacesBtn />
                 <UserProfile email={user?.email} />
               </>
+            ) : (
+              <LoginDialog />
             )}
-
-            {!user && <LoginDialog />}
           </div>
         </div>
       </header>
