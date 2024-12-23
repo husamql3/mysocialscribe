@@ -9,7 +9,7 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
-      - ./public/downloads:/app/public/downloads:ro
+      - downloads_volume:/app/public/downloads:ro
     depends_on:
       - app
     networks:
@@ -26,8 +26,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./public/downloads:/app/public/downloads
-    user: "1000:1000"
+      - downloads_volume:/app/public/downloads
     restart: unless-stopped
     networks:
       - app_network
@@ -45,6 +44,9 @@ services:
     restart: unless-stopped
     networks:
       - app_network
+
+volumes:
+  downloads_volume:
 
 networks:
   app_network:

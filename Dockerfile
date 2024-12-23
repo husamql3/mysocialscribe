@@ -30,20 +30,23 @@ FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV production
 
-# Create necessary directories with proper permissions
+# Create necessary directories and set up user/group
 RUN mkdir -p /app/.next/cache && \
     mkdir -p /app/public/downloads && \
-    addgroup -g 1000 appgroup && \
-    adduser -D -u 1000 -G appgroup appuser && \
-    chown -R appuser:appgroup /app
+    # Try to use an available GID/UID
+    addgroup -S appgroup && \
+    adduser -S appuser -G appgroup && \
+    # Set permissions
+    chown -R appuser:appgroup /app && \
+    chown -R appuser:appgroup /app/public/downloads && \
+    chmod -R 755 /app/public/downloads
 
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
-# Ensure downloads directory has proper permissions
-RUN chown -R appuser:appgroup /app/public/downloads && \
-    chmod -R 755 /app/public/downloads
+# Ensure all copied files have correct ownership
+RUN chown -R appuser:appgroup /app
 
 USER appuser
 
