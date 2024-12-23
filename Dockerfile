@@ -29,6 +29,11 @@ RUN yarn build
 FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV production
+
+# Create .next directory and set permissions before copying files
+RUN mkdir -p /app/.next/cache && \
+    chown -R node:node /app
+
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static

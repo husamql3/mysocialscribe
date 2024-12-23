@@ -18,12 +18,6 @@ export const useDownload = (): UseDownloadType => {
 
     try {
       const normalizedUrl = params.url.replace(/^https?:\/\/twitter\.com/, 'https://x.com')
-      console.log({
-        url: normalizedUrl,
-        userId: params.userId,
-        email: params.email,
-      })
-
       const response = await fetch('/api/twitter/download', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -33,6 +27,7 @@ export const useDownload = (): UseDownloadType => {
           email: params.email,
         }),
       })
+      console.log('response', response.status)
       if (!response.ok) {
         throw new Error('Server error occurred. Please try again later.')
       }
