@@ -50,11 +50,12 @@ const ShareComponent = ({
   return (
     <div className="flex flex-row gap-4">
       <DropdownMenu>
-        <DropdownMenuTrigger>
+        <DropdownMenuTrigger asChild>
           <Button
             variant="outline"
             size="sm"
             className="h-7 w-7"
+            type="button"
           >
             <HiOutlineDotsVertical className="h-7 w-7" />
           </Button>

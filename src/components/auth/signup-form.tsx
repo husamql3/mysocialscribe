@@ -5,7 +5,7 @@ import { Check, Eye, EyeOff, Loader2, X } from 'lucide-react'
 
 import { Input } from '@/components/ui/input'
 import { signupSchema } from '@/types/schema/auth.schema'
-import { signup } from '@/db/supabase/services/auth.service'
+import { signup } from '@/db/auth.service'
 import { SignupFormData } from '@/types/AuthType'
 
 import { Button } from '@/components/ui/button'

@@ -8,7 +8,7 @@ import { LuLoaderCircle } from 'react-icons/lu'
 
 import { TweetDownloadBtnProps } from '@/types/TweetCardType'
 import { useDownload } from '@/hooks/use-download'
-import useLoadingStore from '@/store/useStore'
+import { useLoadingStore } from '@/store/useStore'
 
 import { Button } from '@/components/ui/button'
 import { Confetti, ConfettiRef } from '@/components/ui/confetti'

@@ -15,7 +15,14 @@ import { useLoginDialog } from '@/providers/login-dialog-provider'
 import { Confetti, ConfettiRef } from '@/components/ui/confetti'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogDescription, DialogFooter } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import { useModalStore } from '@/store/useStore'
 
 const Download = ({ user }: { user: User | null }) => {
   const searchParams = useSearchParams()
@@ -24,7 +31,7 @@ const Download = ({ user }: { user: User | null }) => {
   const [storedSpaceUrl, setStoredSpaceUrl] = useLocalStorage('spaceUrl', '')
   const [inputUrl, setInputUrl] = useState('')
   const confettiRef = useRef<ConfettiRef>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const { isModalOpen, toggleModal } = useModalStore()
 
   useEffect(() => {
     const urlFromParams = searchParams.get('spaceUrl')
@@ -37,7 +44,7 @@ const Download = ({ user }: { user: User | null }) => {
 
   const handleDownload = async () => {
     // if the user is not logged in, open the login dialog
-    if (user === null) {
+    if (!user) {
       setStoredSpaceUrl(inputUrl)
       openLoginDialog('login')
       return
@@ -46,31 +53,39 @@ const Download = ({ user }: { user: User | null }) => {
     // if the input is empty, show a toast
     if (!inputUrl.trim()) {
       toast({
-        title: 'Invalid Twitter Spaces or Tweet URL',
-        description: 'Please enter a valid Twitter Spaces or Tweet URL',
+        title: 'Error',
+        description: 'Please enter a URL',
         variant: 'destructive',
       })
       return
     }
 
-    // if the input is not a valid Twitter Spaces or Tweet URL, show a toast
-    const res = await downloadTwitterSpaces({
-      url: inputUrl,
-      userId: user.id,
-      email: user.email!,
-    })
-    if (!res.success) {
+    // if the input is not a valid Twitter space link, show a toast
+    const twitterSpacesRegex = /^https?:\/\/(x|twitter)\.com\/[^/]+\/status\/\d+$/
+    if (!twitterSpacesRegex.test(inputUrl)) {
       toast({
-        title: 'Failed to download',
-        description: res.error,
+        title: 'Error',
+        description: 'Please enter a valid Tweet URL',
         variant: 'destructive',
       })
       return
     }
 
-    setIsModalOpen(true)
-    setStoredSpaceUrl('')
-    setInputUrl('')
+    toggleModal()
+
+    try {
+      await downloadTwitterSpaces({
+        url: inputUrl,
+        userId: user.id,
+        email: user.email!,
+      })
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: error instanceof Error ? error.message : 'An unexpected error occurred',
+        variant: 'destructive',
+      })
+    }
   }
 
   return (
@@ -101,7 +116,7 @@ const Download = ({ user }: { user: User | null }) => {
 
       <Dialog
         open={isModalOpen}
-        onOpenChange={setIsModalOpen}
+        onOpenChange={toggleModal}
       >
         <DialogContent className="flex w-full max-w-sm flex-col items-center justify-center overflow-hidden rounded-lg px-6 pb-4 pt-8 dark:bg-zinc-950">
           <Confetti
@@ -121,6 +136,8 @@ const Download = ({ user }: { user: User | null }) => {
             quality={80}
             loading="eager"
           />
+
+          <DialogTitle className="sr-only">Success</DialogTitle>
 
           <DialogDescription className="w-full pb-5 text-center font-semibold dark:text-stone-50">
             Your download is starting now. We&#39;ll send you an email as soon as it&#39;s ready!

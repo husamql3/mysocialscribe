@@ -8,14 +8,11 @@ import { saveDownloadRecord } from '@/db/downloads.service'
 import { sendDownloadEmail } from '@/utils/sendDownloadEmail'
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
+  const { url, userId, email } = await req.json()
+  if (!url) return NextResponse.json({ error: 'URL is required' }, { status: 400 })
+  if (!userId) return NextResponse.json({ error: 'User must be logged in' }, { status: 401 })
+
   try {
-    const { url, userId, email } = await req.json()
-    // Check for url parameter in the request
-    if (!url) return NextResponse.json({ error: 'URL is required' }, { status: 400 })
-
-    // Check for user authentication
-    if (!userId) return NextResponse.json({ error: 'User must be logged in' }, { status: 401 })
-
     const filename = `twitter_space_${crypto.randomUUID().slice(0, 8)}.mp3`
     const filePath = path.join(process.cwd(), 'public', 'downloads', filename)
 

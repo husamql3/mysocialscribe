@@ -7,7 +7,7 @@ type LoadingState = {
   setNotLoading: () => void
 }
 
-const useLoadingStore = create<LoadingState>()(
+export const useLoadingStore = create<LoadingState>()(
   persist(
     (set) => ({
       isLoading: false,
@@ -20,4 +20,23 @@ const useLoadingStore = create<LoadingState>()(
   )
 )
 
-export default useLoadingStore
+type ModalState = {
+  isModalOpen: boolean
+  openModal: () => void
+  closeModal: () => void
+  toggleModal: () => void
+}
+
+export const useModalStore = create<ModalState>()(
+  persist(
+    (set) => ({
+      isModalOpen: false,
+      openModal: () => set({ isModalOpen: true }),
+      closeModal: () => set({ isModalOpen: false }),
+      toggleModal: () => set((state) => ({ isModalOpen: !state.isModalOpen })),
+    }),
+    {
+      name: 'modal-storage',
+    }
+  )
+)

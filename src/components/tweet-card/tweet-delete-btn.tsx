@@ -6,7 +6,7 @@ import { AiOutlineDelete } from 'react-icons/ai'
 import { toast } from '@/hooks/use-toast'
 import { TweetDelBtnType } from '@/types/TweetCardType'
 import useDeleteDownload from '@/hooks/use-delete-download'
-import useLoadingStore from '@/store/useStore'
+import { useLoadingStore } from '@/store/useStore'
 
 import { Button } from '@/components/ui/button'
 import {

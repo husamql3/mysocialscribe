@@ -1,4 +1,4 @@
-import { getUser } from '@/db/supabase/services/auth.service'
+import { getUser } from '@/db/auth.service'
 
 import HomeView from '@/components/views/home-view'
 

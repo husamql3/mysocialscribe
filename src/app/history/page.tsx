@@ -1,7 +1,7 @@
 import { enrichTweet } from 'react-tweet'
 import { getTweet } from 'react-tweet/api'
 
-import { getUser } from '@/db/supabase/services/auth.service'
+import { getUser } from '@/db/auth.service'
 import { getUserDeletedDownloads, getUserDownloads } from '@/db/downloads.service'
 import { extractTweetId } from '@/utils/extractTweetId'
 import { UserDownloadTweet } from '@/types/TweetType'
