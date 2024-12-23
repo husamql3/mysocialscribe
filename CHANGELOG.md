@@ -1,5 +1,7 @@
 # Changelog
 
+## [1.6.20] - fix loading space state
+
 ## [1.6.19] - fix bug & showing success before checking input
 
 ## [1.6.18] - update deleted downloads section
