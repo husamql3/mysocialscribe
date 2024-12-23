@@ -27,6 +27,7 @@ services:
       - .env
     volumes:
       - ./public/downloads:/app/public/downloads
+    user: "1000:1000"
     restart: unless-stopped
     networks:
       - app_network

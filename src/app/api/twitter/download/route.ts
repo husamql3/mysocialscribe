@@ -57,20 +57,18 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
                 downloadName: filename,
               }),
             ])
-
             resolve(NextResponse.json({ downloadUrl: dlUrl }, { status: 200 }))
-          } catch (uploadError) {
-            console.error('Upload error:', uploadError)
-            resolve(NextResponse.json({ error: 'Upload failed' }, { status: 500 }))
+          } catch {
+            resolve(NextResponse.json({ error: 'Upload failed' }, { status: 501 }))
           }
         } else {
-          resolve(NextResponse.json({ error: 'Download failed' }, { status: 500 }))
+          resolve(NextResponse.json({ error: 'Download failed' }, { status: 502 }))
         }
       })
     })
   } catch (error) {
     console.error('Error:', error)
-    return NextResponse.json({ error: 'Download failed' }, { status: 500 })
+    return NextResponse.json({ error: 'Download failed' }, { status: 503 })
   } finally {
     // Revalidate the history route
     revalidatePath('/history')
