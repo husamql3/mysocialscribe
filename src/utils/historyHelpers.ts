@@ -1,6 +1,6 @@
-// export function extractTweetId(url: string): string {
-//   return url?.split('/status/')[1]?.trim()
-// }
+import { DlType } from '@/types/DownlodsType'
+import { enrichTweet } from 'react-tweet'
+import { getTweet } from 'react-tweet/api'
 
 export function extractTweetId(url: string): string | null {
   try {
@@ -22,4 +22,17 @@ export function extractTweetId(url: string): string | null {
     console.error('Invalid URL:', url)
     return null
   }
+}
+
+export const processGroup = async (downloads: DlType[]) => {
+  return Promise.all(
+    downloads.map(async (dl) => {
+      const tweetId = extractTweetId(dl.space_url)
+      const tweet = tweetId ? await getTweet(tweetId) : undefined
+      return {
+        download: dl,
+        tweet: tweet ? enrichTweet(tweet) : undefined,
+      }
+    })
+  )
 }

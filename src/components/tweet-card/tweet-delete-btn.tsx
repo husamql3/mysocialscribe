@@ -24,7 +24,7 @@ import {
 const TweetDelBtn = ({ downloadId, filename }: TweetDelBtnType) => {
   const isDownloading = useLoadingStore((state) => state.isLoading)
   const { hardDeleteDownload, deleteError } = useDeleteDownload()
-  console.log(isDownloading)
+
   useEffect(() => {
     if (deleteError) {
       toast({

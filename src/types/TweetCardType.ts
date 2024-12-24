@@ -1,17 +1,19 @@
 import { type EnrichedTweet } from 'react-tweet'
 import { User } from '@supabase/auth-js'
+import { DlType } from '@/types/DownlodsType'
 
 type TweetEntity = EnrichedTweet['entities'][number]
 
 export type TweetCardType = {
   tweet: EnrichedTweet | undefined
-  filename: string | undefined
-  downloadId: string
-  createdAt: string | undefined
-  downloadAtdAt: string
-  likes: number | undefined
-  user: User
-  isDeleted: boolean
+  download: DlType
+  // filename: string | undefined
+  // downloadId: string
+  // createdAt: string | undefined
+  // downloadAtdAt: string
+  // likes: number | undefined
+  // user: User
+  // isDeleted: boolean
 }
 
 export type TweetCardHeaderType = {

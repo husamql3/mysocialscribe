@@ -1,3 +1,30 @@
+import { type EnrichedTweet } from 'react-tweet'
+
+export type DlType = {
+  id: string
+  createdAt: string
+  user_id: string | null
+  filename: string | null
+  space_url: string
+  is_deleted: boolean
+  status: 'pending' | 'completed' | 'failed'
+}
+
+export type DownloadsType = {
+  download: DlType
+  tweet: EnrichedTweet | undefined
+}
+
+export type CreateDlType = {
+  user_id: string
+  space_url: string
+}
+
+export type UpdateDlType = {
+  id: string
+  filename: string
+}
+
 export type SaveDownloadRecord = {
   userId: string
   url: string
