@@ -4,7 +4,7 @@ const Hr = ({ className }: { className?: string }) => {
   return (
     <hr
       className={cn(
-        'm-0 h-px w-full border-none bg-gradient-to-r from-neutral-200/0 via-neutral-200/30 to-neutral-200/0',
+        'z-50 m-0 h-0.5 w-full border-none bg-gradient-to-r from-neutral-200/0 via-neutral-200/30 to-neutral-200/0',
         className
       )}
     />

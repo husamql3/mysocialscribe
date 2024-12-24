@@ -1,12 +1,13 @@
+import { LuLoaderCircle } from 'react-icons/lu'
+
 import { TweetCardType } from '@/types/TweetCardType'
+import { formatDate } from '@/utils/format'
 
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
-import { formatDate } from '@/utils/format'
 import TweetCardHeader from '@/components/tweet-card/tweet-card-header'
 import TweetCardContent from '@/components/tweet-card/tweet-card-content'
 import TweetInfo from '@/components/tweet-card/tweet-info'
 import { Button } from '@/components/ui/button'
-import { LuLoaderCircle } from 'react-icons/lu'
 import TweetDelBtn from '@/components/tweet-card/tweet-delete-btn'
 import TweetDownloadAgainBtn from '@/components/tweet-card/tweet-download-again-btn'
 import TweetPlayBtn from '@/components/tweet-card/tweet-play-btn'
@@ -30,7 +31,7 @@ const TweetCard = ({ tweet, download, email }: TweetCardType) => {
   return (
     <div className="z-50 space-y-1">
       {/* created_at */}
-      {!is_deleted && <p className="dark-fit text-xs">Downloaded at {formatDate(created_at)}</p>}
+      {filename && <p className="dark-fit text-xs">Downloaded at {formatDate(created_at)}</p>}
 
       <Card className="flex h-fit w-full flex-col overflow-auto rounded-lg shadow-xl dark:bg-zinc-950">
         <CardHeader className="flex flex-row justify-between gap-3 p-3">

@@ -27,7 +27,6 @@ export const useDownload = (): UseDownloadType => {
           email: params.email,
         }),
       })
-      console.log('response', response.status)
       if (!response.ok) {
         throw new Error('Server error occurred. Please try again later.')
       }
@@ -41,6 +40,7 @@ export const useDownload = (): UseDownloadType => {
       throw new Error(message)
     } finally {
       setNotLoading()
+      window.location.reload()
     }
   }
 
