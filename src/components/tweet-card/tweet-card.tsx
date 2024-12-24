@@ -1,8 +1,19 @@
 import { TweetCardType } from '@/types/TweetCardType'
 
-import { Card, CardHeader } from '@/components/ui/card'
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
+import { formatDate } from '@/utils/format'
+import TweetCardHeader from '@/components/tweet-card/tweet-card-header'
+import TweetCardContent from '@/components/tweet-card/tweet-card-content'
+import TweetInfo from '@/components/tweet-card/tweet-info'
+import { Button } from '@/components/ui/button'
+import { LuLoaderCircle } from 'react-icons/lu'
+import TweetDelBtn from '@/components/tweet-card/tweet-delete-btn'
+import TweetDownloadAgainBtn from '@/components/tweet-card/tweet-download-again-btn'
+import TweetPlayBtn from '@/components/tweet-card/tweet-play-btn'
+import TweetDownloadBtn from '@/components/tweet-card/tweet-download-btn'
+import TweetShare from '@/components/tweet-card/tweet-share'
 
-const TweetCard = ({ tweet, download }: TweetCardType) => {
+const TweetCard = ({ tweet, download, email }: TweetCardType) => {
   if (!tweet) {
     return (
       <Card className="z-50 flex h-fit w-full flex-col overflow-auto rounded-lg shadow-xl dark:bg-zinc-950">
@@ -13,73 +24,83 @@ const TweetCard = ({ tweet, download }: TweetCardType) => {
     )
   }
 
-  console.log('tweet card', tweet, download)
+  const { created_at, user_id, filename, space_url, is_deleted, status } = download
+  const isDownloading = status === 'pending'
 
-  return null
+  return (
+    <div className="z-50 space-y-1">
+      {/* created_at */}
+      {!is_deleted && <p className="dark-fit text-xs">Downloaded at {formatDate(created_at)}</p>}
 
-  // return (
-  //   <div className="z-50 space-y-1">
-  //     {!isDeleted && <p className="dark-fit text-xs">Downloaded at {formatDate(downloadAtdAt)}</p>}
-  //
-  //     <Card className="flex h-fit w-full flex-col overflow-auto rounded-lg shadow-xl dark:bg-zinc-950">
-  //       <CardHeader className="flex flex-row justify-between gap-3 p-3">
-  //         <TweetCardHeader
-  //           tweet={tweet}
-  //           isDeleted={isDeleted}
-  //         />
-  //       </CardHeader>
-  //
-  //       <CardContent className="px-3 py-1">
-  //         <TweetCardContent
-  //           entities={tweet.entities}
-  //           isDeleted={isDeleted}
-  //         />
-  //       </CardContent>
-  //
-  //       <CardFooter className="justify-between px-3 pb-3 pt-3">
-  //         <div className={cn('flex gap-1 text-xs text-zinc-400', isDeleted && 'text-zinc-600')}>
-  //           <p>{formatDate(createdAt!, false)}</p>
-  //           <p>·</p>
-  //           <p className="flex items-center gap-0.5">
-  //             {formatNumber(tweet?.favorite_count)}
-  //             <IoHeartOutline />
-  //           </p>
-  //         </div>
-  //
-  //         <div className="z-50 flex items-center gap-2">
-  //           {/* Delete button */}
-  //           {(isDeleted || (!filename && !isDeleted)) && (
-  //             <TweetDelBtn
-  //               downloadId={downloadId}
-  //               filename={filename}
-  //               isDeleted={isDeleted}
-  //             />
-  //           )}
-  //
-  //           {/* Play button */}
-  //           {filename && !isDeleted && <TweetPlayBtn filename={filename} />}
-  //
-  //           {/* Download button */}
-  //           <TweetDownloadBtn
-  //             filename={filename}
-  //             tweetUrl={tweet.url}
-  //             user={user}
-  //             isDeleted={isDeleted}
-  //           />
-  //
-  //           {/* Share button */}
-  //           {!isDeleted && filename && (
-  //             <TweetShare
-  //               downloadId={downloadId}
-  //               spaceUrl={tweet.url}
-  //               filename={filename!}
-  //             />
-  //           )}
-  //         </div>
-  //       </CardFooter>
-  //     </Card>
-  //   </div>
-  // )
+      <Card className="flex h-fit w-full flex-col overflow-auto rounded-lg shadow-xl dark:bg-zinc-950">
+        <CardHeader className="flex flex-row justify-between gap-3 p-3">
+          <TweetCardHeader
+            tweet={tweet}
+            isDeleted={is_deleted}
+          />
+        </CardHeader>
+
+        <CardContent className="px-3 py-1">
+          <TweetCardContent
+            entities={tweet.entities}
+            isDeleted={download.is_deleted}
+          />
+        </CardContent>
+
+        <CardFooter className="justify-between px-3 pb-3 pt-3">
+          <TweetInfo
+            favorite_count={tweet.favorite_count}
+            created_at={created_at}
+            is_deleted={is_deleted}
+          />
+
+          {/*  Space is downloading */}
+          {isDownloading && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="h-7 text-stone-50"
+              disabled
+            >
+              Downloading
+              <LuLoaderCircle className="h-5 w-5 animate-spin" />
+            </Button>
+          )}
+
+          {/* Space is downloaded */}
+          {filename && (
+            <div className="z-50 flex items-center gap-2">
+              <TweetShare
+                spaceUrl={space_url}
+                filename={filename}
+                downloadId={download.id}
+              />
+              <TweetPlayBtn filename={filename} />
+              <TweetDownloadBtn filename={filename} />
+            </div>
+          )}
+
+          {/* Space is deleted */}
+          {is_deleted && (
+            <div className="z-50 flex items-center gap-2">
+              <TweetDelBtn
+                downloadId={download.id}
+                filename={filename}
+              />
+
+              <TweetDownloadAgainBtn
+                tweetUrl={download.space_url}
+                user_id={user_id!}
+                email={email}
+                isDownloading={isDownloading}
+              />
+            </div>
+          )}
+        </CardFooter>
+      </Card>
+    </div>
+  )
 }
 
 export default TweetCard

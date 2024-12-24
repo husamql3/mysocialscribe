@@ -6,23 +6,24 @@ import path from 'path'
 import { sendDownloadEmail } from '@/utils/sendDownloadEmail'
 import {
   createDownloadRecord,
-  // updateDownloadRecord,
+  updateDownloadRecord,
 } from '@/db/supabase/services/downloads.service'
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const { url, userId, email } = await req.json()
+  const { space_url, user_id, email } = await req.json()
 
-  if (!url) {
+  if (!space_url) {
     console.error('Download request missing URL')
     return NextResponse.json({ error: 'URL is required' }, { status: 400 })
   }
-  if (!userId) {
+
+  if (!user_id) {
     console.error('Download request from unauthenticated user')
     return NextResponse.json({ error: 'User must be logged in' }, { status: 401 })
   }
 
   try {
-    const dlRecord = await createDownloadRecord({ userId, url })
+    const dlRecord = await createDownloadRecord({ user_id, space_url })
     console.log('download record', dlRecord)
     if (!dlRecord) {
       console.error('Failed to create download record')
@@ -45,7 +46,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
           '--extract-audio',
           '--audio-format',
           'mp3',
-          url,
+          space_url,
         ],
         { stdio: ['ignore', 'pipe', 'ignore'] }
       )
@@ -58,14 +59,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         if (code === 0) {
           try {
             const dlUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/downloads/` + filename
-            console.log('download url', dlUrl)
+            console.log('download space_url', dlUrl)
 
             // Save the download record to the database, and send the email to the user
             await Promise.all([
-              // updateDownloadRecord({
-              //   id: dlRecord.id,
-              //   filename,
-              // }),
+              updateDownloadRecord({
+                id: dlRecord.id,
+                filename,
+              }),
               sendDownloadEmail({
                 to: email,
                 href: dlUrl,
@@ -105,7 +106,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   //         '--extract-audio',
   //         '--audio-format',
   //         'mp3',
-  //         url,
+  //         space_url,
   //       ],
   //       { stdio: ['ignore', 'pipe', 'ignore'] }
   //     )
@@ -118,13 +119,13 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   //       if (code === 0) {
   //         try {
   //           const dlUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/downloads/` + filename
-  //           console.log('download url', dlUrl)
+  //           console.log('download space_url', dlUrl)
   //
   //           // Save the download record to the database, and send the email to the user
   //           await Promise.all([
   //             saveDownloadRecord({
-  //               userId,
-  //               url,
+  //               user_id,
+  //               space_url,
   //               filename,
   //             }),
   //             sendDownloadEmail({

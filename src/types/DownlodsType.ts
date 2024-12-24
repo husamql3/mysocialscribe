@@ -2,7 +2,7 @@ import { type EnrichedTweet } from 'react-tweet'
 
 export type DlType = {
   id: string
-  createdAt: string
+  created_at: string
   user_id: string | null
   filename: string | null
   space_url: string

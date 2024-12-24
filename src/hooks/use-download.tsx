@@ -22,8 +22,8 @@ export const useDownload = (): UseDownloadType => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          url: normalizedUrl,
-          userId: params.userId,
+          space_url: normalizedUrl,
+          user_id: params.userId,
           email: params.email,
         }),
       })

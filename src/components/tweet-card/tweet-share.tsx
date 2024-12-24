@@ -52,7 +52,7 @@ const ShareComponent = ({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
-            variant="outline"
+            variant="ghost"
             size="sm"
             className="h-7 w-7"
             type="button"
