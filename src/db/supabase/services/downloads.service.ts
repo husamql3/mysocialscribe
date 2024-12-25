@@ -56,7 +56,7 @@ export const getDownloads = async ({ userId }: { userId: string }): Promise<DlTy
     .from('downloads')
     .select('*')
     .eq('user_id', userId)
-    .eq('is_hidden', false)
+    .eq('is_archived', false)
     .order('created_at', { ascending: false })
 
   if (error) {
@@ -92,7 +92,7 @@ export const hardDeleteDownload = async ({ id }: { id: string }) => {
   const { error } = await supabase
     .from('downloads')
     .update({
-      is_hidden: true,
+      is_archived: true,
       is_deleted: true,
       filename: null,
     })
