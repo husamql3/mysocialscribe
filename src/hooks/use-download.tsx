@@ -22,12 +22,12 @@ export const useDownload = (): UseDownloadType => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          url: normalizedUrl,
-          userId: params.userId,
+          space_url: normalizedUrl,
+          user_id: params.userId,
           email: params.email,
+          downloadId: params.downloadId,
         }),
       })
-      console.log('response', response.status)
       if (!response.ok) {
         throw new Error('Server error occurred. Please try again later.')
       }
@@ -41,6 +41,7 @@ export const useDownload = (): UseDownloadType => {
       throw new Error(message)
     } finally {
       setNotLoading()
+      window.location.reload()
     }
   }
 

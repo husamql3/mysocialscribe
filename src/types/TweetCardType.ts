@@ -1,17 +1,18 @@
 import { type EnrichedTweet } from 'react-tweet'
-import { User } from '@supabase/auth-js'
+import { DlType } from '@/types/DownlodsType'
 
 type TweetEntity = EnrichedTweet['entities'][number]
 
 export type TweetCardType = {
   tweet: EnrichedTweet | undefined
-  filename: string | undefined
-  downloadId: string
-  createdAt: string | undefined
-  downloadAtdAt: string
-  likes: number | undefined
-  user: User
-  isDeleted: boolean
+  download: DlType
+  email: string
+}
+
+export type TweetInfoType = {
+  favorite_count: number
+  created_at: string
+  is_deleted: boolean
 }
 
 export type TweetCardHeaderType = {
@@ -26,8 +27,7 @@ export type TweetCardContentProps = {
 
 export type TweetDelBtnType = {
   downloadId: string
-  filename?: string
-  isDeleted: boolean
+  filename: string | null
 }
 
 export type TweetPlayBtnType = {
@@ -37,7 +37,8 @@ export type TweetPlayBtnType = {
 export type TweetDownloadBtnProps = {
   filename?: string
   tweetUrl: string
-  user: User
+  email: string
+  user_id: string
   isDeleted: boolean
 }
 
@@ -49,4 +50,12 @@ export type DeleteOptions = {
 export type DeleteParams = {
   downloadId: string
   filename?: string
+}
+
+export type TweetDownloadAgainBtnType = {
+  tweetUrl: string
+  email: string
+  user_id: string
+  isDownloading: boolean
+  downloadId: string
 }

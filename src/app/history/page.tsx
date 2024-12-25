@@ -1,46 +1,62 @@
+import { getUser } from '@/db/auth.service'
 import { enrichTweet } from 'react-tweet'
 import { getTweet } from 'react-tweet/api'
-
-import { getUser } from '@/db/auth.service'
-import { getUserDeletedDownloads, getUserDownloads } from '@/db/downloads.service'
-import { extractTweetId } from '@/utils/extractTweetId'
-import { UserDownloadTweet } from '@/types/TweetType'
-
+import { getDownloads } from '@/db/supabase/services/downloads.service'
+import { DlType } from '@/types/DownlodsType'
+import { extractTweetId } from '@/utils/historyHelpers'
 import HistoryView from '@/components/views/history-view'
 
 const Page = async () => {
   const { user } = await getUser()
-  const userDownloads = (await getUserDownloads(user?.id || '')) || []
-  const userDeletedDownloads = (await getUserDeletedDownloads(user?.id || '')) || []
+  if (!user) return null
 
-  const downloadTweets: UserDownloadTweet[] = await Promise.all(
-    userDownloads.map(async (dl) => {
-      const tweetId: string | null = extractTweetId(dl.space_url)
-      const tw = tweetId ? await getTweet(tweetId) : undefined
+  const downloads: DlType[] = await getDownloads({ userId: user.id })
 
-      return {
-        download: dl,
-        tweet: tw ? enrichTweet(tw) : undefined,
+  // Group downloads by status first to avoid multiple iterations
+  const grouped = downloads.reduce(
+    (acc, dl) => {
+      if (dl.status === 'pending') {
+        acc.downloading.push(dl)
+      } else if (dl.status === 'completed' && !dl.is_deleted) {
+        acc.downloaded.push(dl)
+      } else if (dl.is_deleted) {
+        acc.deleted.push(dl)
       }
-    })
+      return acc
+    },
+    {
+      downloading: [] as DlType[],
+      downloaded: [] as DlType[],
+      deleted: [] as DlType[],
+    }
   )
 
-  const deletedDownloads: UserDownloadTweet[] = await Promise.all(
-    userDeletedDownloads.map(async (dl) => {
-      const tweetId: string | null = extractTweetId(dl.space_url)
-      const tw = tweetId ? await getTweet(tweetId) : undefined
+  // Process each group individually
+  const processGroup = async (downloads: DlType[]) => {
+    return Promise.all(
+      downloads.map(async (dl) => {
+        const tweetId = extractTweetId(dl.space_url)
+        const tweet = tweetId ? await getTweet(tweetId) : undefined
+        return {
+          download: dl,
+          tweet: tweet ? enrichTweet(tweet) : undefined,
+        }
+      })
+    )
+  }
 
-      return {
-        download: dl,
-        tweet: tw ? enrichTweet(tw) : undefined,
-      }
-    })
-  )
+  // Process each group
+  const [downloadingRecords, downloadedRecords, deletedRecords] = await Promise.all([
+    processGroup(grouped.downloading),
+    processGroup(grouped.downloaded),
+    processGroup(grouped.deleted),
+  ])
 
   return (
     <HistoryView
-      downloadTweets={downloadTweets}
-      deletedDownloads={deletedDownloads}
+      downloadingRecords={downloadingRecords}
+      downloadedRecords={downloadedRecords}
+      deletedRecords={deletedRecords}
       user={user!}
     />
   )

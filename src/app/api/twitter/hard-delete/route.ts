@@ -1,30 +1,34 @@
-import { revalidatePath } from 'next/cache'
-import { NextRequest, NextResponse } from 'next/server'
-import path from 'path'
 import { unlink } from 'fs/promises'
+import { NextRequest, NextResponse } from 'next/server'
 
-import { hardDeleteDownload } from '@/db/downloads.service'
+import { getDownloadById, hardDeleteDownload } from '@/db/supabase/services/downloads.service'
+import { getFilePath } from '@/utils/getFilePath'
 
-export async function POST(request: NextRequest) {
+export async function DELETE(request: NextRequest) {
   try {
-    const data = await request.json()
-    const { filename, downloadId } = data
+    const { searchParams } = new URL(request.url)
+    const id = searchParams.get('id')
 
-    // File deletion
-    if (filename?.trim()) {
-      const filePath = path.join(process.cwd(), 'public', 'downloads', filename)
+    if (!id) {
+      return NextResponse.json({ error: 'ID is required' }, { status: 400 })
+    }
+
+    // Get download record
+    const dl = await getDownloadById({ id })
+
+    // if filename is present, delete the file
+    if (dl.filename) {
+      const filePath = getFilePath(dl.filename)
       await unlink(filePath).catch(() => {})
     }
 
     // Delete download record
-    await hardDeleteDownload(downloadId)
-
-    // Revalidate the history route
-    revalidatePath('/history')
+    await hardDeleteDownload(dl.id)
+    console.log('Download hard deleted successfully')
 
     return NextResponse.json(
       {
-        message: 'Download deleted successfully',
+        message: 'Download hard deleted successfully',
         success: true,
       },
       { status: 200 }

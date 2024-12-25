@@ -1,9 +1,10 @@
 import { User } from '@supabase/auth-js'
 
-import { UserDownloadTweet } from '@/types/TweetType'
+import { DownloadsType } from '@/types/DownlodsType'
 
 export type HistoryViewTypes = {
-  downloadTweets: UserDownloadTweet[]
-  deletedDownloads: UserDownloadTweet[]
+  downloadingRecords: DownloadsType[]
+  downloadedRecords: DownloadsType[]
+  deletedRecords: DownloadsType[]
   user: User
 }

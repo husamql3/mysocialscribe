@@ -1,18 +1,45 @@
-import { revalidatePath } from 'next/cache'
-import { NextRequest, NextResponse } from 'next/server'
 import { spawn } from 'child_process'
 import { writeFile } from 'fs/promises'
+import { NextRequest, NextResponse } from 'next/server'
 import path from 'path'
 
-import { saveDownloadRecord } from '@/db/downloads.service'
+import {
+  createDownloadRecord,
+  reDownloadRecord,
+  updateDownloadRecord,
+} from '@/db/supabase/services/downloads.service'
+import { DlType } from '@/types/DownlodsType'
 import { sendDownloadEmail } from '@/utils/sendDownloadEmail'
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const { url, userId, email } = await req.json()
-  if (!url) return NextResponse.json({ error: 'URL is required' }, { status: 400 })
-  if (!userId) return NextResponse.json({ error: 'User must be logged in' }, { status: 401 })
+  const { space_url, user_id, email, downloadId } = await req.json()
+
+  if (!space_url) {
+    console.error('Download request missing URL')
+    return NextResponse.json({ error: 'URL is required' }, { status: 400 })
+  }
+
+  if (!user_id) {
+    console.error('Download request from unauthenticated user')
+    return NextResponse.json({ error: 'User must be logged in' }, { status: 401 })
+  }
 
   try {
+    let dlRecord: DlType | null = null
+
+    if (downloadId) {
+      dlRecord = await reDownloadRecord({ id: downloadId })
+      console.log('update download record', dlRecord)
+    } else {
+      dlRecord = await createDownloadRecord({ user_id, space_url })
+      console.log('create download record', dlRecord)
+    }
+
+    if (!dlRecord) {
+      console.error('Failed to create download record')
+      return NextResponse.json({ error: 'Failed to create download record' }, { status: 500 })
+    }
+
     const filename = `twitter_space_${crypto.randomUUID().slice(0, 8)}.mp3`
     const filePath = path.join(process.cwd(), 'public', 'downloads', filename)
 
@@ -29,7 +56,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
           '--extract-audio',
           '--audio-format',
           'mp3',
-          url,
+          space_url,
         ],
         { stdio: ['ignore', 'pipe', 'ignore'] }
       )
@@ -42,13 +69,12 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         if (code === 0) {
           try {
             const dlUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/downloads/` + filename
-            console.log('download url', dlUrl)
+            console.log('download space_url', dlUrl)
 
             // Save the download record to the database, and send the email to the user
             await Promise.all([
-              saveDownloadRecord({
-                userId,
-                url,
+              updateDownloadRecord({
+                id: dlRecord.id,
                 filename,
               }),
               sendDownloadEmail({
@@ -69,8 +95,5 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   } catch (error) {
     console.error('Error:', error)
     return NextResponse.json({ error: 'Download failed' }, { status: 503 })
-  } finally {
-    // Revalidate the history route
-    revalidatePath('/history')
   }
 }
