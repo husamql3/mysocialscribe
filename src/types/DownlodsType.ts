@@ -8,6 +8,7 @@ export type DlType = {
   space_url: string
   is_deleted: boolean
   status: 'pending' | 'completed' | 'failed'
+  is_hidden: boolean
 }
 
 export type DownloadsType = {
