@@ -1,5 +1,7 @@
 # Changelog
 
+## [1.7.20] - add loadings section
+
 ## [1.6.20] - fix loading space state
 
 ## [1.6.19] - fix bug & showing success before checking input
