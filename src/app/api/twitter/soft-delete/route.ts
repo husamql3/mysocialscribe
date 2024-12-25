@@ -1,5 +1,4 @@
 import { unlink } from 'fs/promises'
-import { revalidatePath } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
 
 import { getDownloadById, softDeleteDownload } from '@/db/supabase/services/downloads.service'
