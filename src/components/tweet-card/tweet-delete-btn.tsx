@@ -1,12 +1,9 @@
 'use client'
 
-import { useEffect } from 'react'
 import { AiOutlineDelete } from 'react-icons/ai'
 
-import { toast } from '@/hooks/use-toast'
-import { TweetDelBtnType } from '@/types/TweetCardType'
-import useDeleteDownload from '@/hooks/use-delete-download'
 import { useLoadingStore } from '@/store/useStore'
+import { useDeleteDownload } from '@/hooks/use-delete'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -21,21 +18,12 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 
-const TweetDelBtn = ({ downloadId, filename }: TweetDelBtnType) => {
+const TweetDelBtn = ({ downloadId }: { downloadId: string }) => {
   const isDownloading = useLoadingStore((state) => state.isLoading)
-  const { hardDeleteDownload, deleteError } = useDeleteDownload()
+  const { isHardDeleting, softDelete } = useDeleteDownload()
 
-  useEffect(() => {
-    if (deleteError) {
-      toast({
-        description: deleteError,
-        variant: 'destructive',
-      })
-    }
-  }, [deleteError])
-
-  const handleDelete = (downloadId: string, filename?: string) => {
-    hardDeleteDownload(downloadId, filename)
+  const handleDelete = async (downloadId: string) => {
+    await softDelete(downloadId)
   }
 
   return (
@@ -46,7 +34,7 @@ const TweetDelBtn = ({ downloadId, filename }: TweetDelBtnType) => {
           variant="ghost"
           size="sm"
           className="h-7 w-7 text-neutral-600"
-          disabled={isDownloading}
+          disabled={isDownloading || isHardDeleting}
         >
           <AiOutlineDelete className="h-5 w-5" />
         </Button>
@@ -58,9 +46,7 @@ const TweetDelBtn = ({ downloadId, filename }: TweetDelBtnType) => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={() => handleDelete(downloadId, filename!)}>
-            Continue
-          </AlertDialogAction>
+          <AlertDialogAction onClick={() => handleDelete(downloadId)}>Continue</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

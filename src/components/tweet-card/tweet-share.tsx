@@ -1,16 +1,15 @@
 'use client'
 
-import { useCallback, useEffect } from 'react'
-import { HiOutlineDotsVertical } from 'react-icons/hi'
+import { useCallback } from 'react'
 import { AiOutlineDelete } from 'react-icons/ai'
+import { HiOutlineDotsVertical } from 'react-icons/hi'
 import { LuCopy } from 'react-icons/lu'
 
+import { SOCIAL_PLATFORMS } from '@/constants/SOCIAL_PLATFORMS'
+import { useDeleteDownload } from '@/hooks/use-delete'
 import { PlatformType } from '@/types/PlatformType'
 import { createShareableUrl } from '@/utils/createShareableUrl'
 import { shareOnSocialMedia } from '@/utils/shareOnSocialMedia'
-import { SOCIAL_PLATFORMS } from '@/constants/SOCIAL_PLATFORMS'
-import useDeleteDownload from '@/hooks/use-delete-download'
-import { toast } from '@/hooks/use-toast'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -21,25 +20,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-const ShareComponent = ({
-  spaceUrl,
-  filename,
-  downloadId,
-}: {
-  spaceUrl: string
-  filename: string
-  downloadId: string
-}) => {
-  const { softDeleteDownload, deleteError } = useDeleteDownload()
-
-  useEffect(() => {
-    if (deleteError) {
-      toast({
-        description: deleteError,
-        variant: 'destructive',
-      })
-    }
-  }, [deleteError])
+const ShareComponent = ({ spaceUrl, downloadId }: { spaceUrl: string; downloadId: string }) => {
+  const { softDelete, isSoftDeleting } = useDeleteDownload()
 
   const shareableUrl = createShareableUrl(spaceUrl)
 
@@ -47,10 +29,17 @@ const ShareComponent = ({
     navigator.clipboard.writeText(shareableUrl)
   }, [shareableUrl])
 
+  const handleDelete = async (downloadId: string) => {
+    await softDelete(downloadId)
+  }
+
   return (
     <div className="flex flex-row gap-4">
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
+        <DropdownMenuTrigger
+          asChild
+          disabled={isSoftDeleting}
+        >
           <Button
             variant="ghost"
             size="sm"
@@ -87,7 +76,7 @@ const ShareComponent = ({
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="flex items-center justify-between text-red-500"
-            onClick={() => softDeleteDownload(downloadId, filename)}
+            onClick={() => handleDelete(downloadId)}
           >
             Delete Tweet
             <AiOutlineDelete className="ml-2" />

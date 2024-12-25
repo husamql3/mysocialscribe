@@ -74,7 +74,6 @@ const TweetCard = ({ tweet, download, email }: TweetCardType) => {
             <div className="z-50 flex items-center gap-2">
               <TweetShare
                 spaceUrl={space_url}
-                filename={filename}
                 downloadId={download.id}
               />
               <TweetPlayBtn filename={filename} />
@@ -85,10 +84,7 @@ const TweetCard = ({ tweet, download, email }: TweetCardType) => {
           {/* Space is deleted */}
           {is_deleted && (
             <div className="z-50 flex items-center gap-2">
-              <TweetDelBtn
-                downloadId={download.id}
-                filename={filename}
-              />
+              <TweetDelBtn downloadId={download.id} />
 
               <TweetDownloadAgainBtn
                 tweetUrl={download.space_url}

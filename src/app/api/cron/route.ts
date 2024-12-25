@@ -2,17 +2,17 @@ import { NextResponse } from 'next/server'
 import { unlink } from 'fs/promises'
 import path from 'path'
 
-import { getRecentDownloads, updateDownloadFilename } from '@/db/downloads.service'
-import { UserDownload } from '@/types/DownlodsType'
+import { getRecentDownloads } from '@/db/supabase/services/downloads.service'
+import { DlType } from '@/types/DownlodsType'
+import { removeCachedDownload } from '@/db/supabase/services/downloads.service'
 
 export async function GET() {
   try {
     const oldDownloads = await getRecentDownloads()
 
-    const cleanupTasks = oldDownloads.map(async (download: UserDownload) => {
-      const filePath = path.join(process.cwd(), 'public', 'downloads', download.filename)
-
-      await Promise.all([unlink(filePath).catch(() => {}), updateDownloadFilename(download.id)])
+    const cleanupTasks = oldDownloads.map(async (download: DlType) => {
+      const filePath = path.join(process.cwd(), 'public', 'downloads', download.filename!)
+      await Promise.all([unlink(filePath).catch(() => {}), removeCachedDownload(download.id)])
     })
 
     await Promise.all(cleanupTasks)

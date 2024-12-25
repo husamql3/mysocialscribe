@@ -56,7 +56,7 @@ export const getDownloads = async ({ userId }: { userId: string }): Promise<DlTy
     .from('downloads')
     .select('*')
     .eq('user_id', userId)
-    .eq('is_archived', false)
+    .eq('is_archived', true)
     .order('created_at', { ascending: false })
 
   if (error) {
@@ -67,15 +67,37 @@ export const getDownloads = async ({ userId }: { userId: string }): Promise<DlTy
   return data as DlType[]
 }
 
+export const getRecentDownloads = async (): Promise<DlType[]> => {
+  const { data, error } = await supabase.rpc('get_recent_downloads')
+
+  if (error) {
+    console.error('Error getting recent downloads:', error)
+    throw error
+  }
+
+  return data as DlType[]
+}
+
+export const getDownloadById = async ({ id }: { id: string }): Promise<DlType> => {
+  const { data, error } = await supabase.from('downloads').select('*').eq('id', id)
+
+  if (error) {
+    console.error('Error getting download by id:', error)
+    throw error
+  }
+
+  return data[0] as DlType
+}
+
 /**
  * delete a download record (soft delete)
  */
-export const softDeleteDownload = async ({ id }: { id: string }) => {
+export const softDeleteDownload = async (id: string) => {
   const { error } = await supabase
     .from('downloads')
     .update({
       is_deleted: true,
-      ilename: null,
+      filename: null,
     })
     .eq('id', id)
 
@@ -88,7 +110,7 @@ export const softDeleteDownload = async ({ id }: { id: string }) => {
 /**
  * delete a download record (hard delete)
  */
-export const hardDeleteDownload = async ({ id }: { id: string }) => {
+export const hardDeleteDownload = async (id: string) => {
   const { error } = await supabase
     .from('downloads')
     .update({
@@ -102,4 +124,17 @@ export const hardDeleteDownload = async ({ id }: { id: string }) => {
     console.error('Error hard deleting download:', error)
     throw error
   }
+}
+
+/**
+ * delete cached download from the server
+ */
+export const removeCachedDownload = async (id: string) => {
+  await supabase
+    .from('downloads')
+    .update({
+      filename: null,
+      is_deleted: true,
+    })
+    .eq('id', id)
 }
