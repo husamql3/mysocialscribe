@@ -4,10 +4,10 @@ import { TweetCardType } from '@/types/TweetCardType'
 import { formatDate } from '@/utils/format'
 
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 import TweetCardHeader from '@/components/tweet-card/tweet-card-header'
 import TweetCardContent from '@/components/tweet-card/tweet-card-content'
 import TweetInfo from '@/components/tweet-card/tweet-info'
-import { Button } from '@/components/ui/button'
 import TweetDelBtn from '@/components/tweet-card/tweet-delete-btn'
 import TweetDownloadAgainBtn from '@/components/tweet-card/tweet-download-again-btn'
 import TweetPlayBtn from '@/components/tweet-card/tweet-play-btn'
@@ -25,7 +25,7 @@ const TweetCard = ({ tweet, download, email }: TweetCardType) => {
     )
   }
 
-  const { created_at, user_id, filename, space_url, is_deleted, status } = download
+  const { created_at, user_id, filename, space_url, is_deleted, status, id } = download
   const isDownloading = status === 'pending'
 
   return (
@@ -44,7 +44,7 @@ const TweetCard = ({ tweet, download, email }: TweetCardType) => {
         <CardContent className="px-3 py-1">
           <TweetCardContent
             entities={tweet.entities}
-            isDeleted={download.is_deleted}
+            isDeleted={is_deleted}
           />
         </CardContent>
 
@@ -74,7 +74,7 @@ const TweetCard = ({ tweet, download, email }: TweetCardType) => {
             <div className="z-50 flex items-center gap-2">
               <TweetShare
                 spaceUrl={space_url}
-                downloadId={download.id}
+                downloadId={id}
               />
               <TweetPlayBtn filename={filename} />
               <TweetDownloadBtn filename={filename} />
@@ -84,13 +84,14 @@ const TweetCard = ({ tweet, download, email }: TweetCardType) => {
           {/* Space is deleted */}
           {is_deleted && (
             <div className="z-50 flex items-center gap-2">
-              <TweetDelBtn downloadId={download.id} />
+              <TweetDelBtn downloadId={id} />
 
               <TweetDownloadAgainBtn
-                tweetUrl={download.space_url}
+                tweetUrl={space_url}
                 user_id={user_id!}
                 email={email}
                 isDownloading={isDownloading}
+                downloadId={id}
               />
             </div>
           )}

@@ -20,10 +20,10 @@ import {
 
 const TweetDelBtn = ({ downloadId }: { downloadId: string }) => {
   const isDownloading = useLoadingStore((state) => state.isLoading)
-  const { isHardDeleting, softDelete } = useDeleteDownload()
+  const { isHardDeleting, hardDelete } = useDeleteDownload()
 
   const handleDelete = async (downloadId: string) => {
-    await softDelete(downloadId)
+    await hardDelete(downloadId)
   }
 
   return (

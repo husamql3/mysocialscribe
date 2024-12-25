@@ -31,6 +31,28 @@ export const createDownloadRecord = async ({
 }
 
 /**
+ * Re-download the download record in the database
+ */
+export const reDownloadRecord = async ({ id }: { id: string }): Promise<DlType> => {
+  const { data, error } = await supabase
+    .from('downloads')
+    .update({
+      status: 'pending',
+      is_deleted: false,
+      is_archived: false,
+    })
+    .eq('id', id)
+    .select()
+
+  if (error) {
+    console.error('Error re-downloading download record:', error)
+    throw error
+  }
+
+  return data[0] as DlType
+}
+
+/**
  * Update the download record in the database
  */
 export const updateDownloadRecord = async ({ id, filename }: UpdateDlType) => {
@@ -56,7 +78,7 @@ export const getDownloads = async ({ userId }: { userId: string }): Promise<DlTy
     .from('downloads')
     .select('*')
     .eq('user_id', userId)
-    .eq('is_archived', true)
+    .eq('is_archived', false)
     .order('created_at', { ascending: false })
 
   if (error) {
@@ -67,6 +89,9 @@ export const getDownloads = async ({ userId }: { userId: string }): Promise<DlTy
   return data as DlType[]
 }
 
+/**
+ * Get all recent download records
+ */
 export const getRecentDownloads = async (): Promise<DlType[]> => {
   const { data, error } = await supabase.rpc('get_recent_downloads')
 
@@ -78,6 +103,9 @@ export const getRecentDownloads = async (): Promise<DlType[]> => {
   return data as DlType[]
 }
 
+/**
+ * Get a download record by id
+ */
 export const getDownloadById = async ({ id }: { id: string }): Promise<DlType> => {
   const { data, error } = await supabase.from('downloads').select('*').eq('id', id)
 

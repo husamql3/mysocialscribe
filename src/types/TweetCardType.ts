@@ -51,3 +51,11 @@ export type DeleteParams = {
   downloadId: string
   filename?: string
 }
+
+export type TweetDownloadAgainBtnType = {
+  tweetUrl: string
+  email: string
+  user_id: string
+  isDownloading: boolean
+  downloadId: string
+}

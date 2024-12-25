@@ -26,10 +26,6 @@ export async function DELETE(request: NextRequest) {
     // Delete download record
     await softDeleteDownload(dl.id)
 
-    // Revalidate the history route
-    revalidatePath('/history')
-
-    console.log('Download soft deleted successfully')
     return NextResponse.json(
       {
         message: 'Download soft deleted successfully',

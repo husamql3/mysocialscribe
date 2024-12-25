@@ -1,17 +1,18 @@
-import { revalidatePath } from 'next/cache'
-import { NextRequest, NextResponse } from 'next/server'
 import { spawn } from 'child_process'
 import { writeFile } from 'fs/promises'
+import { NextRequest, NextResponse } from 'next/server'
 import path from 'path'
 
-import { sendDownloadEmail } from '@/utils/sendDownloadEmail'
 import {
   createDownloadRecord,
+  reDownloadRecord,
   updateDownloadRecord,
 } from '@/db/supabase/services/downloads.service'
+import { DlType } from '@/types/DownlodsType'
+import { sendDownloadEmail } from '@/utils/sendDownloadEmail'
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const { space_url, user_id, email } = await req.json()
+  const { space_url, user_id, email, downloadId } = await req.json()
 
   if (!space_url) {
     console.error('Download request missing URL')
@@ -24,8 +25,16 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   }
 
   try {
-    const dlRecord = await createDownloadRecord({ user_id, space_url })
-    console.log('download record', dlRecord)
+    let dlRecord: DlType | null = null
+
+    if (downloadId) {
+      dlRecord = await reDownloadRecord({ id: downloadId })
+      console.log('update download record', dlRecord)
+    } else {
+      dlRecord = await createDownloadRecord({ user_id, space_url })
+      console.log('create download record', dlRecord)
+    }
+
     if (!dlRecord) {
       console.error('Failed to create download record')
       return NextResponse.json({ error: 'Failed to create download record' }, { status: 500 })
@@ -86,7 +95,5 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   } catch (error) {
     console.error('Error:', error)
     return NextResponse.json({ error: 'Download failed' }, { status: 503 })
-  } finally {
-    revalidatePath('/history')
   }
 }

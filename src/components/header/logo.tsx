@@ -11,7 +11,7 @@ const Logo = () => {
         src="/logo.png"
         alt="mysocialscribe logo"
         width={150}
-        height={100}
+        height={25}
         className="h-[25px] w-[150px] object-cover object-center"
       />
     </Link>
