@@ -52,7 +52,9 @@ export const download = async ({
 
   if (existingDownload?.filename) {
     const data = {
+      user_id: user_id,
       filename: existingDownload.filename,
+      space_url,
       status: 'completed' as const,
       is_deleted: false,
       is_archived: false,
