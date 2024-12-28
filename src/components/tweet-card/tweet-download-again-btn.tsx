@@ -7,6 +7,7 @@ import { useLoadingStore } from '@/store/useStore'
 import { TweetDownloadAgainBtnType } from '@/types/TweetCardType'
 
 import { Button } from '@/components/ui/button'
+import { LuLoaderCircle } from 'react-icons/lu'
 
 const TweetDownloadAgainBtn = ({
   tweetUrl,
@@ -25,30 +26,46 @@ const TweetDownloadAgainBtn = ({
   const handleDownloadAgain = async () => {
     setLoading()
 
-    downloadTwitterSpaces({
-      url: tweetUrl,
-      userId: user_id,
-      email: email,
-      downloadId: downloadId,
-    })
-
-    window.location.reload()
-    setNotLoading()
+    try {
+      await downloadTwitterSpaces({
+        url: tweetUrl,
+        userId: user_id,
+        email: email,
+        downloadId: downloadId,
+      })
+    } catch (error) {
+      console.error('Error downloading space:', error)
+    } finally {
+      setNotLoading()
+    }
   }
 
   return (
     <>
-      <Button
-        size="sm"
-        variant="secondary"
-        onClick={handleDownloadAgain}
-        disabled={isDownloading || isLoading}
-        className="h-7"
-        type="button"
-      >
-        <History className="h-5 w-5" />
-        <span>Download Again</span>
-      </Button>
+      {isLoading ? (
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="h-7 text-stone-50"
+          disabled
+        >
+          Downloading
+          <LuLoaderCircle className="h-5 w-5 animate-spin" />
+        </Button>
+      ) : (
+        <Button
+          size="sm"
+          variant="secondary"
+          onClick={handleDownloadAgain}
+          disabled={isDownloading}
+          className="h-7"
+          type="button"
+        >
+          <History className="h-5 w-5" />
+          <span>Download Again</span>
+        </Button>
+      )}
 
       {/* Success Modal */}
       {/*<Dialog*/}

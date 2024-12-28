@@ -25,12 +25,20 @@ export const useDownload = (): UseDownloadType => {
           space_url: normalizedUrl,
           user_id: params.userId,
           email: params.email,
-          downloadId: params.downloadId,
+          download_id: params.downloadId,
         }),
       })
+
       if (!response.ok) {
-        throw new Error('Server error occurred. Please try again later.')
+        const errorData = await response.json()
+        if (response.status === 401 && errorData.error === 'User must be logged in') {
+          openLoginDialog('login')
+          return false
+        }
+        throw new Error(errorData.error)
       }
+
+      window.location.reload()
       return true
     } catch (err) {
       const message = err instanceof Error ? err.message : 'An unexpected error occurred'
@@ -38,10 +46,11 @@ export const useDownload = (): UseDownloadType => {
         openLoginDialog('login')
         return false
       }
+
       throw new Error(message)
     } finally {
       setNotLoading()
-      window.location.reload()
+      // window.location.reload()
     }
   }
 

@@ -26,7 +26,9 @@ const ShareComponent = ({ spaceUrl, downloadId }: { spaceUrl: string; downloadId
   const shareableUrl = createShareableUrl(spaceUrl)
 
   const handleCopy = useCallback(() => {
-    navigator.clipboard.writeText(shareableUrl)
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(shareableUrl)
+    }
   }, [shareableUrl])
 
   const handleDelete = async (downloadId: string) => {

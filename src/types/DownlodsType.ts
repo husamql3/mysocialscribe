@@ -1,4 +1,5 @@
 import { type EnrichedTweet } from 'react-tweet'
+import { Database } from '@/types/supabase'
 
 export type DlType = {
   id: string
@@ -16,27 +17,18 @@ export type DownloadsType = {
   tweet: EnrichedTweet | undefined
 }
 
-export type CreateDlType = {
+export type DownloadParams = {
+  space_url: string
+  user_id: string
+  download_id?: string
+}
+
+export type DownloadResult = {
+  dl: Database['public']['Tables']['downloads']['Row']
+  startDownloading: boolean
+}
+
+export type CheckIfDownloadExistsType = {
   user_id: string
   space_url: string
-}
-
-export type UpdateDlType = {
-  id: string
-  filename: string
-}
-
-export type SaveDownloadRecord = {
-  userId: string
-  url: string
-  filename: string
-}
-
-export type UserDownload = {
-  id: string
-  created_at: string
-  user_id: string
-  filename: string
-  space_url: string
-  is_deleted: boolean
 }

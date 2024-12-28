@@ -11,6 +11,7 @@ import { toast } from '@/hooks/use-toast'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { useDownload } from '@/hooks/use-download'
 import { useLoginDialog } from '@/providers/login-dialog-provider'
+import { useModalStore } from '@/store/useStore'
 
 import { Confetti, ConfettiRef } from '@/components/ui/confetti'
 import { Input } from '@/components/ui/input'
@@ -22,7 +23,6 @@ import {
   DialogFooter,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { useModalStore } from '@/store/useStore'
 
 const Download = ({ user }: { user: User | null }) => {
   const searchParams = useSearchParams()
@@ -43,14 +43,14 @@ const Download = ({ user }: { user: User | null }) => {
   }, [searchParams, storedSpaceUrl])
 
   const handleDownload = async () => {
-    // if the user is not logged in, open the login dialog
+    // if the user is not logged in, open the login dialog and return
     if (!user) {
       setStoredSpaceUrl(inputUrl)
       openLoginDialog('login')
       return
     }
 
-    // if the input is empty, show a toast
+    // if the input is empty, show a toast and return
     if (!inputUrl.trim()) {
       toast({
         title: 'Error',
@@ -60,7 +60,7 @@ const Download = ({ user }: { user: User | null }) => {
       return
     }
 
-    // if the input is not a valid Twitter space link, show a toast
+    // if the input is not a valid Twitter space link, show a error toast and return
     const twitterSpacesRegex = /^https?:\/\/(x|twitter)\.com\/[^/]+\/status\/\d+$/
     if (!twitterSpacesRegex.test(inputUrl)) {
       toast({
@@ -71,6 +71,7 @@ const Download = ({ user }: { user: User | null }) => {
       return
     }
 
+    // close the modal and start the download
     toggleModal()
 
     try {
@@ -86,6 +87,10 @@ const Download = ({ user }: { user: User | null }) => {
         variant: 'destructive',
       })
     }
+  }
+
+  const handleCloseModal = () => {
+    toggleModal()
   }
 
   return (
@@ -116,7 +121,7 @@ const Download = ({ user }: { user: User | null }) => {
 
       <Dialog
         open={isModalOpen}
-        onOpenChange={toggleModal}
+        onOpenChange={handleCloseModal}
       >
         <DialogContent className="flex w-full max-w-sm flex-col items-center justify-center overflow-hidden rounded-lg px-6 pb-4 pt-8 dark:bg-zinc-950">
           <Confetti
@@ -147,6 +152,7 @@ const Download = ({ user }: { user: User | null }) => {
             <Link
               href="/history"
               className="z-50 flex items-center gap-1 text-sm text-blue-500 transition duration-200 hover:underline"
+              onClick={handleCloseModal}
             >
               View My Spaces
               <IoArrowForward />
