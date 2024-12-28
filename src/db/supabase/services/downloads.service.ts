@@ -166,14 +166,13 @@ export const checkIfDownloadExists = async ({
     .eq('user_id', user_id)
     .eq('space_url', space_url)
     .select()
-    .single()
 
   if (error) {
     console.error('Error checking if download exists:', error)
     throw error
   }
 
-  return !!data
+  return data?.length > 0
 }
 
 /**

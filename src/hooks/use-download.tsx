@@ -43,11 +43,8 @@ export const useDownload = (): UseDownloadType => {
       if (message === 'User must be logged in') {
         openLoginDialog('login')
         return false
-      } else if (message === 'You have already downloaded this space') {
-        console.log('You have already downloaded this space')
-        setError(message)
-        return false
       }
+
       throw new Error(message)
     } finally {
       setNotLoading()
