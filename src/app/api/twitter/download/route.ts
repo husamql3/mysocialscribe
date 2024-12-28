@@ -28,6 +28,11 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     // If we're not starting a new download, return the existing download URL
     if (!startDownloading) {
       const dlUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/downloads/${dl.filename}`
+      await sendDownloadEmail({
+        to: email,
+        href: dlUrl,
+        downloadName: dlUrl,
+      })
       return NextResponse.json({ downloadUrl: dlUrl }, { status: 200 })
     }
 
