@@ -28,8 +28,14 @@ export const useDownload = (): UseDownloadType => {
           download_id: params.downloadId,
         }),
       })
+
       if (!response.ok) {
-        throw new Error('Server error occurred. Please try again later.')
+        const errorData = await response.json()
+        if (response.status === 401 && errorData.error === 'User must be logged in') {
+          openLoginDialog('login')
+          return false
+        }
+        throw new Error(errorData.error)
       }
       return true
     } catch (err) {
@@ -37,11 +43,15 @@ export const useDownload = (): UseDownloadType => {
       if (message === 'User must be logged in') {
         openLoginDialog('login')
         return false
+      } else if (message === 'You have already downloaded this space') {
+        console.log('You have already downloaded this space')
+        setError(message)
+        return false
       }
       throw new Error(message)
     } finally {
       setNotLoading()
-      window.location.reload()
+      // window.location.reload()
     }
   }
 

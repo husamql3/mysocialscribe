@@ -1,8 +1,9 @@
-import { unlink } from 'fs/promises'
+// import { unlink } from 'fs/promises'
 import { NextRequest, NextResponse } from 'next/server'
 
-import { getDownloadById, hardDeleteDownload } from '@/db/supabase/services/downloads.service'
-import { getFilePath } from '@/utils/getFilePath'
+import { getDownloadById, hardDeleteDownload } from '@/db/supabase/services/downloads.service' // import { getFilePath } from '@/utils/getFilePath'
+
+// import { getFilePath } from '@/utils/getFilePath'
 
 export async function DELETE(request: NextRequest) {
   try {
@@ -17,10 +18,10 @@ export async function DELETE(request: NextRequest) {
     const dl = await getDownloadById({ id })
 
     // if filename is present, delete the file
-    if (dl.filename) {
-      const filePath = getFilePath(dl.filename)
-      await unlink(filePath).catch(() => {})
-    }
+    // if (dl.filename) {
+    //   const filePath = getFilePath(dl.filename)
+    //   await unlink(filePath).catch(() => {})
+    // }
 
     // Delete download record
     await hardDeleteDownload(dl.id)

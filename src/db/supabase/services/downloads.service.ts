@@ -81,107 +81,10 @@ export const download = async ({
     space_url,
     status: 'pending',
     is_deleted: false,
+    is_archived: false,
   })
   return { dl, startDownloading: true }
 }
-
-// export const download = async ({ space_url, user_id, download_id }: Download) => {
-//   const dl: DlType | undefined = await findDlBySpaceUrl(space_url)
-//
-//   // if the download id is passed, we need to rownload the space
-//   if (download_id) {
-//     // if the filename already exists on the server, update the filename (avoiding redownload the space)
-//     if (dl?.filename) {
-//       const { data, error } = await supabase
-//         .from('downloads')
-//         .update({
-//           filename: dl.filename,
-//           status: 'completed',
-//           is_deleted: false,
-//           is_archived: false,
-//         })
-//         .eq('id', download_id)
-//         .select()
-//
-//       if (error) {
-//         console.error('1 Error updating download record with the exsiting filename')
-//         throw error
-//       }
-//
-//       return {
-//         dl: data[0],
-//         startDownloading: false,
-//       }
-//     }
-//
-//     // if there is no filename, the record already exists, but it's expired so we need to redowload it
-//     const { data, error } = await supabase
-//       .from('downloads')
-//       .update({
-//         status: 'pending',
-//         is_deleted: false,
-//         is_archived: false,
-//       })
-//       .eq('id', download_id)
-//       .select()
-//
-//     if (error) {
-//       console.error('2 Error re-downloading download record:', error)
-//       throw error
-//     }
-//
-//     return {
-//       dl: data[0],
-//       startDownloading: false,
-//     }
-//   }
-//
-//   // we need to create a new dl record
-//   // if the filename already exists create a new record with it
-//   if (dl?.filename) {
-//     const { data, error } = await supabase
-//       .from('downloads')
-//       .insert({
-//         user_id: user_id,
-//         space_url: space_url,
-//         filename: dl.filename,
-//         status: 'completed',
-//         is_deleted: false,
-//       })
-//       .select()
-//
-//     if (error) {
-//       console.error('3 Error creating download record:', error)
-//       throw error
-//     }
-//
-//     return {
-//       dl: data[0],
-//       startDownloading: false,
-//     }
-//   }
-//
-//   // start the normal downloading proccess
-//   const { data, error } = await supabase
-//     .from('downloads')
-//     .insert({
-//       user_id: user_id,
-//       space_url: space_url,
-//       status: 'pending',
-//       is_deleted: false,
-//     })
-//     .select()
-//
-//   if (error) {
-//     console.error('4 Error creating download record:', error)
-//     throw error
-//   }
-//
-//   return {
-//     dl: data[0],
-//     startDownloading: true,
-//   }
-// }
 
 /**
  * Create a new download record in the database
@@ -248,6 +151,31 @@ export const updateDownloadRecord = async ({ id, filename }: UpdateDlType) => {
   }
 }
 
+type CheckIfDownloadExistsType = {
+  user_id: string
+  space_url: string
+}
+
+export const checkIfDownloadExists = async ({
+  space_url,
+  user_id,
+}: CheckIfDownloadExistsType): Promise<boolean> => {
+  const { data, error } = await supabase
+    .from('downloads')
+    .select('*')
+    .eq('user_id', user_id)
+    .eq('space_url', space_url)
+    .select()
+    .single()
+
+  if (error) {
+    console.error('Error checking if download exists:', error)
+    throw error
+  }
+
+  return !!data
+}
+
 /**
  * Get all download records for a user
  */
@@ -304,6 +232,7 @@ export const softDeleteDownload = async (id: string) => {
     .update({
       is_deleted: true,
       filename: null,
+      status: 'pending',
     })
     .eq('id', id)
 
@@ -323,6 +252,7 @@ export const hardDeleteDownload = async (id: string) => {
       is_archived: true,
       is_deleted: true,
       filename: null,
+      status: 'pending',
     })
     .eq('id', id)
 

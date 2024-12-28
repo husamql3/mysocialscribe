@@ -3,7 +3,11 @@ import { writeFile } from 'fs/promises'
 import { NextRequest, NextResponse } from 'next/server'
 import path from 'path'
 
-import { download, updateOrInsertDownload } from '@/db/supabase/services/downloads.service'
+import {
+  checkIfDownloadExists,
+  download,
+  updateOrInsertDownload,
+} from '@/db/supabase/services/downloads.service'
 import { sendDownloadEmail } from '@/utils/sendDownloadEmail'
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
@@ -17,6 +21,13 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   if (!user_id) {
     console.error('Download request from unauthenticated user')
     return NextResponse.json({ error: 'User must be logged in' }, { status: 401 })
+  }
+
+  if (!download_id) {
+    const dlExists = await checkIfDownloadExists({ space_url, user_id })
+    if (dlExists) {
+      return NextResponse.json({ error: 'Download already exists' }, { status: 400 })
+    }
   }
 
   try {

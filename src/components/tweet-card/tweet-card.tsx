@@ -26,7 +26,7 @@ const TweetCard = ({ tweet, download, email }: TweetCardType) => {
   }
 
   const { created_at, user_id, filename, space_url, is_deleted, status, id } = download
-  const isDownloading = status === 'pending'
+  const isDownloading = status === 'pending' && !is_deleted
 
   return (
     <div className="z-50 space-y-1">
@@ -56,7 +56,7 @@ const TweetCard = ({ tweet, download, email }: TweetCardType) => {
           />
 
           {/*  Space is downloading */}
-          {isDownloading && (
+          {isDownloading && !is_deleted && (
             <Button
               type="button"
               variant="ghost"
