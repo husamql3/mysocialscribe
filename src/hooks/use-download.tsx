@@ -25,7 +25,7 @@ export const useDownload = (): UseDownloadType => {
           space_url: normalizedUrl,
           user_id: params.userId,
           email: params.email,
-          downloadId: params.downloadId,
+          download_id: params.downloadId,
         }),
       })
       if (!response.ok) {

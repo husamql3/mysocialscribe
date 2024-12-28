@@ -3,16 +3,11 @@ import { writeFile } from 'fs/promises'
 import { NextRequest, NextResponse } from 'next/server'
 import path from 'path'
 
-import {
-  createDownloadRecord,
-  reDownloadRecord,
-  updateDownloadRecord,
-} from '@/db/supabase/services/downloads.service'
-import { DlType } from '@/types/DownlodsType'
+import { download, updateOrInsertDownload } from '@/db/supabase/services/downloads.service'
 import { sendDownloadEmail } from '@/utils/sendDownloadEmail'
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const { space_url, user_id, email, downloadId } = await req.json()
+  const { space_url, user_id, email, download_id } = await req.json()
 
   if (!space_url) {
     console.error('Download request missing URL')
@@ -25,21 +20,18 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   }
 
   try {
-    let dlRecord: DlType | null = null
-
-    if (downloadId) {
-      dlRecord = await reDownloadRecord({ id: downloadId })
-      console.log('update download record', dlRecord)
-    } else {
-      dlRecord = await createDownloadRecord({ user_id, space_url })
-      console.log('create download record', dlRecord)
+    const { dl, startDownloading } = await download({
+      space_url,
+      user_id,
+      download_id,
+    })
+    // If we're not starting a new download, return the existing download URL
+    if (!startDownloading) {
+      const dlUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/downloads/${dl.filename}`
+      return NextResponse.json({ downloadUrl: dlUrl }, { status: 200 })
     }
 
-    if (!dlRecord) {
-      console.error('Failed to create download record')
-      return NextResponse.json({ error: 'Failed to create download record' }, { status: 500 })
-    }
-
+    // If we're starting a new download, proceed with the download process
     const filename = `twitter_space_${crypto.randomUUID().slice(0, 8)}.mp3`
     const filePath = path.join(process.cwd(), 'public', 'downloads', filename)
 
@@ -73,10 +65,15 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
             // Save the download record to the database, and send the email to the user
             await Promise.all([
-              updateDownloadRecord({
-                id: dlRecord.id,
-                filename,
-              }),
+              updateOrInsertDownload(
+                {
+                  filename,
+                  status: 'completed',
+                  is_deleted: false,
+                  is_archived: false,
+                },
+                dl.id
+              ),
               sendDownloadEmail({
                 to: email,
                 href: dlUrl,
