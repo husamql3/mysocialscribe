@@ -37,6 +37,8 @@ export const useDownload = (): UseDownloadType => {
         }
         throw new Error(errorData.error)
       }
+
+      window.location.reload()
       return true
     } catch (err) {
       const message = err instanceof Error ? err.message : 'An unexpected error occurred'

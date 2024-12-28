@@ -1,22 +1,19 @@
 'use server'
 
 import { createClient } from '@/db/supabase/client'
-import { CreateDlType, DlType, UpdateDlType } from '@/types/DownlodsType'
+import {
+  CheckIfDownloadExistsType,
+  DlType,
+  DownloadParams,
+  DownloadResult,
+} from '@/types/DownlodsType'
 import { Database } from '@/types/supabase'
 
 const supabase = createClient()
 
-type DownloadParams = {
-  space_url: string
-  user_id: string
-  download_id?: string
-}
-
-type DownloadResult = {
-  dl: Database['public']['Tables']['downloads']['Row']
-  startDownloading: boolean
-}
-
+/**
+ * Get a download record by space url
+ **/
 export const findDlBySpaceUrl = async (space_url: string): Promise<DlType | undefined> => {
   const { data: record } = await supabase
     .from('downloads')
@@ -27,6 +24,9 @@ export const findDlBySpaceUrl = async (space_url: string): Promise<DlType | unde
   if (record) return record[0] ? record[0] : null
 }
 
+/**
+ * Update or insert a download record based on download_id
+ **/
 export async function updateOrInsertDownload(
   data: Partial<Database['public']['Tables']['downloads']['Insert']>,
   download_id?: string
@@ -43,6 +43,9 @@ export async function updateOrInsertDownload(
   return result
 }
 
+/**
+ * Download a space and return the download record
+ **/
 export const download = async ({
   space_url,
   user_id,
@@ -87,75 +90,8 @@ export const download = async ({
 }
 
 /**
- * Create a new download record in the database
+ * Check if a download record exists
  */
-export const createDownloadRecord = async ({
-  user_id,
-  space_url,
-}: CreateDlType): Promise<DlType> => {
-  const { data, error } = await supabase
-    .from('downloads')
-    .insert({
-      user_id: user_id,
-      space_url: space_url,
-      status: 'pending',
-      is_deleted: false,
-    })
-    .select()
-
-  if (error) {
-    console.error('Error creating download record:', error)
-    throw error
-  }
-
-  return data[0] as DlType
-}
-
-/**
- * Re-download the download record in the database
- */
-export const reDownloadRecord = async ({ id }: { id: string }): Promise<DlType> => {
-  const { data, error } = await supabase
-    .from('downloads')
-    .update({
-      status: 'pending',
-      is_deleted: false,
-      is_archived: false,
-    })
-    .eq('id', id)
-    .select()
-
-  if (error) {
-    console.error('Error re-downloading download record:', error)
-    throw error
-  }
-
-  return data[0] as DlType
-}
-
-/**
- * Update the download record in the database
- */
-export const updateDownloadRecord = async ({ id, filename }: UpdateDlType) => {
-  const { error } = await supabase
-    .from('downloads')
-    .update({
-      filename,
-      status: 'completed',
-    })
-    .eq('id', id)
-
-  if (error) {
-    console.error('Error updating download record:', error)
-    throw error
-  }
-}
-
-type CheckIfDownloadExistsType = {
-  user_id: string
-  space_url: string
-}
-
 export const checkIfDownloadExists = async ({
   space_url,
   user_id,
@@ -165,6 +101,7 @@ export const checkIfDownloadExists = async ({
     .select('*')
     .eq('user_id', user_id)
     .eq('space_url', space_url)
+    .eq('is_archived', false)
     .select()
 
   if (error) {
@@ -272,4 +209,19 @@ export const removeCachedDownload = async (id: string) => {
       is_deleted: true,
     })
     .eq('id', id)
+}
+
+/**
+ * ONLY USED FOR TESTING
+ **/
+export const deleteAllFilenames = async () => {
+  const { error } = await supabase
+    .from('downloads')
+    .update({ filename: null, is_deleted: true })
+    .neq('filename', null)
+
+  if (error) {
+    console.error('Error deleting all filenames:', error)
+    throw error
+  }
 }
