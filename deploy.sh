@@ -79,7 +79,7 @@ if [ -d "$APP_DIR" ]; then
     git reset --hard origin/main
 else
     log "Cloning repository..."
-    git clone https://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@github.com/mysocialscribe/mysocialscribe.git "$APP_DIR"
+    git clone https://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@github.com/mysocialscribe/mysocialscribe.git "$APP_DIR"
     cd "$APP_DIR"
 fi
 check_command "Repository setup"
