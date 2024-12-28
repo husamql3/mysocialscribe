@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   output: 'standalone',
   experimental: {
     optimizeCss: true,
+    ppr: true,
   },
   images: {
     remotePatterns: [
