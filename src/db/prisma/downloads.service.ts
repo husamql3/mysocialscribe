@@ -1,6 +1,73 @@
-import { Download, PrismaClient } from '@prisma/client'
+import { Download, PrismaClient, STATUS } from '@prisma/client'
+import { DownloadParams, DownloadResult, UpdateOrInsertDownload } from '@/types/PrismaDownloadType'
 
 const prisma = new PrismaClient() as PrismaClient
+
+export const updateOrInsertDownload = async ({
+  data,
+  downloadId,
+}: UpdateOrInsertDownload): Promise<Download> => {
+  try {
+    if (downloadId) {
+      return await prisma.download.update({
+        where: { id: downloadId },
+        data,
+      })
+    }
+
+    return await prisma.download.create({
+      data: data as Partial<Download>,
+    })
+  } catch (error) {
+    console.error('Error updating/inserting download record:', error)
+    throw error
+  }
+}
+
+export const download = async ({
+  spaceUrl,
+  userId,
+  downloadId,
+}: DownloadParams): Promise<DownloadResult> => {
+  const existingDownload = await findDownloadBySpaceUrl(spaceUrl)
+
+  if (existingDownload?.filename) {
+    const data = {
+      userId: userId,
+      filename: existingDownload.filename,
+      spaceUrl: spaceUrl,
+      status: STATUS.completed,
+      isDeleted: false,
+      isArchived: false,
+    }
+
+    const dl = await updateOrInsertDownload({ data, downloadId })
+    return { dl, startDownloading: false }
+  }
+
+  if (downloadId) {
+    const dl = await updateOrInsertDownload({
+      data: {
+        status: STATUS.pending,
+        isDeleted: false,
+        isArchived: false,
+      },
+      downloadId,
+    })
+    return { dl, startDownloading: true }
+  }
+
+  const dl = await updateOrInsertDownload({
+    data: {
+      userId: userId,
+      spaceUrl: spaceUrl,
+      status: STATUS.pending,
+      isDeleted: false,
+      isArchived: false,
+    },
+  })
+  return { dl, startDownloading: true }
+}
 
 /**
  * findDownloadBySpaceUrl - Find a download record by spaceUrl
@@ -146,7 +213,9 @@ export const clearDownloadFiles = async (): Promise<void> => {
   }
 }
 
-// Ensure to disconnect when the process terminates
+/**
+ * disconnect - Disconnect from the database and exit the process
+ **/
 process.on('SIGINT', async () => {
   await prisma.$disconnect()
   process.exit(0)
