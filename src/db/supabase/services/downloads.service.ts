@@ -14,15 +14,6 @@ const supabase = createClient()
 /**
  * Get a download record by space url
  **/
-export const findDlBySpaceUrl = async (space_url: string): Promise<DlType | undefined> => {
-  const { data: record } = await supabase
-    .from('downloads')
-    .select('*')
-    .eq('space_url', space_url)
-    .select()
-
-  if (record) return record[0] ? record[0] : null
-}
 
 /**
  * Update or insert a download record based on download_id
@@ -110,6 +101,16 @@ export const checkIfDownloadExists = async ({
   }
 
   return data?.length > 0
+}
+
+export const findDlBySpaceUrl = async (space_url: string): Promise<DlType | undefined> => {
+  const { data: record } = await supabase
+    .from('downloads')
+    .select('*')
+    .eq('space_url', space_url)
+    .select()
+
+  if (record) return record[0] ? record[0] : null
 }
 
 /**
