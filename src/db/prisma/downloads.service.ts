@@ -1,4 +1,7 @@
+'use server'
+
 import { Download, PrismaClient, STATUS } from '@prisma/client'
+
 import { DownloadParams, DownloadResult, UpdateOrInsertDownload } from '@/types/PrismaDownloadType'
 
 const prisma = new PrismaClient() as PrismaClient
@@ -41,12 +44,12 @@ export const download = async ({
       isArchived: false,
     }
 
-    const dl = await updateOrInsertDownload({ data, downloadId })
-    return { dl, startDownloading: false }
+    const download = await updateOrInsertDownload({ data, downloadId })
+    return { download, startDownloading: false }
   }
 
   if (downloadId) {
-    const dl = await updateOrInsertDownload({
+    const download = await updateOrInsertDownload({
       data: {
         status: STATUS.pending,
         isDeleted: false,
@@ -54,10 +57,10 @@ export const download = async ({
       },
       downloadId,
     })
-    return { dl, startDownloading: true }
+    return { download, startDownloading: true }
   }
 
-  const dl = await updateOrInsertDownload({
+  const download = await updateOrInsertDownload({
     data: {
       userId: userId,
       spaceUrl: spaceUrl,
@@ -66,7 +69,7 @@ export const download = async ({
       isArchived: false,
     },
   })
-  return { dl, startDownloading: true }
+  return { download, startDownloading: true }
 }
 
 /**

@@ -7,7 +7,7 @@ export type DownloadParams = {
 }
 
 export type DownloadResult = {
-  dl: Download
+  download: Download
   startDownloading: boolean
 }
 
