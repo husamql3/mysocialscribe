@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum STATUS {
+  pending
+  completed
+  failed
+  in_progress
+}
+
+model Download {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamp()
+  userId     String?  @map("user_id") @db.Uuid
+  filename   String?
+  spaceUrl   String?  @map("space_url")
+  isDeleted  Boolean  @default(false) @map("is_deleted")
+  status     STATUS   @default(pending)
+  isArchived Boolean? @default(false) @map("is_archived")
+
+  @@index([spaceUrl])
+  @@map("downloads")
+}
