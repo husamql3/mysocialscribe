@@ -11,7 +11,6 @@ NEXT_PUBLIC_AUTH_CALLBACK_URL="https://mysocialscribe.com/auth/callback"
 NODE_ENV="production"
 
 # Script Vars
-REPO_URL="https://github.com/mysocialscribe/mysocialscribe"
 APP_DIR=~/mysocialscribe
 LOG_FILE="/var/log/deploy.log"
 

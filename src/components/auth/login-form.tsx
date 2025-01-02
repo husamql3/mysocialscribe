@@ -9,7 +9,7 @@ import { loginSchema } from '@/types/schema/auth.schema'
 import { LoginFormData } from '@/types/AuthType'
 
 import { useLoginDialog } from '@/providers/login-dialog-provider'
-import { login } from '@/db/auth.service'
+import { login } from '@/db/supabase/services/auth.service'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'

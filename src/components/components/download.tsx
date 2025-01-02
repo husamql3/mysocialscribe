@@ -26,7 +26,7 @@ import {
 
 const Download = ({ user }: { user: User | null }) => {
   const searchParams = useSearchParams()
-  const { downloadTwitterSpaces } = useDownload()
+  const { downloadTwitterSpaces, checkIfDownloadExists } = useDownload()
   const { openLoginDialog } = useLoginDialog()
   const [storedSpaceUrl, setStoredSpaceUrl] = useLocalStorage('spaceUrl', '')
   const [inputUrl, setInputUrl] = useState('')
@@ -66,6 +66,19 @@ const Download = ({ user }: { user: User | null }) => {
       toast({
         title: 'Error',
         description: 'Please enter a valid Tweet URL',
+        variant: 'destructive',
+      })
+      return
+    }
+
+    const spaceExists = await checkIfDownloadExists({
+      url: inputUrl,
+      userId: user.id,
+    })
+    if (spaceExists) {
+      toast({
+        title: 'Error',
+        description: 'Download already exists',
         variant: 'destructive',
       })
       return
@@ -153,6 +166,7 @@ const Download = ({ user }: { user: User | null }) => {
               href="/history"
               className="z-50 flex items-center gap-1 text-sm text-blue-500 transition duration-200 hover:underline"
               onClick={handleCloseModal}
+              prefetch
             >
               View My Spaces
               <IoArrowForward />

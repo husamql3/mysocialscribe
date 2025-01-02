@@ -1,4 +1,4 @@
-import { getUser } from '@/db/auth.service'
+import { getUser } from '@/db/supabase/services/auth.service'
 import { enrichTweet } from 'react-tweet'
 import { getTweet } from 'react-tweet/api'
 import { getDownloads } from '@/db/supabase/services/downloads.service'

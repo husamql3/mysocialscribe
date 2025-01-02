@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils'
-import { getUser } from '@/db/auth.service'
+import { getUser } from '@/db/supabase/services/auth.service'
 import { LoginDialogProvider } from '@/providers/login-dialog-provider'
 
 import { Toaster } from '@/components/ui/toaster'
