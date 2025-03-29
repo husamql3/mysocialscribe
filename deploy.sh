@@ -1,15 +1,5 @@
 #!/bin/bash
 
-# Env Vars
-DOMAIN_NAME="mysocialscribe.com"
-EMAIL="mysocialscribe.info@gmail.com"
-GA_MEASUREMENT_ID="G-C7X418PQ0G"
-NEXT_PUBLIC_SUPABASE_URL="https://onzqipmlfmrtharffolm.supabase.co"
-NEXT_PUBLIC_SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uenFpcG1sZm1ydGhhcmZmb2xtIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMTg1NzMyMywiZXhwIjoyMDQ3NDMzMzIzfQ.BHgQI4MNGMWa88vDxKw8i49KVaJbnpS1bGQYuHitU8o"
-NEXT_PUBLIC_BASE_URL="https://mysocialscribe.com"
-NEXT_PUBLIC_AUTH_CALLBACK_URL="https://mysocialscribe.com/auth/callback"
-NODE_ENV="production"
-
 # Script Vars
 APP_DIR=~/mysocialscribe
 LOG_FILE="/var/log/deploy.log"
