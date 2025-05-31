@@ -14,7 +14,7 @@ const Footer = () => {
       <div className="dark-fit space-x-1 text-center text-xs font-normal text-gray-200">
         <span>Crafted by</span>
         <a
-          href="https://www.linkedin.com/in/husamahmud/"
+          href="https://www.linkedin.com/in/husamql3/"
           target="_blank"
           className="text-blue-500 transition duration-200 hover:underline"
         >

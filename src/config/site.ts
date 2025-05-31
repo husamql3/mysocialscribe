@@ -5,6 +5,6 @@ export const siteConfig = {
   url: 'https://mysocialscribe.com',
   ogImage: '/og-image.png',
   twitter: {
-    creator: '@husamahmud',
+    creator: '@husamql3',
   },
 }

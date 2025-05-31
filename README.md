@@ -21,6 +21,6 @@ For support or inquiries, please contact:
 
 Created and maintained by:
 
-- **Hüsam** [🔗 LinkedIn](https://www.linkedin.com/in/husamahmud/) | [🐦 Twitter](https://twitter.com/husamahmud) | [💻 GitHub](https://github.com/husamahmud)
+- **Hüsam** [🔗 LinkedIn](https://www.linkedin.com/in/husamql3/) | [🐦 Twitter](https://twitter.com/husamql3) | [💻 GitHub](https://github.com/husamql3)
 
 - **Julien** [🔗 LinkedIn](https://www.linkedin.com/in/julienbarbier/) | [🐦 Twitter](https://x.com/julienbarbier42) | [💻 GitHub](https://github.com/jbarbier)
